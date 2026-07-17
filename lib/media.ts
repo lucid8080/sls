@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
 import { z } from "zod";
@@ -23,10 +23,22 @@ export type MediaReference = {
   height?: number;
 };
 
+function resolveMediaAcceptedPath(): string | null {
+  const candidates = [
+    join(process.cwd(), "data", "media-accepted.json"),
+    join(process.cwd(), "recovered-media-output", "reports", "media-accepted.json"),
+  ];
+  return candidates.find((path) => existsSync(path)) ?? null;
+}
+
 export const getMediaMap = cache(() => {
-  const reportPath = join(process.cwd(), "recovered-media-output", "reports", "media-accepted.json");
-  const parsed = mediaAcceptedSchema.parse(JSON.parse(readFileSync(reportPath, "utf8")) as unknown);
   const map = new Map<string, MediaReference>();
+  const reportPath = resolveMediaAcceptedPath();
+  if (!reportPath) {
+    return map;
+  }
+
+  const parsed = mediaAcceptedSchema.parse(JSON.parse(readFileSync(reportPath, "utf8")) as unknown);
 
   for (const item of parsed) {
     if (!item.outputPath) {
