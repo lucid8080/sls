@@ -1,0 +1,26 @@
+{
+  "id": "6",
+  "title": "Demo: Blog",
+  "slug": "demo-blog",
+  "pathname": "/demo-blog/",
+  "status": "published",
+  "publishedAt": "2019-11-09T08:11:58.000Z",
+  "modifiedAt": "2019-11-09T08:11:58.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [],
+  "tags": [],
+  "content": {
+    "kind": "html",
+    "html": ""
+  },
+  "seo": {
+    "title": "Demo: Blog",
+    "canonicalPath": "/demo-blog/",
+    "noindex": false
+  },
+  "type": "page"
+}

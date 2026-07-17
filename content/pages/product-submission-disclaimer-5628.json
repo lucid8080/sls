@@ -1,0 +1,28 @@
+{
+  "id": "5628",
+  "title": "Product Submission Disclaimer",
+  "slug": "product-submission-disclaimer",
+  "pathname": "/product-submission-disclaimer/",
+  "status": "published",
+  "excerpt": "Dear Visitors, Thank you for your interest in our blog and for considering sharing your products with us. We always appreciate discovering new and innovative items that a",
+  "publishedAt": "2023-08-02T21:40:54.000Z",
+  "modifiedAt": "2023-08-02T21:48:05.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [],
+  "tags": [],
+  "content": {
+    "kind": "html",
+    "html": "<p>Dear Visitors,</p>\n\n\n\n<p>Thank you for your interest in our blog and for considering sharing your products with us. We always appreciate discovering new and innovative items that align with the content of our blog. However, we kindly ask for your understanding and cooperation in following our guidelines outlined below.</p>\n\n\n\n<p>Before shipping any product(s) to us:</p>\n\n\n\n<ol>\n<li><strong>Please reach out via email first.</strong> To ensure that we can allocate the necessary time and resources to give your product the attention it deserves, please get in touch with us at contact@simplelifesaver.com before shipping your product.</li>\n\n\n\n<li><strong>Shipping approval is mandatory.</strong> We reserve the right to accept or decline any unsolicited product submissions. Approval for shipping will be explicitly communicated via email.</li>\n\n\n\n<li><strong>Acceptance does not guarantee review or endorsement.</strong> Please note that while we appreciate your interest in our blog and your willingness to share your product, receiving a product does not guarantee a review or endorsement.</li>\n\n\n\n<li><strong>Shipping costs.</strong> Unless explicitly agreed in writing, all shipping and related costs for product submission shall be borne by the sender.</li>\n\n\n\n<li><strong>Return of product.</strong> Unless specifically agreed upon in advance, all products sent to us will not be returned. Please ensure that you are comfortable with this before sending anything to us.</li>\n</ol>\n\n\n\n<p>Please understand that these measures are in place to manage our time and resources efficiently, while ensuring we provide meaningful and unbiased content to our readers. We appreciate your understanding and adherence to these guidelines.</p>\n\n\n\n<p>Thank you once again for your interest in our blog, and we look forward to potentially working together.</p>\n\n\n\n<p>Best, SLS Team!</p>"
+  },
+  "seo": {
+    "title": "Product Submission Disclaimer",
+    "description": "Dear Visitors, Thank you for your interest in our blog and for considering sharing your products with us. We always appreciate discovering new and innovative items that a",
+    "canonicalPath": "/product-submission-disclaimer/",
+    "noindex": false
+  },
+  "type": "page"
+}

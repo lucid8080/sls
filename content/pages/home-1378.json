@@ -1,0 +1,26 @@
+{
+  "id": "1378",
+  "title": "Home",
+  "slug": "home",
+  "pathname": "/home/",
+  "status": "published",
+  "publishedAt": "2020-08-29T01:16:53.000Z",
+  "modifiedAt": "2020-08-29T01:16:53.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [],
+  "tags": [],
+  "content": {
+    "kind": "html",
+    "html": ""
+  },
+  "seo": {
+    "title": "Home",
+    "canonicalPath": "/home/",
+    "noindex": false
+  },
+  "type": "page"
+}

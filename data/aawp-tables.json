@@ -1,0 +1,125 @@
+[
+  {
+    "id": "4232",
+    "title": "Makita Comparison Table",
+    "slug": "makita-comparison-table",
+    "products": [
+      {
+        "asin": "B06Y2Q2RWW",
+        "label": "Editor’s Pick",
+        "highlight": false,
+        "product": {
+          "asin": "B06Y2Q2RWW",
+          "title": "Makita DRC200PT 18V X2 LXT Lithium-Ion Brushless Cordless Robotic Vacuum Kit (5.0Ah)",
+          "url": "https://www.amazon.com/dp/B06Y2Q2RWW?tag=sls0fa-20",
+          "imageUrl": "https://m.media-amazon.com/images/I/41d59cNnqwL._AC_SL320_.jpg",
+          "features": [
+            "Cleans approximately 5,380 square feet of hard floor surfaces using two 18V LXT 5.0Ah batteries BL1850B",
+            "Upto 200 minutes of continuous operation on hard floors in \"main brush Plus vacuum\" mode using two 18V LXT 5.0Ah batteries",
+            "The BL Brushless motor eliminates carbon brushes, enabling the BL motor to run cooler and more efficiently for longer life",
+            "Efficient BL Brushless motor is electronically controlled to optimize battery energy use for upto 50% longer run time per charge",
+            "Three stage cleaning system utilizes side brushes, main brush and vacuum suction to ensure complete cleaning performance"
+          ],
+          "currency": "USD",
+          "price": "$1,599.00",
+          "brand": "Makita"
+        }
+      },
+      {
+        "asin": "B0B885625M",
+        "label": "Runner’s Up",
+        "highlight": false,
+        "product": {
+          "asin": "B0B885625M",
+          "title": "Makita DRC300Z 18V X2 LXT® Brushless Cordless Smart Robotic HEPA Filter Vacuum, Tool Only",
+          "url": "https://www.amazon.com/dp/B0B885625M?tag=sls0fa-20",
+          "imageUrl": "https://m.media-amazon.com/images/I/41Za3cYXy4L._AC_SL320_.jpg",
+          "features": [
+            "Innovative LiDAR sensor technology and front camera sensor help to map and save up to 5 rooms totaling over 100,000 square feet",
+            "Connects to a smart phone (with dedicated app installed) for smart cleaning",
+            "Obstacle detection with six ultrasonic sensors, one bumper sensor, and one LiDAR sensor (2D)",
+            "Operates using (1) 18V LXT battery with the option to insert (1) additional battery for extended run time (batteries not included)",
+            "Cleans approximately 5,380 square feet of hard floor surfaces using two 18V LXT 5.0Ah batteries BL1850B (batteries not included)"
+          ],
+          "currency": "USD",
+          "price": "$2,750.00",
+          "brand": "Makita"
+        }
+      }
+    ]
+  },
+  {
+    "id": "4551",
+    "title": "AAWP Table 4551",
+    "slug": "4551",
+    "products": [
+      {
+        "asin": "B09NM549V7",
+        "label": "Editor’s Choice",
+        "highlight": false,
+        "product": {
+          "asin": "B09NM549V7",
+          "title": "Roborock S7 MaxV Ultra Robot Vacuum and Mop, Auto Mop Washing with Empty Wash Fill Dock, Self-Emptying, Self-Refilling, ReactiveAI 2.0 Obstacle Avoidance, 5100Pa Suction, App Control, Works with Alexa",
+          "url": "https://www.amazon.com/dp/B09NM549V7?tag=sls0fa-20",
+          "imageUrl": "https://m.media-amazon.com/images/I/41Xrg7-nc4L._AC_SL320_.jpg",
+          "features": [
+            "Roborock's smartest robot combo yet. S7 MaxV Ultra provides an extremely convenient, totally hands-free cleaning experience. Using the Empty Wash Fill Dock, you get automatic dust emptying, mop washing, and robot water tank refilling. The dock even cleans itself too.",
+            "Self-Refilling and Self-Emptying. The Empty Wash Fill Dock automatically refills the S7 MaxV water tank when it docks, extending its mopping range to up to 3230 sqft (300 sqm). The dock also empties the robot vacuum and holds enough dust for up to 7-weeks without emptying.",
+            "ReactiveAI 2.0. With Roborock’s next generation of obstacle avoidance technology, ReactiveAI 2.0, S7 MaxV can navigate around common domestic hazards using its RGB camera and a new neural processing unit. An additional light turns on in dark rooms, making obstacle recognition as effective at night as during the day. 3D structured light systems supplement the RGB camera and can spot unknown objects, determine their size and location, and allow the robot to navigate around them.",
+            "Next-Level Intelligence. Using its camera, S7 MaxV can now recognize the furniture in your home and place them on the map automatically. It can also identify your floors in each room and recommend cleaning patterns and scrub intensity accordingly.",
+            "The Most Powerful Roborock Robot Vacuum Ever. S7 MaxV has more suction power than any previous Roborock robot vacuum, generating a maximum of 5100 Pa. That’s more than double the power of S6 MaxV. It quickly picks up debris, hair, dust, and more from hard floors and carpets."
+          ],
+          "currency": "USD",
+          "price": "$1,200.99",
+          "brand": "roborock"
+        }
+      },
+      {
+        "asin": "B09NPKWDRX",
+        "label": "Runner Up",
+        "highlight": false,
+        "product": {
+          "asin": "B09NPKWDRX",
+          "title": "ECOVACS DEEBOT X1 Omni Robot Vacuum and Mop Combo with Self-Empty and Auto-Clean Station, 5000Pa, Robot Vacuum Cleaner with Laser Navigation, Obstacle Avoidance, Built-in YIKO Voice Assistant, Black",
+          "url": "https://www.amazon.com/dp/B09NPKWDRX?tag=sls0fa-20",
+          "imageUrl": "https://m.media-amazon.com/images/I/31khmrEgRoL._AC_SL320_.jpg",
+          "features": [
+            "All-IN-ONE OMNI STATION. A first in the industry. After vacuuming, your DEEBOT returns to station and automatically empties the dustbin. After mopping, it automatically washes the mop heads and dries them with hot air. Experience a whole new level of freedom from cleaning.",
+            "5000PA DEEP CLEANING AND ALL-NEW MOPPING. With superior 5,000PA suction power, your DEEBOT picks debris more effectively from both hard floor and carpets. The all-new OZMO Turbo rotating mopping system works doubly hard in removing stubborn stains and debris, leaving the floor clean as new.",
+            "MAXIMUM COVERAGE, LESS MISSED SPOTS. With TrueMapping, the most advanced laser-based navigation system, your DEEBOT scans home environment to create the most efficient and fastest cleaning paths. Unmatched precision mapping and navigation result in methodical coverage with fewer missed spots.",
+            "SAY GOODBYE TO PRE-CLEANING. Didn’t pick up your shoes No worries. AIVI 3D Technology automatically identifies, recognizes and avoids obstacles above 2 inches in height with the utmost accuracy and precision-even in the dark.",
+            "INTUITIVE VOICE CONTROL. Using your X1 OMNI will feel like second nature. The voice command system makes cleaning your house as simple as saying, “Ok YIKO, vacuum under the sofa in the living room.” YIKO is a natural control system that’s even easier than the push of a button.",
+            "JACOB JENSEN DESIGN. DEEBOT X1 family combines seamless functionality and timeliness beauty that looks beautiful even when it’s not hard at work.",
+            "WHAT YOU GET: DEEBOT X1 robot, OMNI station, 2 sets of spinning mopping pads, 2 auto-seal dust bags, 1 set of side brushes, 1 cleaning brush, multi-function cleaning tool, user manual, friendly after-sale service and our worry-free 12-month warranty.",
+            "Only suitable for use in North America, please don't use it in other regions. (different current and voltage)"
+          ],
+          "currency": "USD",
+          "price": "$999.99",
+          "brand": "ECOVACS"
+        }
+      },
+      {
+        "asin": "B0B7J95MHN",
+        "label": "Lower Priced",
+        "highlight": false,
+        "product": {
+          "asin": "B0B7J95MHN",
+          "title": "Dreametech L10s Ultra Robot Vacuum and Mop Combo, Auto Mop Cleaning and Drying, Self-refilling and Self-Emptying Base for 60 Days of Cleaning, 5300Pa Suction and AI Navigation, Compatible with Alexa",
+          "url": "https://www.amazon.com/dp/B0B7J95MHN?tag=sls0fa-20",
+          "imageUrl": "https://m.media-amazon.com/images/I/319TZ8l2TvL._AC_SL320_.jpg",
+          "features": [
+            "Fully Automated Cleaning: Automatic dust collection, mop-cleaning and -drying, water-refilling, solution-adding, fast mapping, and path-planning all combine to make fully automated home cleaning a reality. The convenient auto-empty system utilizes our exclusive DualBoost 2.0 system to blow air into the robot’s dust box and vacuum it into a 3L dust bag, giving you up to 60 days of automatic, hands-off cleaning",
+            "Advanced AI Navigation: The advanced AI Action utilizes an RGB camera and 3D structured light to rapidly learn your home, tailor cleaning strategies, and auto-generate paths according to the type of obstacle, flooring, and room",
+            "Robust Vacuuming and Carpet Cleaning: Powerful 5,300Pa suction, automatic carpet detection, suction boost, and a robust rubber brush coordinate to pull household debris, hair, and dust from floors and carpets. Set cleaning behavior to have carpet identification avoid carpets while mopping or simply raise the mop pads while vacuuming",
+            "Makes Floors Shine: Dual rotary mops spin at 180RPM under firm pressure to thoroughly scrub floors, covering up to 2,152ft² (200sqm) with a large 2.5L water tank, to make your wood, tile, vinyl, or other hard floors refreshingly clean",
+            "Cleans and Dries Its Mops: The mops are lifted automatically when returning to the base station to ensure your floors stay pristine. Automatic mop cleaning immerses the mops in water and spins them at high speed against grooves in the removable base plate to dislodge dirt. After cleaning is complete, the mops are dried with hot air in as little as 2 hours to help prevent odor",
+            "Customize Your Cleaning from Anywhere: Create multiple maps for multi-floor houses, segment rooms, create virtual walls, set no-go zones, and create cleaning schedules and routines. Start, pause, or stop cleaning with voice commands or supervise your home using the video control in the app. The power is at the tip of your tongue and the ends of your fingers"
+          ],
+          "currency": "USD",
+          "price": "$999.99",
+          "brand": "Dreametech"
+        }
+      }
+    ]
+  }
+]

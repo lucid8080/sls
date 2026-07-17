@@ -1,0 +1,52 @@
+{
+  "id": "67",
+  "title": "About",
+  "slug": "about",
+  "pathname": "/about/",
+  "status": "published",
+  "excerpt": "Here at Simple Lifesaver, I genuinely value time-saving tools and techniques! I test, review, and recommend products I feature on my website. I also provide unique techni",
+  "publishedAt": "2019-11-15T15:24:18.000Z",
+  "modifiedAt": "2023-08-02T21:33:28.000Z",
+  "author": {
+    "id": "178",
+    "name": "Andre",
+    "slug": "drenation"
+  },
+  "categories": [],
+  "tags": [],
+  "featuredImage": {
+    "src": "/media/2020/04/simplelifesaver.com-logo-dark-writting-1.webp",
+    "width": 1792,
+    "height": 589,
+    "alt": "simplelifesaver.com logo - dark writting (1)",
+    "variants": {
+      "thumbnail": {
+        "src": "/media/2020/04/simplelifesaver.com-logo-dark-writting-1-150x150.webp",
+        "width": 150,
+        "height": 150
+      },
+      "card": {
+        "src": "/media/2020/04/simplelifesaver.com-logo-dark-writting-1-768x252.webp",
+        "width": 768,
+        "height": 252
+      },
+      "large": {
+        "src": "/media/2020/04/simplelifesaver.com-logo-dark-writting-1-1024x337.webp",
+        "width": 1024,
+        "height": 337
+      }
+    }
+  },
+  "content": {
+    "kind": "html",
+    "html": "<hr>\n\n\n\n<p>Here at Simple Lifesaver, I genuinely value time-saving tools and techniques!</p>\n\n\n\n<p>I test, review, and recommend products I feature on my website. I also provide unique techniques to help simplify your home life.&amp;nbsp;</p>\n\n\n\n<p>I believe consumer education is one of the most important ways to combat inferior products and services in the market today.&amp;nbsp;</p>\n\n\n\n<h2>WHAT KIND OF PRODUCTS DO I TEST? </h2>\n\n\n\n<p>Right now, we focus on multifunction and smart home products that actually save you time.&amp;nbsp;</p>\n\n\n\n<p>Although I'm not entirely product-focused, I still love finding tips and tricks to help you simplify your life and improve your home.&amp;nbsp;&amp;nbsp;</p>\n\n\n\n<p>Throughout the years, I've spent my own hard-earned money on many different products.</p>\n\n\n\n<p>Some good, some bad, and some ugly!&amp;nbsp;&amp;nbsp;</p>\n\n\n\n<figure><img src=\"/media/2019/12/dre-e1576698143481.jpg\" alt=\"\" width=\"403\" height=\"299\"><figcaption>Me with just a few of the products I have purchased and tested over the years!</figcaption></figure>\n\n\n\n<h2>MY STORY</h2>\n\n\n\n<p>Officially Simplelifesaver.com was born on November 2019. Launching a product review site was always brewing within me for many years.&amp;nbsp;&amp;nbsp;</p>\n\n\n\n<p>You know that one friend or colleague<strong>&amp;nbsp;</strong>you would call up to ask for advice about a product or service before buying it? Well, that's me! :) My family and friends always call to ask about my thoughts on items before they buy them.</p>\n\n\n\n<p>I realized people valued my in-depth insight when it comes to getting the most out of products and getting the best bang for their buck.&amp;nbsp;&amp;nbsp;</p>\n\n\n\n<p>It became second nature to buy products and stress test the heck out of them and see if it lives up to their claims.&amp;nbsp;</p>\n\n\n\n<p>Because people valued my insight, I thought it would be the perfect opportunity to create an online presence, and a central knowledge base where I could help people on a mass scale buy the products that best suit their needs.&amp;nbsp;</p>\n\n\n\n<h2>WE'RE ON YOUTUBE</h2>\n\n\n\n<p>Not only do I help people on this site, but I also have a growing YouTube channel!&amp;nbsp;</p>\n\n\n\n<figure><a href=\"https://www.youtube.com/channel/UCCzzgqRRjfzt74N8fI3xreQ\" rel=\"noopener noreferrer\"><img src=\"/media/2021/11/youtube_chan.png\" alt=\"\"></a></figure>\n\n\n\n<figure>\nhttps://www.youtube.com/watch?v=E7PLSOPyTqo&amp;t=56s\n</figure>\n\n\n\n<figure>\nhttps://www.youtube.com/watch?v=B_pa6_sbdow&amp;t=113s\n</figure>\n\n\n\n<h2>MY MISSION&amp;nbsp;</h2>\n\n\n\n<p>I'm obsessed with finding new ways to make life simple. I love providing helpful reviews, hacks, and guides to help people find the best products.&amp;nbsp;</p>\n\n\n\n<h2>ORIGINAL CONTENT </h2>\n\n\n\n<p>There’s been a growing trend of sites using AI-written content. You won’t find that here. Our whole content team comprises human writers that provide in-depth, well-researched articles. Our revenue from advertising and several other sources allows us to pay our contributors a fair wage and to deliver high-quality content without any cost to you, the reader.</p>\n\n\n\n<p>If you find an error in one of our articles, please feel free to contact us at</p>\n\n\n\n<p>contact[@]simplelifesaver<p><em>Migration note: unsupported shortcode removed for manual review.</em></p>com.</p>\n\n\n\n<h2>WHO AM I</h2>\n\n\n\n<p>I'm Andre, co-founder, product reviewer, and editor-in-chief of simplelifesaver.com. After departing from IT in 2012, I decided the enter the entrepreneurial space.&amp;nbsp;</p>\n\n\n\n<p>I have launched several businesses since then. One of my successful ventures was my real-estate business. My partners and I built a million-dollar real estate portfolio that we own and operate to this day.&amp;nbsp;</p>\n\n\n\n<p>This site is run by smart, resourceful people that believe in good solid products.</p>\n\n\n\n<p>I occasionally contact other professionals in our space to help write, review, and test products. </p>\n\n\n\n<p></p>\n\n\n\n<p><strong>Address: </strong><br>4498 Main St Suite #4 - 1103<br>Buffalo, NY 14226<br>United States </p>"
+  },
+  "seo": {
+    "title": "About",
+    "description": "Here at Simple Lifesaver, I genuinely value time-saving tools and techniques! I test, review, and recommend products I feature on my website. I also provide unique techni",
+    "canonicalPath": "/about/",
+    "ogImage": "/media/2020/04/simplelifesaver.com-logo-dark-writting-1.webp",
+    "noindex": false
+  },
+  "type": "page"
+}

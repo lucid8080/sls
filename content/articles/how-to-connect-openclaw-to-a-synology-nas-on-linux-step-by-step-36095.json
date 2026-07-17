@@ -1,0 +1,58 @@
+{
+  "id": "36095",
+  "title": "How to Connect OpenClaw to a Synology NAS on Linux (Step-by-Step)",
+  "slug": "how-to-connect-openclaw-to-a-synology-nas-on-linux-step-by-step",
+  "pathname": "/how-to-connect-openclaw-to-a-synology-nas-on-linux-step-by-step/",
+  "status": "published",
+  "excerpt": "If you run OpenClaw on a Linux machine, connecting it to a Synology NAS is one of the best upgrades you can make. It gives you persistent storage for logs, backups, expor",
+  "publishedAt": "2026-02-19T22:17:42.000Z",
+  "modifiedAt": "2026-02-19T22:17:55.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [
+    {
+      "id": "1",
+      "name": "Blog",
+      "slug": "blog"
+    }
+  ],
+  "tags": [],
+  "featuredImage": {
+    "src": "/media/2026/02/How-to-Connect-OpenClaw-to-a-Synology-NAS-on-Linux-Step-by-Step.webp",
+    "width": 768,
+    "height": 512,
+    "alt": "How to Connect OpenClaw to a Synology NAS on Linux (Step-by-Step)",
+    "variants": {
+      "thumbnail": {
+        "src": "/media/2026/02/How-to-Connect-OpenClaw-to-a-Synology-NAS-on-Linux-Step-by-Step-150x150.webp",
+        "width": 150,
+        "height": 150
+      },
+      "card": {
+        "src": "/media/2026/02/How-to-Connect-OpenClaw-to-a-Synology-NAS-on-Linux-Step-by-Step-300x200.webp",
+        "width": 300,
+        "height": 200
+      },
+      "large": {
+        "src": "/media/2026/02/How-to-Connect-OpenClaw-to-a-Synology-NAS-on-Linux-Step-by-Step.webp",
+        "width": 768,
+        "height": 512
+      }
+    }
+  },
+  "content": {
+    "kind": "html",
+    "html": "<p>If you run OpenClaw on a Linux machine, connecting it to a Synology NAS is one of the best upgrades you can make. It gives you persistent storage for logs, backups, exports, and project files without keeping everything tied to one local disk.</p>\n<p>In this guide, I’ll show you exactly how to mount a Synology share, test access, and make it persistent after reboot.</p>\n<h2>Why this setup is worth it</h2>\n<ul><li>Centralized file storage for assistant workflows</li><li>Cleaner organization for backups, logs, and exports</li><li>Persistence across reboots</li><li>Easier scaling as your automation grows</li></ul>\n<h2>What you need first</h2>\n<ul><li>A Linux machine running OpenClaw</li><li>A Synology NAS on the same network</li><li>A Synology shared folder (example: OpenClaw)</li><li>A Synology user with read/write access to that share</li></ul>\n<h2>Step 1) Create a local mount point</h2>\n<pre><code>sudo mkdir -p /mnt/synology</code></pre>\n<h2>Step 2) Create a credentials file</h2>\n<pre><code>cat &amp;gt; /home/hero/.smbcredentials_synology &amp;lt;&amp;lt;'EOF'\nusername=YOUR_SYNOLOGY_USERNAME\npassword=YOUR_SYNOLOGY_PASSWORD\nEOF\nchmod 600 /home/hero/.smbcredentials_synology</code></pre>\n<h2>Step 3) Mount the Synology share manually (first test)</h2>\n<pre><code>sudo mount -t cifs //192.168.0.2/OpenClaw /mnt/synology -o credentials=/home/hero/.smbcredentials_synology,uid=$(id -u),gid=$(id -g),iocharset=utf8,vers=3.0</code></pre>\n<p>Then verify:</p><pre><code>ls -la /mnt/synology</code></pre>\n<h2>Step 4) Make it auto-mount at boot</h2>\n<pre><code>//192.168.0.2/OpenClaw /mnt/synology cifs credentials=/home/hero/.smbcredentials_synology,uid=1000,gid=1000,iocharset=utf8,vers=3.0,x-systemd.automount,_netdev,nofail 0 0</code></pre>\n<h2>Step 5) Create a clean folder layout for OpenClaw</h2>\n<pre><code>mkdir -p /mnt/synology/OpenClaw/{backups,logs,projects,exports}</code></pre>\n<h2>FAQ</h2>\n<h3>Is AFP better than SMB for Linux?</h3><p>For most Linux setups today, SMB/CIFS is more practical and better supported than AFP.</p>\n<h3>Can I mount multiple Synology shares?</h3><p>Yes. Create additional mount points and add one entry per share.</p>\n<h3>Will this still work after reboot?</h3><p>Yes, if your mount configuration is valid and test-mount passes.</p>\n<p><strong>External references:</strong> <a href=\"https://kb.synology.com/\" rel=\"noopener noreferrer\">Synology Knowledge Center</a>, <a href=\"https://help.ubuntu.com/community/MountCifsFstabSecurely\" rel=\"noopener noreferrer\">Ubuntu CIFS setup guide</a>, <a href=\"https://www.samba.org/samba/docs/\" rel=\"noopener noreferrer\">Samba documentation</a>.</p>\n<p><strong>Affiliate Disclosure:</strong> This article may contain affiliate links. If you buy through these links, we may earn a commission at no extra cost to you.</p>"
+  },
+  "seo": {
+    "title": "How to Connect OpenClaw to a Synology NAS on Linux (Step-by-Step)",
+    "description": "If you run OpenClaw on a Linux machine, connecting it to a Synology NAS is one of the best upgrades you can make. It gives you persistent storage for logs, backups, expor",
+    "canonicalPath": "/how-to-connect-openclaw-to-a-synology-nas-on-linux-step-by-step/",
+    "ogImage": "/media/2026/02/How-to-Connect-OpenClaw-to-a-Synology-NAS-on-Linux-Step-by-Step.webp",
+    "noindex": false
+  },
+  "type": "article"
+}

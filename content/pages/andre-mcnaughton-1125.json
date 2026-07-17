@@ -1,0 +1,35 @@
+{
+  "id": "1125",
+  "title": "Andre McNaughton",
+  "slug": "andre-mcnaughton",
+  "pathname": "/about/andre-mcnaughton/",
+  "status": "published",
+  "excerpt": "My name is Andre McNaughton, Co-Founder, and Editor-in-Chief of Simplelifesaver.com . I enjoy dissecting technology and playing with new gadgets. Tormented with a chronic",
+  "publishedAt": "2020-04-21T11:39:38.000Z",
+  "modifiedAt": "2020-04-22T14:07:25.000Z",
+  "author": {
+    "id": "178",
+    "name": "Andre",
+    "slug": "drenation"
+  },
+  "categories": [],
+  "tags": [],
+  "featuredImage": {
+    "src": "/media/2019/12/dre-e1576698143481.webp",
+    "width": 403,
+    "height": 299,
+    "alt": "Andre McNaughton"
+  },
+  "content": {
+    "kind": "html",
+    "html": "<hr>\n\n\n\n<figure><img src=\"/media/2019/12/dre-e1576698143481.jpg\" alt=\"\" width=\"575\" height=\"427\"></figure>\n\n\n\n<p>My name is Andre McNaughton, Co-Founder, and Editor-in-Chief of <a href=\"/\" rel=\"noopener noreferrer\">Simplelifesaver.com</a>.</p>\n\n\n\n<p>I enjoy dissecting technology and playing with new gadgets. Tormented with a chronic case of curiosity, I leave no rock unturned for solutions. I would definitely classify myself as a maven that enjoys helping people find answers.</p>\n\n\n\n<h2>My Story</h2>\n\n\n\n<p>Shortly after receiving our first family computer, my brother and I completely dismantled it. Our natural curiosity got the best of us. We wanted to understand how it worked. Our parents were so furious. But you better believe we learned how to fix it!</p>\n\n\n\n<p>My brother and I were heavily into technology! Ever<br>every penny we saved when back into new technology.</p>\n\n\n\n<p>Growing up, we didn't have much money. So when I bought something, it needed to be the best, most reliable, and the most durable thing ever because it wouldn't be replaced if it broke.</p>\n\n\n\n<p>So anything I bought, I would make sure to ask all my reliable sources and research the heck out of it. It had the be the best bang for my buck!</p>\n\n\n\n<p>In the early 2000's, I would often search the web for the best technology. I feel reviews were a lot nobler back then.</p>\n\n\n\n<p>These days sites label everything the \"best.\"</p>\n\n\n\n<p>It's quite challenging to find honest reviews online.<br>So I took it upon myself to provide high-quality and honest tips, hacks, and product reviews.</p>"
+  },
+  "seo": {
+    "title": "Andre McNaughton",
+    "description": "My name is Andre McNaughton, Co-Founder, and Editor-in-Chief of Simplelifesaver.com . I enjoy dissecting technology and playing with new gadgets. Tormented with a chronic",
+    "canonicalPath": "/about/andre-mcnaughton/",
+    "ogImage": "/media/2019/12/dre-e1576698143481.webp",
+    "noindex": false
+  },
+  "type": "page"
+}

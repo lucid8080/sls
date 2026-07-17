@@ -1,0 +1,52 @@
+{
+  "name": "simple-life-saver-rebuild",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "cms:export": "tsx scripts/cms-export.ts",
+    "prebuild": "npm run cms:export",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "media:sync": "node scripts/sync-approved-media.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "@tiptap/pm": "^3.22.3",
+    "@tiptap/react": "^3.22.3",
+    "@tiptap/starter-kit": "^3.22.3",
+    "@vercel/blob": "^2.3.2",
+    "bcryptjs": "^3.0.3",
+    "drizzle-orm": "^0.45.2",
+    "next": "16.1.6",
+    "next-auth": "^5.0.0-beta.30",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sharp": "^0.34.5",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@tailwindcss/postcss": "^4.2.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^25.3.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^9.39.3",
+    "prettier": "^3.8.4",
+    "tailwindcss": "^4.2.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "8.56.0",
+    "vitest": "^4.1.0"
+  }
+}

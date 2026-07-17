@@ -1,0 +1,28 @@
+{
+  "id": "1481",
+  "title": "Contact",
+  "slug": "contact",
+  "pathname": "/contact/",
+  "status": "published",
+  "excerpt": "Get In Touch Contact US General Customer Care &amp; Technical Support As we address the needs of our customers, email wait times may be longer than usual. In an effor",
+  "publishedAt": "2021-11-04T15:45:08.000Z",
+  "modifiedAt": "2021-11-04T15:45:08.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [],
+  "tags": [],
+  "content": {
+    "kind": "html",
+    "html": "<h3>Get In Touch</h3>\t\t\n\t\t\t<h1>Contact US</h1>\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<a href=\"https://www.google.com/maps/@40.6315416,-75.3576829,18z\" rel=\"noopener noreferrer\">\n\t\t\t\t\t\t\t<img width=\"1240\" height=\"300\" src=\"https://foxiz.themeruby.com/default/wp-content/uploads/sites/2/2021/11/map.png\" alt=\"\">\t\t\t\t\t\t\t\t</a>\n\t\t\t<h3>General Customer Care &amp; Technical Support</h3>\n<p>As we address the needs of our customers, email wait times may be longer than usual. In an effort to give you the best customer experience possible, we encourage you to take advantage of our phones. In most cases this is the fastest and easiest option.\n</p>\t\t\n\t\t<p><em>Migration note: unsupported shortcode removed for manual review.</em></p>\t\t\n\t\t\t<h3>Find Us on Social</h3>"
+  },
+  "seo": {
+    "title": "Contact",
+    "description": "Get In Touch Contact US General Customer Care &amp; Technical Support As we address the needs of our customers, email wait times may be longer than usual. In an effor",
+    "canonicalPath": "/contact/",
+    "noindex": false
+  },
+  "type": "page"
+}

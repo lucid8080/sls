@@ -1,0 +1,28 @@
+{
+  "id": "1151",
+  "title": "Editorial Policy",
+  "slug": "editorial-policy",
+  "pathname": "/editorial-policy/",
+  "status": "published",
+  "excerpt": "ROLES AND RESPONSIBILITIES OF THE EDITOR&amp;nbsp; The editor rigorously pursues the submission of appropriate and informative articles. The editor reviews all drafts for",
+  "publishedAt": "2020-04-22T22:21:59.000Z",
+  "modifiedAt": "2022-05-06T15:08:08.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [],
+  "tags": [],
+  "content": {
+    "kind": "html",
+    "html": "<h3><strong>ROLES AND RESPONSIBILITIES OF THE EDITOR&amp;nbsp;</strong></h3>\n\n\n\n<p>The editor rigorously pursues the submission of appropriate and informative articles.</p>\n\n\n\n<p>The editor reviews all drafts for submitted articles and applies his/her best technical knowledge to critique the content and appraise its value for simplelifesaver.com's readership.&amp;nbsp;</p>\n\n\n\n<p>The editor may recommend reworking or rearrangement an article for clarity, readability, and accuracy. </p>\n\n\n\n<p>When reviewing drafts on simplelifesave.com, the editor should also note any grammatical, stylistic, or typographical errors.&amp;nbsp;</p>\n\n\n\n<p>All articles are Grammarly optimized for readability, grammar, structure, and plagiarism. We’re proud of all the articles we write here at simplelifesaver.com.&amp;nbsp;</p>"
+  },
+  "seo": {
+    "title": "Editorial Policy",
+    "description": "ROLES AND RESPONSIBILITIES OF THE EDITOR&amp;nbsp; The editor rigorously pursues the submission of appropriate and informative articles. The editor reviews all drafts for",
+    "canonicalPath": "/editorial-policy/",
+    "noindex": false
+  },
+  "type": "page"
+}

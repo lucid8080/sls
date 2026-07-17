@@ -1,0 +1,26 @@
+{
+  "id": "1215",
+  "title": "My Bookmarks",
+  "slug": "my-bookmarks",
+  "pathname": "/my-bookmarks/",
+  "status": "published",
+  "publishedAt": "2021-09-27T13:57:47.000Z",
+  "modifiedAt": "2021-09-27T13:57:47.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [],
+  "tags": [],
+  "content": {
+    "kind": "html",
+    "html": ""
+  },
+  "seo": {
+    "title": "My Bookmarks",
+    "canonicalPath": "/my-bookmarks/",
+    "noindex": false
+  },
+  "type": "page"
+}

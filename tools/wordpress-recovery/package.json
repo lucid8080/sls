@@ -1,0 +1,32 @@
+{
+  "name": "wordpress-recovery",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only WordPress SQL dump extraction utility for secure static-site recovery.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test dist/test/*.test.js",
+    "extract": "npm run build && node dist/src/cli.js",
+    "media": "npm run build && node dist/src/media-cli.js",
+    "sanitize": "npm run build && node dist/src/sanitize-cli.js",
+    "format": "npm run build && node dist/src/format-cli.js",
+    "routes": "npm run build && node dist/src/route-cli.js",
+    "seo": "npm run build && node dist/src/seo-cli.js",
+    "links": "npm run build && node dist/src/link-cli.js",
+    "content": "npm run build && node dist/src/content-model-cli.js",
+    "products": "npm run build && node dist/src/product-display-cli.js",
+    "reinject-products": "npm run build && node dist/src/reinject-product-displays-cli.js"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "typescript": "latest"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5",
+    "zod": "^4.3.6"
+  }
+}

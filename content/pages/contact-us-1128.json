@@ -1,0 +1,52 @@
+{
+  "id": "1128",
+  "title": "Contact us",
+  "slug": "contact-us",
+  "pathname": "/contact-us/",
+  "status": "published",
+  "excerpt": "If you have a question, comment, or just need to get in touch with us. Please contact us using the email address below. We will do our very best to&amp;nbsp;respond to al",
+  "publishedAt": "2020-04-22T07:04:38.000Z",
+  "modifiedAt": "2021-11-02T12:07:31.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [],
+  "tags": [],
+  "featuredImage": {
+    "src": "/media/2021/11/hero-banner-simplelifesaver-copyrighted.webp",
+    "width": 1200,
+    "height": 400,
+    "alt": "hero-banner-simplelifesaver-copyrighted",
+    "variants": {
+      "thumbnail": {
+        "src": "/media/2021/11/hero-banner-simplelifesaver-copyrighted-150x150.webp",
+        "width": 150,
+        "height": 150
+      },
+      "card": {
+        "src": "/media/2021/11/hero-banner-simplelifesaver-copyrighted-768x256.webp",
+        "width": 768,
+        "height": 256
+      },
+      "large": {
+        "src": "/media/2021/11/hero-banner-simplelifesaver-copyrighted-1024x341.webp",
+        "width": 1024,
+        "height": 341
+      }
+    }
+  },
+  "content": {
+    "kind": "html",
+    "html": "<hr>\n\n\n\n<p>If you have a question, comment, or just need to get in touch with us. Please contact us using the email address below.</p>\n\n\n\n<figure><img src=\"/media/2020/04/email.png\" alt=\"\"></figure>\n\n\n\n<p><strong>We will do our very best to&amp;nbsp;respond to all email requests within 24 hours.&amp;nbsp;</strong></p>\n\n\n\n<p>Check out our YouTube Channel</p>\n\n\n\n<figure><a href=\"https://www.youtube.com/channel/UCCzzgqRRjfzt74N8fI3xreQ\" rel=\"noopener noreferrer\"><img src=\"/media/2021/11/youtube_chan.png\" alt=\"\"></a></figure>\n\n\n\n<ul>\n\n\n\n\n\n\n\n\n\n</ul>"
+  },
+  "seo": {
+    "title": "Contact us",
+    "description": "If you have a question, comment, or just need to get in touch with us. Please contact us using the email address below. We will do our very best to&amp;nbsp;respond to al",
+    "canonicalPath": "/contact-us/",
+    "ogImage": "/media/2021/11/hero-banner-simplelifesaver-copyrighted.webp",
+    "noindex": false
+  },
+  "type": "page"
+}

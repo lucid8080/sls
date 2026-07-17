@@ -1,0 +1,58 @@
+{
+  "id": "29034",
+  "title": "Getting Started with OpenClaw (Clawdbot): A Beginner's Guide",
+  "slug": "getting-started-with-openclaw-a-beginners-guide",
+  "pathname": "/getting-started-with-openclaw-a-beginners-guide/",
+  "status": "published",
+  "excerpt": "Ready to self-host your own AI assistant? This beginner-friendly guide walks you through setting up OpenClaw from scratch — no prior experience required. What We'll Cover",
+  "publishedAt": "2026-02-02T03:55:56.000Z",
+  "modifiedAt": "2026-02-03T21:43:47.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [
+    {
+      "id": "157",
+      "name": "Lifestyle",
+      "slug": "lifestyle"
+    }
+  ],
+  "tags": [],
+  "featuredImage": {
+    "src": "/media/2026/02/openclaw-beginner-lobster.webp",
+    "width": 1024,
+    "height": 634,
+    "alt": "openclaw-beginner-lobster",
+    "variants": {
+      "thumbnail": {
+        "src": "/media/2026/02/openclaw-beginner-lobster-150x150.webp",
+        "width": 150,
+        "height": 150
+      },
+      "card": {
+        "src": "/media/2026/02/openclaw-beginner-lobster-768x476.webp",
+        "width": 768,
+        "height": 476
+      },
+      "large": {
+        "src": "/media/2026/02/openclaw-beginner-lobster-768x476.webp",
+        "width": 768,
+        "height": 476
+      }
+    }
+  },
+  "content": {
+    "kind": "html",
+    "html": "Ready to self-host your own AI assistant? This beginner-friendly guide walks you through setting up OpenClaw from scratch — no prior experience required.\n<h2>What We'll Cover</h2>\n<ol>\n \t<li>Prerequisites and requirements</li>\n \t<li>Installing OpenClaw</li>\n \t<li>Running the setup wizard</li>\n \t<li>Connecting your AI provider</li>\n \t<li>Adding your first messaging channel</li>\n \t<li>Your first conversation</li>\n</ol>\nTotal time: 15-30 minutes\n<h2>Prerequisites</h2>\nBefore starting, make sure you have:\n<ul>\n \t<li><strong>A computer</strong> — Windows, Mac, or Linux all work</li>\n \t<li><strong>Node.js 18 or higher</strong> — the runtime that powers OpenClaw</li>\n \t<li><strong>An AI API key</strong> — from Anthropic (Claude) or OpenAI (GPT-4)</li>\n \t<li><strong>Basic terminal comfort</strong> — you'll type a few commands</li>\n</ul>\n<h3>Installing Node.js</h3>\nIf you don't have Node.js installed:\n\n<strong>Windows/Mac:</strong> Download from <a href=\"https://nodejs.org/\" rel=\"noopener noreferrer\">nodejs.org</a> and run the installer.\n\n<strong>Linux:</strong>\n<pre><code>curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -\nsudo apt-get install -y nodejs</code></pre>\nVerify installation: <code>node --version</code> (should show v18 or higher)\n<h3>Getting an AI API Key</h3>\nYou'll need an API key from at least one AI provider:\n<ul>\n \t<li><strong>Anthropic (Claude):</strong> <a href=\"https://console.anthropic.com/\" rel=\"noopener noreferrer\">console.anthropic.com</a></li>\n \t<li><strong>OpenAI (GPT-4):</strong> <a href=\"https://platform.openai.com/\" rel=\"noopener noreferrer\">platform.openai.com</a></li>\n</ul>\nBoth offer pay-as-you-go pricing. Start with $10-20 credit — it goes a long way for personal use.\n<h2>Step 1: Install OpenClaw</h2>\nOpen your terminal (Command Prompt on Windows, Terminal on Mac/Linux) and run:\n<pre><code>npm install -g openclaw</code></pre>\nThis installs OpenClaw globally on your system. Wait for it to complete (1-2 minutes).\n\nVerify installation:\n<pre><code>openclaw --version</code></pre>\n<h2>Step 2: Run the Setup Wizard</h2>\nThe onboarding wizard guides you through initial configuration:\n<pre><code>openclaw onboard</code></pre>\nThe wizard will ask you about:\n<ul>\n \t<li>Your preferred AI provider</li>\n \t<li>API key configuration</li>\n \t<li>Basic settings</li>\n</ul>\nFollow the prompts — defaults are sensible for most users.\n<h2>Step 3: Add Your AI Provider</h2>\nIf the wizard didn't prompt for your API key, add it manually:\n<pre><code>openclaw configure --section auth</code></pre>\nEnter your Anthropic or OpenAI API key when prompted. The key is stored securely on your machine.\n<h2>Step 4: Start the Gateway</h2>\nThe gateway is the background service that runs your AI assistant:\n<pre><code>openclaw gateway start</code></pre>\nCheck that it's running:\n<pre><code>openclaw status</code></pre>\nYou should see the gateway status as \"running\" with your configured AI provider listed.\n<h2>Step 5: Open the Dashboard</h2>\nOpenClaw includes a web dashboard for chatting and configuration:\n<pre><code>openclaw dashboard</code></pre>\nThis opens your browser to the local dashboard. You can chat with your AI right here to verify everything works!\n\nhttps://www.youtube.com/watch?v=a63dUwXUgDo\n<h2>Step 6: Connect Telegram (Optional but Recommended)</h2>\nTo chat from your phone via Telegram:\n<ol>\n \t<li>Open Telegram and message @BotFather</li>\n \t<li>Send <code>/newbot</code> and follow prompts to create a bot</li>\n \t<li>Copy the bot token BotFather gives you</li>\n \t<li>Run: <code>openclaw configure --section telegram</code></li>\n \t<li>Paste your bot token</li>\n \t<li>Restart the gateway: <code>openclaw gateway restart</code></li>\n</ol>\nNow message your bot on Telegram — your AI assistant responds!\n\nFor detailed Telegram setup, see our <a href=\"/how-to-connect-openclaw-to-telegram-complete-setup-guide/\" rel=\"noopener noreferrer\">complete Telegram guide</a>.\n<h2>Your First Conversation</h2>\nWhether through the dashboard or Telegram, try asking your AI:\n<ul>\n \t<li>\"Hello! What can you help me with?\"</li>\n \t<li>\"What's the weather like today?\" (if web search is enabled)</li>\n \t<li>\"Remember that my favorite color is blue\" (testing memory)</li>\n \t<li>\"Set a reminder for 10 minutes from now\" (if cron is configured)</li>\n</ul>\nYour AI assistant is now running locally, under your control!\n<h2>Essential Commands Reference</h2>\n<table>\n<thead>\n<tr>\n<th>Command</th>\n<th>What it does</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>openclaw status</code></td>\n<td>Check if gateway is running</td>\n</tr>\n<tr>\n<td><code>openclaw gateway start</code></td>\n<td>Start the gateway</td>\n</tr>\n<tr>\n<td><code>openclaw gateway stop</code></td>\n<td>Stop the gateway</td>\n</tr>\n<tr>\n<td><code>openclaw gateway restart</code></td>\n<td>Restart with new config</td>\n</tr>\n<tr>\n<td><code>openclaw dashboard</code></td>\n<td>Open web dashboard</td>\n</tr>\n<tr>\n<td><code>openclaw configure</code></td>\n<td>Change settings</td>\n</tr>\n<tr>\n<td><code>openclaw help</code></td>\n<td>Show all commands</td>\n</tr>\n</tbody>\n</table>\n<h2>Running 24/7</h2>\nFor always-on availability:\n<ol>\n \t<li><strong>Keep the gateway running:</strong> Use <code>openclaw gateway start</code> in a persistent terminal or configure it as a system service</li>\n \t<li><strong>Dedicated hardware:</strong> Consider a <a href=\"https://www.amazon.com/s?k=mini+pc&amp;tag=sls0fa-20\" rel=\"noopener noreferrer\">mini PC</a> for always-on operation</li>\n \t<li><strong>Auto-start:</strong> Configure your system to start the gateway on boot</li>\n</ol>\n<h2>Troubleshooting Common Issues</h2>\n<h3>\"Command not found: openclaw\"</h3>\nNode.js global packages aren't in your PATH. Try restarting your terminal, or run with npx: <code>npx openclaw</code>\n<h3>\"Cannot connect to AI provider\"</h3>\nVerify your API key is correct and has credit. Check: <code>openclaw configure --section auth</code>\n<h3>\"Gateway won't start\"</h3>\nCheck if something else is using the default port: <code>openclaw status</code> shows details. Try a different port in config if needed.\n<h3>Telegram bot doesn't respond</h3>\nEnsure the gateway is running, bot token is correct, and you've approved yourself (if using pairing mode).\n<h2>Next Steps</h2>\nNow that OpenClaw is running:\n<ul>\n \t<li><a href=\"/how-to-connect-openclaw-to-telegram-complete-setup-guide/\" rel=\"noopener noreferrer\">Connect more messaging platforms</a></li>\n \t<li>Explore the dashboard settings</li>\n \t<li>Set up scheduled tasks and reminders</li>\n \t<li>Customize your AI's personality in the workspace files</li>\n \t<li>Join the <a href=\"https://discord.com/invite/clawd\" rel=\"noopener noreferrer\">OpenClaw Discord</a> for community support</li>\n</ul>\n<h2>Frequently Asked Questions</h2>\n<h3>How much does OpenClaw cost to run?</h3>\nThe software is free. You only pay for AI API usage — typically $5-30/month for personal use depending on how much you chat.\n<h3>Can I use multiple AI models?</h3>\nYes! Configure multiple providers and switch between Claude, GPT-4, and others based on task or preference.\n<h3>Is my data private?</h3>\nYour conversation history stays on your machine. Only individual prompts go to your chosen AI provider when you chat.\n<h3>What if I break something?</h3>\nOpenClaw stores config in <code>~/.openclaw/</code>. Worst case, delete that folder and run <code>openclaw onboard</code> again for a fresh start.\n<h3>Can I run this on a Raspberry Pi?</h3>\nYes! A Raspberry Pi 4 or 5 works fine for API-based AI. Just install Node.js for ARM and follow the same steps.\n<h2>Congratulations!</h2>\nYou now have a self-hosted AI assistant running on your own hardware. Welcome to the world of <a href=\"/what-is-openclaw-the-personal-ai-assistant-you-can-self-host/\" rel=\"noopener noreferrer\">personal AI ownership</a>!\n\n<hr>\n\n<em>This article contains affiliate links. As an Amazon Associate, we earn from qualifying purchases at no additional cost to you.</em>"
+  },
+  "seo": {
+    "title": "Getting Started with OpenClaw (Clawdbot): A Beginner's Guide",
+    "description": "Ready to self-host your own AI assistant? This beginner-friendly guide walks you through setting up OpenClaw from scratch — no prior experience required. What We'll Cover",
+    "canonicalPath": "/getting-started-with-openclaw-a-beginners-guide/",
+    "ogImage": "/media/2026/02/openclaw-beginner-lobster.webp",
+    "noindex": false
+  },
+  "type": "article"
+}

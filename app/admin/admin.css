@@ -1,0 +1,389 @@
+.admin-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  background: #f6f7f9;
+  color: #1f2937;
+}
+
+.admin-sidebar {
+  background: #111827;
+  color: #f9fafb;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.admin-brand a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-nav a {
+  color: #d1d5db;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.admin-nav a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.admin-signout button {
+  margin-top: auto;
+  width: 100%;
+  border: 1px solid #374151;
+  background: transparent;
+  color: #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.admin-main {
+  padding: 2rem;
+}
+
+.admin-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+
+.admin-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-button,
+.admin-input,
+.admin-textarea,
+.admin-select {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+}
+
+.admin-button {
+  background: #111827;
+  color: #fff;
+  cursor: pointer;
+}
+
+.admin-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.admin-button.secondary {
+  background: #fff;
+  color: #111827;
+}
+
+.admin-login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.admin-login form {
+  width: min(100%, 24rem);
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-editor {
+  min-height: 320px;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background: #fff;
+}
+
+.admin-editor .ProseMirror {
+  min-height: 280px;
+  outline: none;
+}
+
+.admin-editor .ProseMirror h2 {
+  margin-top: 1.25rem;
+}
+
+.admin-status {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: #e5e7eb;
+}
+
+.admin-status.published {
+  background: #d1fae5;
+}
+
+.admin-status.in_review {
+  background: #fef3c7;
+}
+
+.admin-ads-header,
+.admin-ads-group-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-ads-actions,
+.admin-ads-group-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-ads-global {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.admin-ads-description,
+.admin-ads-note {
+  margin: 0.35rem 0 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.admin-ads-note {
+  font-size: 0.82rem;
+}
+
+.admin-error {
+  color: #b91c1c;
+}
+
+.admin-success {
+  color: #047857;
+}
+
+.admin-youtube-header,
+.admin-youtube-summary,
+.admin-youtube-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-youtube-header h1 {
+  margin-top: 0;
+}
+
+.admin-youtube-summary {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.admin-youtube-summary span {
+  border-right: 1px solid #e5e7eb;
+  padding-right: 1rem;
+}
+
+.admin-youtube-actions {
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.admin-youtube-select-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-youtube-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-youtube-status {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+  background: #e5e7eb;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+.admin-youtube-status.available {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.admin-youtube-status.unavailable {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.admin-youtube-status.restricted {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.admin-youtube-status.error {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.admin-youtube-articles {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.admin-youtube-articles li + li {
+  margin-top: 0.35rem;
+}
+
+.admin-preview-kicker {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-preview-canvas {
+  overflow: auto;
+}
+
+.mock-article-page {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+.mock-article-header h1 {
+  margin: 0.35rem 0;
+}
+
+.mock-article-eyebrow,
+.mock-article-meta,
+.mock-article-share {
+  color: #6b7280;
+}
+
+.mock-article-shell {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: 1.25rem;
+}
+
+.mock-article-shell--with-rail {
+  grid-template-columns: minmax(0, 1fr) 280px;
+}
+
+.mock-article-body p {
+  line-height: 1.7;
+}
+
+.mock-article-rail {
+  display: grid;
+  gap: 1rem;
+}
+
+.mock-rail-block,
+.mock-placement-anchor {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.mock-placement-anchor--wide {
+  margin-top: 1.25rem;
+}
+
+.mock-ad {
+  border: 2px dashed #cbd5e1;
+  border-radius: 0.75rem;
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+  padding: 1rem;
+  text-align: center;
+  background: #fff;
+}
+
+.mock-ad--highlighted {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.mock-ad-kicker {
+  color: #6b7280;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.mock-ad-copy {
+  color: #4b5563;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .admin-grid.two {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-youtube-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

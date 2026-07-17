@@ -1,0 +1,26 @@
+{
+  "id": "5140",
+  "title": "Blog",
+  "slug": "blog-2",
+  "pathname": "/blog-2/",
+  "status": "published",
+  "publishedAt": "2021-09-01T18:39:53.000Z",
+  "modifiedAt": "2021-09-01T18:39:53.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [],
+  "tags": [],
+  "content": {
+    "kind": "html",
+    "html": ""
+  },
+  "seo": {
+    "title": "Blog",
+    "canonicalPath": "/blog-2/",
+    "noindex": false
+  },
+  "type": "page"
+}

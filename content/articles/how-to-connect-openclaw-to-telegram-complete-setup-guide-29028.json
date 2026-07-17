@@ -1,0 +1,58 @@
+{
+  "id": "29028",
+  "title": "How to Connect OpenClaw to Telegram: Complete Setup Guide",
+  "slug": "how-to-connect-openclaw-to-telegram-complete-setup-guide",
+  "pathname": "/how-to-connect-openclaw-to-telegram-complete-setup-guide/",
+  "status": "published",
+  "excerpt": "Want to chat with your AI assistant from anywhere? Connecting OpenClaw to Telegram puts a powerful AI in your pocket — accessible from any device, anytime. This guide wal",
+  "publishedAt": "2026-02-02T03:55:38.000Z",
+  "modifiedAt": "2026-02-03T10:50:12.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [
+    {
+      "id": "157",
+      "name": "Lifestyle",
+      "slug": "lifestyle"
+    }
+  ],
+  "tags": [],
+  "featuredImage": {
+    "src": "/media/2026/02/openclaw-telegram-lobster.webp",
+    "width": 1024,
+    "height": 612,
+    "alt": "openclaw-telegram-lobster",
+    "variants": {
+      "thumbnail": {
+        "src": "/media/2026/02/openclaw-telegram-lobster-150x150.webp",
+        "width": 150,
+        "height": 150
+      },
+      "card": {
+        "src": "/media/2026/02/openclaw-telegram-lobster-768x459.webp",
+        "width": 768,
+        "height": 459
+      },
+      "large": {
+        "src": "/media/2026/02/openclaw-telegram-lobster-768x459.webp",
+        "width": 768,
+        "height": 459
+      }
+    }
+  },
+  "content": {
+    "kind": "html",
+    "html": "<p>Want to chat with your AI assistant from anywhere? Connecting OpenClaw to Telegram puts a powerful AI in your pocket — accessible from any device, anytime. This guide walks you through the complete setup process.</p>\n\n<h2>Why Connect OpenClaw to Telegram?</h2>\n\n<p>Telegram integration transforms OpenClaw from a local tool into a mobile-ready assistant:</p>\n\n<ul>\n<li><strong>Chat from anywhere:</strong> Phone, tablet, desktop — wherever Telegram works</li>\n<li><strong>No app switching:</strong> Your AI lives in an app you already use</li>\n<li><strong>Instant notifications:</strong> Get responses pushed to your device</li>\n<li><strong>Media support:</strong> Send and receive images, files, and voice messages</li>\n<li><strong>Group chat capable:</strong> Add your AI to group conversations</li>\n</ul>\n\n<h2>What You'll Need</h2>\n\n<ul>\n<li>OpenClaw installed and running (<a href=\"/what-is-openclaw-the-personal-ai-assistant-you-can-self-host/\" rel=\"noopener noreferrer\">see our intro guide</a>)</li>\n<li>A Telegram account</li>\n<li>10-15 minutes for setup</li>\n</ul>\n\n<h2>Step 1: Create Your Telegram Bot</h2>\n\n<p>Telegram bots are created through BotFather — Telegram's official bot management tool.</p>\n\n<ol>\n<li>Open Telegram and search for <strong>@BotFather</strong></li>\n<li>Start a chat and send <code>/newbot</code></li>\n<li>Choose a display name (e.g., \"My AI Assistant\")</li>\n<li>Choose a username ending in \"bot\" (e.g., \"myai_assistant_bot\")</li>\n<li>BotFather will give you an <strong>API token</strong> — save this securely!</li>\n</ol>\n\n<p>The token looks like: <code>1234567890:ABCdefGHIjklMNOpqrsTUVwxyz</code></p>\n\n<p><strong>Important:</strong> Keep this token private. Anyone with it can control your bot.</p>\n\n<h2>Step 2: Configure OpenClaw</h2>\n\n<p>Add your bot token to OpenClaw's configuration. You can do this through the setup wizard or manually.</p>\n\n<h3>Option A: Setup Wizard (Recommended)</h3>\n\n<pre><code>openclaw configure --section telegram</code></pre>\n\n<p>The wizard will prompt you to paste your bot token and configure basic settings.</p>\n\n<h3>Option B: Manual Configuration</h3>\n\n<p>Edit your OpenClaw config file (usually <code>~/.openclaw/openclaw.json</code>):</p>\n\n<pre><code>{\n  \"channels\": {\n    \"telegram\": {\n      \"enabled\": true,\n      \"botToken\": \"YOUR_BOT_TOKEN_HERE\",\n      \"dmPolicy\": \"pairing\"\n    }\n  }\n}</code></pre>\n\n<h2>Step 3: Set DM Policy</h2>\n\n<p>The DM policy controls who can message your bot:</p>\n\n<ul>\n<li><strong>pairing:</strong> New users must be approved before chatting (recommended)</li>\n<li><strong>allowlist:</strong> Only pre-approved user IDs can chat</li>\n<li><strong>open:</strong> Anyone can chat (use with caution)</li>\n</ul>\n\n<p>For personal use, \"pairing\" is ideal — you'll approve yourself on first message.</p>\n\n<h2>Step 4: Start the Gateway</h2>\n\n<p>Restart OpenClaw to apply the Telegram configuration:</p>\n\n<pre><code>openclaw gateway restart</code></pre>\n\n<p>Check the status to confirm Telegram is connected:</p>\n\n<pre><code>openclaw status</code></pre>\n\n<p>You should see Telegram listed as an active channel.</p>\n\n<h2>Step 5: Pair Your Account</h2>\n\n<ol>\n<li>Open Telegram and find your bot (search for the username you created)</li>\n<li>Send any message (like \"hello\")</li>\n<li>If using \"pairing\" mode, approve the request in the OpenClaw dashboard</li>\n<li>Start chatting!</li>\n</ol>\n\n<h2>Advanced Configuration</h2>\n\n<h3>Group Chat Setup</h3>\n\n<p>To use your bot in group chats:</p>\n\n<ol>\n<li>Add the bot to a Telegram group</li>\n<li>Set <code>groupPolicy</code> in your config:\n  <ul>\n    <li><code>\"allowlist\"</code> — only approved groups</li>\n    <li><code>\"mentions\"</code> — responds when @mentioned</li>\n  </ul>\n</li>\n<li>The bot can be triggered by @mention or configured keywords</li>\n</ol>\n\n<h3>Multiple Bots (Multi-Agent)</h3>\n\n<p>Running multiple AI personalities? Create separate bots and configure accounts:</p>\n\n<pre><code>{\n  \"channels\": {\n    \"telegram\": {\n      \"accounts\": {\n        \"main\": { \"botToken\": \"TOKEN_1\" },\n        \"work\": { \"botToken\": \"TOKEN_2\" }\n      }\n    }\n  }\n}</code></pre>\n\n<p>Each bot can have different behaviors, models, or purposes.</p>\n\n<h3>Streaming Responses</h3>\n\n<p>Enable streaming for real-time typing feedback:</p>\n\n<pre><code>\"streamMode\": \"partial\"</code></pre>\n\n<p>This shows the AI \"typing\" and updates messages as they generate.</p>\n\n<h2>Troubleshooting Common Issues</h2>\n\n<h3>Bot doesn't respond</h3>\n<ul>\n<li>Check that the gateway is running: <code>openclaw status</code></li>\n<li>Verify the bot token is correct</li>\n<li>Ensure you've approved your user (if using pairing mode)</li>\n</ul>\n\n<h3>Rate limits</h3>\n<ul>\n<li>Telegram has API limits — space out rapid messages</li>\n<li>Consider enabling message queuing in config</li>\n</ul>\n\n<h3>\"Unauthorized\" errors</h3>\n<ul>\n<li>Regenerate your bot token in BotFather</li>\n<li>Update the token in OpenClaw config</li>\n<li>Restart the gateway</li>\n</ul>\n\n<h2>Tips for the Best Experience</h2>\n\n<ul>\n<li><strong>Set a profile photo</strong> for your bot in BotFather — makes it feel more personal</li>\n<li><strong>Add a description</strong> so you remember what each bot does</li>\n<li><strong>Use commands</strong> — OpenClaw supports /status, /help, and custom commands</li>\n<li><strong>Enable notifications</strong> selectively to avoid alert fatigue</li>\n</ul>\n\n<h2>Frequently Asked Questions</h2>\n\n<h3>Is Telegram integration free?</h3>\n<p>Yes! Telegram's Bot API is free. You only pay for AI model API costs (like Anthropic or OpenAI).</p>\n\n<h3>Can multiple people use the same bot?</h3>\n<p>Yes, with proper configuration. Each user gets their own session context. Use allowlists to control access.</p>\n\n<h3>Does it work with Telegram Premium?</h3>\n<p>Yes, it works with both free and Premium Telegram accounts.</p>\n\n<h3>Can I use voice messages?</h3>\n<p>OpenClaw can receive voice messages and transcribe them (with appropriate configuration). Voice output requires additional TTS setup.</p>\n\n<h3>What happens if my server goes offline?</h3>\n<p>Telegram queues messages for a short time. When your server comes back online, it will receive pending messages. For high availability, consider running on always-on hardware like a <a href=\"https://www.amazon.com/s?k=mini+pc&amp;tag=sls0fa-20\" rel=\"noopener noreferrer\">mini PC</a>.</p>\n\n<h2>Next Steps</h2>\n\n<p>Now that Telegram is connected, explore what your AI assistant can do:</p>\n\n<ul>\n<li>Set up scheduled tasks and reminders</li>\n<li>Connect additional channels (WhatsApp, Discord)</li>\n<li>Customize your AI's personality and capabilities</li>\n<li>Explore <a href=\"/ai-home-gadgets-that-save-time-without-the-learning-curve/\" rel=\"noopener noreferrer\">AI home automation</a> possibilities</li>\n</ul>\n\n<hr>\n\n<p><em>This article contains affiliate links. As an Amazon Associate, we earn from qualifying purchases at no additional cost to you.</em></p>"
+  },
+  "seo": {
+    "title": "How to Connect OpenClaw to Telegram: Complete Setup Guide",
+    "description": "Want to chat with your AI assistant from anywhere? Connecting OpenClaw to Telegram puts a powerful AI in your pocket — accessible from any device, anytime. This guide wal",
+    "canonicalPath": "/how-to-connect-openclaw-to-telegram-complete-setup-guide/",
+    "ogImage": "/media/2026/02/openclaw-telegram-lobster.webp",
+    "noindex": false
+  },
+  "type": "article"
+}

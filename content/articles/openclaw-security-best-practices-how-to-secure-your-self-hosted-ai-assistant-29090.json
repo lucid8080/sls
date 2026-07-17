@@ -1,0 +1,58 @@
+{
+  "id": "29090",
+  "title": "OpenClaw Security Best Practices: How to Secure Your Self-Hosted AI Assistant",
+  "slug": "openclaw-security-best-practices-how-to-secure-your-self-hosted-ai-assistant",
+  "pathname": "/openclaw-security-best-practices-how-to-secure-your-self-hosted-ai-assistant/",
+  "status": "published",
+  "excerpt": "Protect your AI assistant, API keys, and data with these essential security practices Self-hosting OpenClaw gives you complete control over your AI assistant, but with gr",
+  "publishedAt": "2026-02-04T12:34:30.000Z",
+  "modifiedAt": "2026-02-04T12:34:41.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [
+    {
+      "id": "157",
+      "name": "Lifestyle",
+      "slug": "lifestyle"
+    }
+  ],
+  "tags": [],
+  "featuredImage": {
+    "src": "/media/2026/02/openclaw-security-best-practices.webp",
+    "width": 1024,
+    "height": 590,
+    "alt": "openclaw-security-best-practices",
+    "variants": {
+      "thumbnail": {
+        "src": "/media/2026/02/openclaw-security-best-practices-150x150.webp",
+        "width": 150,
+        "height": 150
+      },
+      "card": {
+        "src": "/media/2026/02/openclaw-security-best-practices-768x443.webp",
+        "width": 768,
+        "height": 443
+      },
+      "large": {
+        "src": "/media/2026/02/openclaw-security-best-practices-768x443.webp",
+        "width": 768,
+        "height": 443
+      }
+    }
+  },
+  "content": {
+    "kind": "html",
+    "html": "<p><em>Protect your AI assistant, API keys, and data with these essential security practices</em></p>\n\n<p>Self-hosting <a href=\"/what-is-openclaw-the-personal-ai-assistant-you-can-self-host/\" rel=\"noopener noreferrer\">OpenClaw</a> gives you complete control over your AI assistant, but with great power comes great responsibility—especially when it comes to security. Unlike cloud services where security is handled for you, self-hosting means you're responsible for protecting your API keys, securing network access, and safeguarding your data.</p>\n\n<p>In this comprehensive guide, we'll cover essential security practices for running OpenClaw safely, from API key management to network hardening. Whether you're running OpenClaw on a home server or a cloud VPS, these practices will help you avoid the security pitfalls that have plagued other agent platforms.</p>\n\n<h2>Why OpenClaw Security Matters</h2>\n\n<p>Recent security breaches in the agent-native ecosystem (like the <a href=\"https://simplelifesaver.com/the-moltbook-security-breach-why-agent-native-platforms-need-better-security/\" rel=\"noopener noreferrer\">Moltbook incident</a>) have highlighted critical vulnerabilities. When you self-host OpenClaw, you're not just protecting your AI assistant—you're protecting:</p>\n\n<ul>\n<li><strong>API Keys</strong>: Access to expensive AI model APIs (Claude, GPT-4, Gemini)</li>\n<li><strong>Personal Data</strong>: Chat history, preferences, and context</li>\n<li><strong>Credentials</strong>: Passwords, tokens, and authentication data</li>\n<li><strong>Network Access</strong>: Your server and local network resources</li>\n<li><strong>Automation Capabilities</strong>: Tools and integrations that could be misused</li>\n</ul>\n\n<h2>Core Security Principles</h2>\n\n<p>Before diving into specific practices, understand these fundamental principles:</p>\n\n<ol>\n<li><strong>Defense in Depth</strong>: Multiple layers of security, not just one</li>\n<li><strong>Least Privilege</strong>: Only grant the minimum access necessary</li>\n<li><strong>Regular Updates</strong>: Keep software and dependencies current</li>\n<li><strong>Monitoring</strong>: Know what's happening on your system</li>\n<li><strong>Backup Security</strong>: Secure your backups as much as your live system</li>\n</ol>\n\n<h2>1. API Key Management</h2>\n\n<p>API keys are the most valuable target for attackers. Here's how to protect them:</p>\n\n<h3>Never Commit Keys to Version Control</h3>\n\n<p>If you accidentally commit API keys to a public repository, they're immediately exposed. Attackers scan GitHub constantly for exposed credentials.</p>\n\n<pre><code># ✅ Use .gitignore\necho \".openclaw/openclaw.json\" &gt;&gt; .gitignore\necho \".openclaw/credentials/\" &gt;&gt; .gitignore\ngit add .gitignore</code></pre>\n\n<h3>Use Environment Variables</h3>\n\n<pre><code># Set environment variables\nexport ANTHROPIC_API_KEY=\"sk-ant-...\"\nexport OPENAI_API_KEY=\"sk-...\"</code></pre>\n\n<h3>Rotate Keys Regularly</h3>\n\n<p>Even if you haven't detected a breach, rotate API keys periodically. Generate new keys, update OpenClaw, test, then revoke old keys.</p>\n\n<h3>Monitor API Usage</h3>\n\n<p>Set up alerts for unusual API usage. Check for unexpected spikes, requests from unfamiliar IPs, or unusual patterns.</p>\n\n<h2>2. Network Security</h2>\n\n<h3>Firewall Configuration</h3>\n\n<pre><code># Allow only necessary ports\nsudo ufw allow 7070/tcp  # OpenClaw gateway\nsudo ufw allow 22/tcp    # SSH\nsudo ufw enable</code></pre>\n\n<h3>Use VPN for Remote Access</h3>\n\n<p>If you need remote access, use a VPN instead of exposing ports directly. OpenClaw supports Tailscale integration for secure mesh networking.</p>\n\n<h3>Gateway Authentication</h3>\n\n<pre><code>{\n  \"gateway\": {\n    \"auth\": {\n      \"mode\": \"token\",\n      \"token\": \"your-strong-random-token-here\"\n    },\n    \"controlUi\": {\n      \"allowInsecureAuth\": false\n    }\n  }\n}</code></pre>\n\n<p><strong>Generate a strong token:</strong></p>\n<pre><code>openssl rand -hex 32</code></pre>\n\n<h3>Bind to Localhost When Possible</h3>\n\n<pre><code>{\n  \"gateway\": {\n    \"bind\": \"localhost\"\n  }\n}</code></pre>\n\n<h2>3. File System Security</h2>\n\n<h3>Restrict File Permissions</h3>\n\n<pre><code>chmod 700 ~/.openclaw\nchmod 600 ~/.openclaw/openclaw.json\nchmod 600 ~/.openclaw/agents/*/agent/auth-profiles.json</code></pre>\n\n<h3>Regular Backups (Securely)</h3>\n\n<pre><code># Create encrypted backup\ntar -czf - ~/.openclaw | \\\n  gpg --symmetric --cipher-algo AES256 \\\n  -o openclaw-backup-$(date +%Y%m%d).tar.gz.gpg</code></pre>\n\n<h2>4. Authentication and Access Control</h2>\n\n<h3>Telegram Bot Security</h3>\n\n<pre><code>{\n  \"channels\": {\n    \"telegram\": {\n      \"dmPolicy\": \"pairing\",\n      \"groupPolicy\": \"allowlist\"\n    }\n  }\n}</code></pre>\n\n<p><strong>Best Practices:</strong></p>\n<ul>\n<li>Use <code>pairing</code> for DMs (requires explicit pairing)</li>\n<li>Use <code>allowlist</code> for groups (only approved groups)</li>\n<li>Never use <code>open</code> policy in production</li>\n</ul>\n\n<h2>5. Common Security Pitfalls</h2>\n\n<h3>❌ Don't: Expose Gateway Without Authentication</h3>\n<h3>✅ Do: Always Require Strong Authentication</h3>\n\n<h3>❌ Don't: Use Weak Tokens</h3>\n<h3>✅ Do: Use openssl rand -hex 32</h3>\n\n<h3>❌ Don't: Commit Secrets to Git</h3>\n<h3>✅ Do: Use .gitignore</h3>\n\n<h3>❌ Don't: Use Open Telegram Policies</h3>\n<h3>✅ Do: Use Restrictive Policies (pairing/allowlist)</h3>\n\n<h2>6. Incident Response Plan</h2>\n\n<p>If you suspect a security breach:</p>\n\n<h3>Immediate Actions</h3>\n<ol>\n<li><strong>Revoke API Keys</strong>: Immediately revoke all exposed API keys</li>\n<li><strong>Disable Access</strong>: Shut down OpenClaw or disable network access</li>\n<li><strong>Change Credentials</strong>: Rotate all passwords, tokens, and keys</li>\n<li><strong>Review Logs</strong>: Check logs for unauthorized access</li>\n<li><strong>Assess Damage</strong>: Determine what was accessed or compromised</li>\n</ol>\n\n<h2>Security Checklist</h2>\n\n<h3>API Keys</h3>\n<ul>\n<li>☐ API keys stored securely (not in version control)</li>\n<li>☐ Environment variables used where possible</li>\n<li>☐ Keys rotated regularly</li>\n<li>☐ API usage monitoring enabled</li>\n</ul>\n\n<h3>Network Security</h3>\n<ul>\n<li>☐ Firewall configured correctly</li>\n<li>☐ Only necessary ports exposed</li>\n<li>☐ VPN used for remote access</li>\n<li>☐ Gateway requires authentication</li>\n</ul>\n\n<h3>File System</h3>\n<ul>\n<li>☐ Proper file permissions set</li>\n<li>☐ Backups encrypted and stored securely</li>\n<li>☐ .gitignore configured correctly</li>\n</ul>\n\n<h2>Frequently Asked Questions</h2>\n\n<h3>How often should I rotate API keys?</h3>\n<p>Rotate API keys at least every 90 days, or immediately if you suspect they've been exposed.</p>\n\n<h3>Is it safe to expose OpenClaw to the internet?</h3>\n<p>Only if you use HTTPS with a reverse proxy, require strong authentication, keep OpenClaw updated, and monitor for suspicious activity. For most users, VPN access is safer.</p>\n\n<h3>What should I do if my API key is exposed?</h3>\n<p>Immediately revoke the key in your provider's dashboard, generate a new key, update OpenClaw configuration, and review API usage logs.</p>\n\n<h3>Can I use OpenClaw without exposing it to the internet?</h3>\n<p>Yes! OpenClaw works perfectly on a local network via localhost, LAN IP, or VPN for secure remote access.</p>\n\n<h3>How do I know if my OpenClaw installation is compromised?</h3>\n<p>Signs include: unexpected API usage spikes, unfamiliar processes, unauthorized config changes, logs showing unknown IPs, or unusual agent behavior.</p>\n\n<h2>Conclusion</h2>\n\n<p>Securing your self-hosted OpenClaw installation requires attention to multiple layers: API keys, network access, file permissions, authentication, and monitoring.</p>\n\n<p><strong>Key Takeaways:</strong></p>\n<ol>\n<li>Protect API keys like credit cards—they can cost you money</li>\n<li>Restrict network access—only expose what's necessary</li>\n<li>Use strong authentication—weak tokens are easy targets</li>\n<li>Monitor regularly—catch problems before they become breaches</li>\n<li>Keep everything updated—security patches matter</li>\n</ol>\n\n<p>For more on why security matters, see our article on <a href=\"https://simplelifesaver.com/the-moltbook-security-breach-why-agent-native-platforms-need-better-security/\" rel=\"noopener noreferrer\">the Moltbook security breach</a>. And if you're just getting started, check out our <a href=\"/getting-started-with-openclaw-a-beginners-guide/\" rel=\"noopener noreferrer\">beginner's guide to OpenClaw</a>.</p>\n\n<hr>\n\n<p><em>This article contains affiliate links. As an Amazon Associate, we earn from qualifying purchases at no additional cost to you.</em></p>"
+  },
+  "seo": {
+    "title": "OpenClaw Security Best Practices: How to Secure Your Self-Hosted AI Assistant",
+    "description": "Protect your AI assistant, API keys, and data with these essential security practices Self-hosting OpenClaw gives you complete control over your AI assistant, but with gr",
+    "canonicalPath": "/openclaw-security-best-practices-how-to-secure-your-self-hosted-ai-assistant/",
+    "ogImage": "/media/2026/02/openclaw-security-best-practices.webp",
+    "noindex": false
+  },
+  "type": "article"
+}

@@ -1,0 +1,35 @@
+{
+  "id": "2140",
+  "title": "YouTube Channel",
+  "slug": "youtube-channel",
+  "pathname": "/youtube-channel/",
+  "status": "published",
+  "excerpt": "Click To Visit Now",
+  "publishedAt": "2021-11-19T14:29:32.000Z",
+  "modifiedAt": "2021-11-19T14:33:43.000Z",
+  "author": {
+    "id": "177",
+    "name": "Victoria Parkley",
+    "slug": "admin"
+  },
+  "categories": [],
+  "tags": [],
+  "featuredImage": {
+    "src": "/media/2021/11/youtube_chan.webp",
+    "width": 942,
+    "height": 543,
+    "alt": "YouTube Channel"
+  },
+  "content": {
+    "kind": "html",
+    "html": "<figure><a href=\"https://www.youtube.com/channel/UCCzzgqRRjfzt74N8fI3xreQ/featured\" rel=\"noopener noreferrer\"><img src=\"/media/2021/11/youtube_chan.png\" alt=\"\"></a></figure>\n\n\n\n\n<a href=\"https://www.youtube.com/channel/UCCzzgqRRjfzt74N8fI3xreQ/featured\" rel=\"noopener noreferrer\">Click To Visit Now</a>"
+  },
+  "seo": {
+    "title": "YouTube Channel",
+    "description": "Click To Visit Now",
+    "canonicalPath": "/youtube-channel/",
+    "ogImage": "/media/2021/11/youtube_chan.webp",
+    "noindex": false
+  },
+  "type": "page"
+}

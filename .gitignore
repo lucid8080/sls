@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+tools/**/node_modules/
+
+# Next.js / build
+.next/
+out/
+coverage/
+*.tsbuildinfo
+tools/**/dist/
+
+# Test / Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Secrets
+.env*
+!.env.example
+
+# Local IDE
+.cursor/
+
+# Untrusted / recovery source material (keep local only)
+sls-bkup/
+approved-uploads/
+
+# Bulky recovery pipeline intermediates (keep local only)
+recovered-media-output/
+formatted-content-output/
+sanitized-content-output/
+link-output/
+seo-output/
+route-output/
+product-display-output/
+reports/
+
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini
