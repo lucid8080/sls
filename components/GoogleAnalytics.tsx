@@ -8,10 +8,10 @@ export function GoogleAnalytics() {
 
   return (
     <>
-      <Script src={config.scriptSrc} strategy="afterInteractive" />
       <Script id="google-analytics" strategy="afterInteractive">
         {config.initScript}
       </Script>
+      <Script src={config.scriptSrc} strategy="afterInteractive" />
     </>
   );
 }

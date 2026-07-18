@@ -11,8 +11,8 @@ export default async function SiteLayout({ children }: Readonly<{ children: Reac
 
   return (
     <SiteAds initialConfig={adConfig}>
+      <EzoicHeadScripts adsEnabled={adConfig.globalEnabled} />
       <GoogleAnalytics />
-      {adConfig.globalEnabled ? <EzoicHeadScripts /> : null}
       <SiteHeader />
       {children}
       <SiteFooter />

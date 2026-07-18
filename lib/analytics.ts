@@ -13,6 +13,7 @@ export function getGoogleAnalyticsConfig(measurementId: string) {
     initScript: `
 window.dataLayer = window.dataLayer || [];
 function gtag(){window.dataLayer.push(arguments);}
+window['gtag_enable_tcf_support'] = true;
 gtag('js', new Date());
 gtag('config', '${normalizedId}');
 `.trim(),

@@ -6,6 +6,10 @@ describe("Google Analytics configuration", () => {
     const config = getGoogleAnalyticsConfig("G-Y029QN6YPB");
 
     expect(config.scriptSrc).toBe("https://www.googletagmanager.com/gtag/js?id=G-Y029QN6YPB");
+    expect(config.initScript).toContain("window['gtag_enable_tcf_support'] = true");
+    expect(config.initScript.indexOf("gtag_enable_tcf_support")).toBeLessThan(
+      config.initScript.indexOf("gtag('config'"),
+    );
     expect(config.initScript).toContain("gtag('config', 'G-Y029QN6YPB')");
   });
 

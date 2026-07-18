@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { RichTextEditor } from "@/components/cms/RichTextEditor";
+import type { ArticleAiSuggestion, ArticleAiSuggestionField } from "@/lib/cms/article-suggestions";
+
+type TaxonomyTerm = { id: string; name: string; slug: string };
 
 type Article = {
   id: string;
@@ -11,6 +14,8 @@ type Article = {
   status: string;
   excerpt: string | null;
   html: string;
+  categories: TaxonomyTerm[];
+  tags: TaxonomyTerm[];
   seo: {
     title?: string;
     description?: string;
@@ -18,13 +23,61 @@ type Article = {
     ogImage?: string;
     noindex: boolean;
   };
+  updatedAt: string;
 };
+
+type SuggestionResponse = {
+  suggestions: ArticleAiSuggestion;
+  generatedAt: string;
+  model: string;
+  expectedUpdatedAt: string;
+  articleStatus: string;
+  error?: string;
+  code?: string;
+};
+
+const FIELD_LABELS: Record<ArticleAiSuggestionField, string> = {
+  title: "Title",
+  excerpt: "Excerpt",
+  seoTitle: "SEO title",
+  seoDescription: "SEO description",
+  categories: "Categories",
+  tags: "Tags",
+  html: "Body HTML",
+};
+
+function formatTaxonomy(terms: TaxonomyTerm[] | undefined): string {
+  if (!terms?.length) return "—";
+  return terms.map((term) => term.name).join(", ");
+}
+
+function formatSuggestionValue(field: ArticleAiSuggestionField, value: unknown): string {
+  if (field === "categories" || field === "tags") {
+    return formatTaxonomy(value as TaxonomyTerm[] | undefined);
+  }
+  if (field === "html") {
+    const html = String(value ?? "");
+    return html ? `${html.slice(0, 280)}${html.length > 280 ? "…" : ""}` : "—";
+  }
+  if (value == null || value === "") return "—";
+  return String(value);
+}
 
 export function ArticleEditor({ articleId }: { articleId: string }) {
   const [article, setArticle] = useState<Article | null>(null);
+  const [savedSnapshot, setSavedSnapshot] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
+  const [suggesting, setSuggesting] = useState(false);
+  const [applying, setApplying] = useState(false);
+  const [suggestionPayload, setSuggestionPayload] = useState<SuggestionResponse | null>(null);
+  const [selected, setSelected] = useState<Set<ArticleAiSuggestionField>>(new Set());
+
+  const dirty = useMemo(() => {
+    if (!article) return false;
+    return JSON.stringify(article) !== savedSnapshot;
+  }, [article, savedSnapshot]);
 
   useEffect(() => {
     fetch(`/api/cms/articles/${articleId}`)
@@ -33,10 +86,19 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
         if (!response.ok) {
           throw new Error(data.error ?? "Failed to load article.");
         }
-        setArticle(data.article ?? null);
+        const loaded = data.article ?? null;
+        setArticle(loaded);
+        setSavedSnapshot(loaded ? JSON.stringify(loaded) : "");
       })
       .catch((loadError: Error) => setError(loadError.message));
   }, [articleId]);
+
+  const suggestedFields = useMemo(() => {
+    if (!suggestionPayload?.suggestions) return [] as ArticleAiSuggestionField[];
+    return (Object.keys(FIELD_LABELS) as ArticleAiSuggestionField[]).filter(
+      (field) => suggestionPayload.suggestions[field] !== undefined,
+    );
+  }, [suggestionPayload]);
 
   async function save() {
     if (!article) return;
@@ -50,7 +112,7 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
       body: JSON.stringify(article),
     });
 
-    const data = (await response.json()) as { error?: string };
+    const data = (await response.json()) as { article?: Article; error?: string };
     setSaving(false);
 
     if (!response.ok) {
@@ -58,10 +120,19 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
       return;
     }
 
+    if (data.article) {
+      setArticle(data.article);
+      setSavedSnapshot(JSON.stringify(data.article));
+    }
     setMessage("Saved.");
   }
 
   async function publish(action: "review" | "publish") {
+    if (dirty) {
+      setError("Save your changes before submitting for review or publishing.");
+      return;
+    }
+
     setSaving(true);
     setError("");
     setMessage("");
@@ -77,12 +148,120 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
       return;
     }
 
-    setMessage(action === "review" ? "Submitted for review." : `Published.${data.deployTriggered ? " Deploy triggered." : ""}`);
+    setMessage(
+      action === "review"
+        ? "Submitted for review."
+        : `Published.${data.deployTriggered ? " Deploy triggered." : ""}`,
+    );
+  }
+
+  async function generateSuggestions() {
+    if (!article) return;
+    if (dirty) {
+      setError("Save your changes before generating AI suggestions.");
+      return;
+    }
+
+    setSuggesting(true);
+    setError("");
+    setMessage("");
+    try {
+      const response = await fetch(`/api/cms/articles/${articleId}/suggestions`, {
+        method: "POST",
+      });
+      const data = (await response.json()) as SuggestionResponse;
+      if (!response.ok) {
+        throw new Error(data.error ?? `Suggestion failed (${data.code ?? response.status}).`);
+      }
+      setSuggestionPayload(data);
+      const fields = (Object.keys(FIELD_LABELS) as ArticleAiSuggestionField[]).filter(
+        (field) => data.suggestions[field] !== undefined,
+      );
+      setSelected(new Set(fields));
+      setMessage(`Suggestions ready from ${data.model}. Review and apply selected fields.`);
+    } catch (generateError) {
+      setSuggestionPayload(null);
+      setSelected(new Set());
+      setError(generateError instanceof Error ? generateError.message : "Suggestion failed.");
+    } finally {
+      setSuggesting(false);
+    }
+  }
+
+  async function applySelectedSuggestions() {
+    if (!article || !suggestionPayload || selected.size === 0) {
+      setError("Select at least one suggested field to apply.");
+      return;
+    }
+    if (dirty) {
+      setError("Save your local edits before applying AI suggestions.");
+      return;
+    }
+    if (
+      !window.confirm(
+        `Apply ${selected.size} selected suggestion${selected.size === 1 ? "" : "s"} and save a revision?`,
+      )
+    ) {
+      return;
+    }
+
+    setApplying(true);
+    setError("");
+    setMessage("");
+    try {
+      const response = await fetch(`/api/cms/articles/${articleId}/suggestions/apply`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          expectedUpdatedAt: suggestionPayload.expectedUpdatedAt,
+          selectedFields: [...selected],
+          suggestions: suggestionPayload.suggestions,
+        }),
+      });
+      const data = (await response.json()) as {
+        article?: Article;
+        error?: string;
+        code?: string;
+      };
+      if (!response.ok) {
+        throw new Error(data.error ?? `Apply failed (${data.code ?? response.status}).`);
+      }
+      if (data.article) {
+        setArticle(data.article);
+        setSavedSnapshot(JSON.stringify(data.article));
+      }
+      setSuggestionPayload(null);
+      setSelected(new Set());
+      setMessage("Selected suggestions applied and saved.");
+    } catch (applyError) {
+      setError(applyError instanceof Error ? applyError.message : "Apply failed.");
+    } finally {
+      setApplying(false);
+    }
+  }
+
+  function toggleField(field: ArticleAiSuggestionField) {
+    setSelected((current) => {
+      const next = new Set(current);
+      if (next.has(field)) next.delete(field);
+      else next.add(field);
+      return next;
+    });
   }
 
   if (!article) {
     return <p>{error || "Loading..."}</p>;
   }
+
+  const currentValues: Record<ArticleAiSuggestionField, unknown> = {
+    title: article.title,
+    excerpt: article.excerpt,
+    seoTitle: article.seo.title,
+    seoDescription: article.seo.description,
+    categories: article.categories,
+    tags: article.tags,
+    html: article.html,
+  };
 
   return (
     <div className="admin-grid">
@@ -122,23 +301,137 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
               className="admin-input"
               placeholder="SEO description"
               value={article.seo.description ?? ""}
-              onChange={(e) => setArticle({ ...article, seo: { ...article.seo, description: e.target.value } })}
+              onChange={(e) =>
+                setArticle({ ...article, seo: { ...article.seo, description: e.target.value } })
+              }
             />
           </div>
+          <p>
+            <strong>Categories:</strong> {formatTaxonomy(article.categories)}
+          </p>
+          <p>
+            <strong>Tags:</strong> {formatTaxonomy(article.tags)}
+          </p>
+          {dirty ? (
+            <p className="admin-error" role="status">
+              You have unsaved changes. Save before generating suggestions, review, or publish.
+            </p>
+          ) : null}
           {error ? <p style={{ color: "#b91c1c" }}>{error}</p> : null}
           {message ? <p style={{ color: "#047857" }}>{message}</p> : null}
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
             <button className="admin-button secondary" type="button" disabled={saving} onClick={save}>
               Save
             </button>
-            <button className="admin-button secondary" type="button" disabled={saving} onClick={() => publish("review")}>
+            <button
+              className="admin-button secondary"
+              type="button"
+              disabled={saving || dirty}
+              onClick={() => publish("review")}
+            >
               Submit for review
             </button>
-            <button className="admin-button" type="button" disabled={saving} onClick={() => publish("publish")}>
+            <button
+              className="admin-button"
+              type="button"
+              disabled={saving || dirty}
+              onClick={() => publish("publish")}
+            >
               Publish
             </button>
           </div>
         </div>
+      </section>
+
+      <section className="admin-card article-ai-suggestions" aria-busy={suggesting || applying}>
+        <div className="topic-section-heading">
+          <div>
+            <h2>AI suggestions</h2>
+            <p>
+              Generate OpenRouter proposals for title, excerpt, SEO, taxonomy, and body. Apply creates
+              one saved revision and never changes status.
+            </p>
+          </div>
+          <button
+            className="admin-button secondary"
+            type="button"
+            disabled={suggesting || applying || dirty}
+            onClick={generateSuggestions}
+          >
+            {suggesting ? "Generating…" : "Generate AI suggestions"}
+          </button>
+        </div>
+
+        {suggestionPayload?.suggestions.rationale ? (
+          <p className="topic-ai-rationale">
+            <strong>Rationale:</strong> {suggestionPayload.suggestions.rationale}
+          </p>
+        ) : null}
+
+        {suggestedFields.length ? (
+          <>
+            <div className="topic-ai-toolbar">
+              <button
+                className="admin-button secondary"
+                type="button"
+                onClick={() => setSelected(new Set(suggestedFields))}
+                disabled={applying}
+              >
+                Select all
+              </button>
+              <button
+                className="admin-button secondary"
+                type="button"
+                onClick={() => setSelected(new Set())}
+                disabled={applying}
+              >
+                Clear
+              </button>
+              <button
+                className="admin-button"
+                type="button"
+                disabled={applying || selected.size === 0}
+                onClick={applySelectedSuggestions}
+              >
+                {applying ? "Applying…" : `Apply selected (${selected.size})`}
+              </button>
+            </div>
+            <div className="topic-ai-comparison-grid">
+              {suggestedFields.map((field) => {
+                const checked = selected.has(field);
+                const suggestedValue = suggestionPayload!.suggestions[field];
+                return (
+                  <label
+                    key={field}
+                    className={`topic-ai-comparison-card${checked ? " selected" : ""}`}
+                  >
+                    <div className="topic-ai-comparison-header">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleField(field)}
+                        disabled={applying}
+                      />
+                      <strong>{FIELD_LABELS[field]}</strong>
+                    </div>
+                    <div className="topic-ai-comparison-values">
+                      <div>
+                        <span>Current</span>
+                        <p>{formatSuggestionValue(field, currentValues[field])}</p>
+                      </div>
+                      <div>
+                        <span>Suggested</span>
+                        <p>{formatSuggestionValue(field, suggestedValue)}</p>
+                      </div>
+                    </div>
+                  </label>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <p className="topic-ai-empty">Save the article, then generate suggestions to compare fields.</p>
+        )}
       </section>
     </div>
   );
