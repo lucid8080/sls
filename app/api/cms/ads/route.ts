@@ -1,5 +1,6 @@
 import { AD_PLACEMENTS, AD_PLACEMENT_GROUPS } from "@/lib/ads/placements";
-import { getAdSettings, getDefaultAdSettings, saveAdSettings } from "@/lib/ads/settings";
+import { saveAdSettings } from "@/lib/ads/server-settings";
+import { getAdSettings, getDefaultAdSettings } from "@/lib/ads/settings";
 import type { AdSettings } from "@/lib/ads/types";
 import { auth } from "@/lib/auth";
 import { isDatabaseConfigured } from "@/lib/cms/db/client";

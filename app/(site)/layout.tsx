@@ -2,7 +2,8 @@ import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { EzoicHeadScripts } from "@/components/ads/EzoicHeadScripts";
 import { SiteAds } from "@/components/ads/SiteAds";
-import { getAdSettingsSafe, toPublicAdConfig } from "@/lib/ads/settings";
+import { getAdSettingsSafe } from "@/lib/ads/server-settings";
+import { toPublicAdConfig } from "@/lib/ads/settings";
 
 export default async function SiteLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const adSettings = await getAdSettingsSafe();

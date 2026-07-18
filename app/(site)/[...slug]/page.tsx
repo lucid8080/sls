@@ -5,7 +5,7 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { ArticleRail, AfterArticleAds, ShareLinks } from "@/components/ArticleExtras";
 import { HeroTitle } from "@/components/HeroTitle";
 import { SafeHtml } from "@/components/SafeHtml";
-import { getAdSettingsSafe } from "@/lib/ads/settings";
+import { getAdSettingsSafe } from "@/lib/ads/server-settings";
 import {
   extractHeadings,
   formatDate,

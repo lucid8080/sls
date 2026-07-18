@@ -1,6 +1,5 @@
 import { AD_PLACEMENTS } from "@/lib/ads/placements";
 import type { AdPlacementState, AdSettings, PublicAdConfig } from "@/lib/ads/types";
-import { isDatabaseConfigured } from "@/lib/cms/db/client";
 import { getSetting, setSetting } from "@/lib/cms/settings";
 
 const SETTINGS_KEY = "ad_placements";
@@ -42,20 +41,7 @@ export async function getAdSettings(): Promise<AdSettings> {
   return normalizeAdSettings(stored);
 }
 
-/** Safe for public pages — never throws when DATABASE_URL is missing. */
-export async function getAdSettingsSafe(): Promise<AdSettings> {
-  if (!isDatabaseConfigured()) {
-    return getDefaultAdSettings();
-  }
-
-  try {
-    return await getAdSettings();
-  } catch {
-    return getDefaultAdSettings();
-  }
-}
-
-export async function saveAdSettings(settings: AdSettings): Promise<void> {
+export async function persistAdSettings(settings: AdSettings): Promise<void> {
   await setSetting(SETTINGS_KEY, normalizeAdSettings(settings));
 }
 
