@@ -9,6 +9,9 @@ type PageProps = {
   }>;
 };
 
+/** Only known author slugs render; unknown archives 404 without on-demand generation. */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return getContentBundle().authors.map((author) => ({ slug: author.slug }));
 }

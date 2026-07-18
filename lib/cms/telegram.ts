@@ -19,11 +19,20 @@ export async function notifyTelegram(message: string): Promise<boolean> {
         parse_mode: "Markdown",
         disable_web_page_preview: false,
       }),
+      signal: AbortSignal.timeout(8_000),
     });
     return response.ok;
   } catch {
     return false;
   }
+}
+
+export function isAllowedTelegramChat(chatId: number | string | undefined | null): boolean {
+  const configured = process.env.TELEGRAM_CHAT_ID?.trim();
+  if (!configured || chatId === undefined || chatId === null) {
+    return false;
+  }
+  return String(chatId) === configured;
 }
 
 export async function handleTelegramUpdate(update: {
@@ -32,6 +41,10 @@ export async function handleTelegramUpdate(update: {
   const text = update.message?.text?.trim();
   if (!text) {
     return { handled: false };
+  }
+
+  if (!isAllowedTelegramChat(update.message?.chat?.id)) {
+    return { handled: true, message: "Unauthorized chat." };
   }
 
   const publishMatch = text.match(/^publish\s+(\S+)/i);

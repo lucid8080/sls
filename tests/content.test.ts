@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   getContentBundle,
@@ -28,6 +29,14 @@ describe("public content loader", () => {
     expect(results.length).toBeGreaterThan(0);
     expect(results[0].title.toLowerCase()).toContain("robot");
   });
+
+  it("keeps the search page free of server searchParams", () => {
+    const source = readFileSync(new URL("../app/(site)/search/page.tsx", import.meta.url), "utf8");
+    expect(source).not.toContain("searchParams");
+    expect(source).toContain("getSearchIndex");
+    expect(source).toContain("SearchClient");
+  });
+
 
   it("loads featured image data for public article cards and hero images", () => {
     const article = getItemByPathname("/7-ai-automations-that-save-me-10-hours-every-week/");

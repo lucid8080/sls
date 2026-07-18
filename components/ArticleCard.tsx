@@ -13,17 +13,24 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
   return (
     <article className={featured ? "article-card article-card-featured" : "article-card"}>
       {image ? (
-        <Link className="article-card-image" href={article.pathname} aria-label={article.title}>
+        <Link
+          className="article-card-image"
+          href={article.pathname}
+          aria-label={article.title}
+          prefetch={false}
+        >
           <img src={image.src} width={image.width} height={image.height} alt="" loading="lazy" decoding="async" />
         </Link>
       ) : null}
       {category ? (
-        <Link className="eyebrow" href={`/category/${category.slug}/`}>
+        <Link className="eyebrow" href={`/category/${category.slug}/`} prefetch={false}>
           {category.name}
         </Link>
       ) : null}
       <h3>
-        <Link href={article.pathname}>{article.title}</Link>
+        <Link href={article.pathname} prefetch={false}>
+          {article.title}
+        </Link>
       </h3>
       <div className="meta">
         {article.author ? <span>{article.author.name}</span> : null}

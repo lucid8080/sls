@@ -25,6 +25,9 @@ type PageProps = {
   }>;
 };
 
+/** Only build-time public paths render; unknown slugs 404 without on-demand generation. */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return getContentBundle().allPublicItems.map((item) => ({
     slug: pathnameToSegments(item.pathname),

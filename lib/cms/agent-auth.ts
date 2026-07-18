@@ -8,6 +8,9 @@ export type AgentAuthResult =
   | { ok: true; keyId: string; label: string; scopes: AgentScope[] }
   | { ok: false; status: number; error: string };
 
+/** Skip lastUsedAt writes when the previous stamp is newer than this window. */
+export const AGENT_LAST_USED_THROTTLE_MS = 30 * 60 * 1000;
+
 export function hashApiKey(key: string): string {
   return createHash("sha256").update(key).digest("hex");
 }
@@ -19,6 +22,23 @@ export function generateApiKey(): { key: string; prefix: string; hash: string } 
     prefix: key.slice(0, 12),
     hash: hashApiKey(key),
   };
+}
+
+export function shouldUpdateLastUsedAt(
+  lastUsedAt: Date | string | null | undefined,
+  now = new Date(),
+  throttleMs = AGENT_LAST_USED_THROTTLE_MS,
+): boolean {
+  if (!lastUsedAt) {
+    return true;
+  }
+
+  const previous = lastUsedAt instanceof Date ? lastUsedAt : new Date(lastUsedAt);
+  if (Number.isNaN(previous.getTime())) {
+    return true;
+  }
+
+  return now.getTime() - previous.getTime() >= throttleMs;
 }
 
 export async function verifyAgentRequest(
@@ -47,10 +67,12 @@ export async function verifyAgentRequest(
     return { ok: false, status: 403, error: `Missing required scope: ${requiredScope}` };
   }
 
-  await db
-    .update(apiKeys)
-    .set({ lastUsedAt: new Date() })
-    .where(eq(apiKeys.id, record.id));
+  if (shouldUpdateLastUsedAt(record.lastUsedAt)) {
+    await db
+      .update(apiKeys)
+      .set({ lastUsedAt: new Date() })
+      .where(eq(apiKeys.id, record.id));
+  }
 
   return {
     ok: true,

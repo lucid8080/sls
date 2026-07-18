@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "cms:export": "tsx scripts/cms-export.ts",
-    "prebuild": "npm run cms:export",
+    "seo:generate": "tsx scripts/generate-public-seo.ts",
+    "prebuild": "npm run cms:export && npm run seo:generate",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",

@@ -28,12 +28,20 @@ export function AdConfigProvider({ children, initialConfig }: AdConfigProviderPr
   const [loaded, setLoaded] = useState(Boolean(initialConfig));
 
   useEffect(() => {
+    // Layout already embeds the build-time/static ad config for public pages.
+    // Skip the redundant CDN round-trip unless this provider mounts without it.
+    if (initialConfig) {
+      setConfig(initialConfig);
+      setLoaded(true);
+      return;
+    }
+
     let cancelled = false;
 
     fetch("/api/ads/config")
       .then(async (response) => {
         if (!response.ok) {
-          return initialConfig ?? defaultConfig;
+          return defaultConfig;
         }
         return (await response.json()) as PublicAdConfig;
       })
@@ -45,7 +53,7 @@ export function AdConfigProvider({ children, initialConfig }: AdConfigProviderPr
       })
       .catch(() => {
         if (!cancelled) {
-          setConfig(initialConfig ?? defaultConfig);
+          setConfig(defaultConfig);
           setLoaded(true);
         }
       });
