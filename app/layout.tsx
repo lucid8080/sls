@@ -10,6 +10,10 @@ export const metadata: Metadata = {
     template: `%s | ${siteName}`,
   },
   description: "Practical guides for smarter cooking, cleaning, home care, appliances, and everyday life.",
+  icons: {
+    icon: [{ url: "/branding/logo6.webp", type: "image/webp" }],
+    shortcut: "/branding/logo6.webp",
+  },
 };
 
 export const viewport: Viewport = {
