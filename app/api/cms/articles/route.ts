@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
-import { createArticle, listArticles } from "@/lib/cms/articles";
+import { listAdminArticles } from "@/lib/cms/admin-articles";
+import { createArticle } from "@/lib/cms/articles";
 import { isDatabaseConfigured } from "@/lib/cms/db/client";
 import { jsonError, jsonOk, readJsonBody } from "@/lib/cms/http";
 import { sanitizeCmsHtml } from "@/lib/cms/sanitize";
@@ -17,14 +18,23 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
-  const status = searchParams.get("status") as Parameters<typeof listArticles>[0] extends infer T
+  const status = searchParams.get("status") as Parameters<typeof listAdminArticles>[0] extends infer T
     ? T extends { status?: infer S }
       ? S
       : never
     : never;
   const search = searchParams.get("search") ?? undefined;
-  const rows = await listArticles({ status: status ?? undefined, search });
-  return jsonOk({ articles: rows.map(serializeArticle) });
+  const rows = await listAdminArticles({ status: status ?? undefined, search });
+  return jsonOk({
+    articles: rows.map(({ id, title, slug, status: articleStatus, updatedAt, source }) => ({
+      id,
+      title,
+      slug,
+      status: articleStatus,
+      updatedAt,
+      source,
+    })),
+  });
 }
 
 export async function POST(request: Request) {

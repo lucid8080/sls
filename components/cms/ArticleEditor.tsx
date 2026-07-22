@@ -24,6 +24,7 @@ type Article = {
     noindex: boolean;
   };
   updatedAt: string;
+  source: "database" | "recovered";
 };
 
 type SuggestionResponse = {
@@ -128,6 +129,10 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
   }
 
   async function publish(action: "review" | "publish") {
+    if (article?.source === "recovered") {
+      setError("Save this recovered article before submitting it for review or publishing.");
+      return;
+    }
     if (dirty) {
       setError("Save your changes before submitting for review or publishing.");
       return;
@@ -157,6 +162,10 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
 
   async function generateSuggestions() {
     if (!article) return;
+    if (article.source === "recovered") {
+      setError("Save this recovered article before generating AI suggestions.");
+      return;
+    }
     if (dirty) {
       setError("Save your changes before generating AI suggestions.");
       return;
@@ -312,6 +321,11 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
           <p>
             <strong>Tags:</strong> {formatTaxonomy(article.tags)}
           </p>
+          {article.source === "recovered" ? (
+            <p className="admin-error" role="status">
+              This article comes from the recovered catalog. Saving it creates an editable CMS override.
+            </p>
+          ) : null}
           {dirty ? (
             <p className="admin-error" role="status">
               You have unsaved changes. Save before generating suggestions, review, or publish.
@@ -326,7 +340,7 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
             <button
               className="admin-button secondary"
               type="button"
-              disabled={saving || dirty}
+              disabled={saving || dirty || article.source === "recovered"}
               onClick={() => publish("review")}
             >
               Submit for review
@@ -334,7 +348,7 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
             <button
               className="admin-button"
               type="button"
-              disabled={saving || dirty}
+              disabled={saving || dirty || article.source === "recovered"}
               onClick={() => publish("publish")}
             >
               Publish
@@ -355,7 +369,7 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
           <button
             className="admin-button secondary"
             type="button"
-            disabled={suggesting || applying || dirty}
+            disabled={suggesting || applying || dirty || article.source === "recovered"}
             onClick={generateSuggestions}
           >
             {suggesting ? "Generating…" : "Generate AI suggestions"}
@@ -430,7 +444,11 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
             </div>
           </>
         ) : (
-          <p className="topic-ai-empty">Save the article, then generate suggestions to compare fields.</p>
+          <p className="topic-ai-empty">
+            {article.source === "recovered"
+              ? "Save this recovered article to the CMS before generating suggestions."
+              : "Save the article, then generate suggestions to compare fields."}
+          </p>
         )}
       </section>
     </div>

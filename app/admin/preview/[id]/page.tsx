@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { SafeHtml } from "@/components/SafeHtml";
-import { getArticleById } from "@/lib/cms/articles";
+import { getAdminArticleById } from "@/lib/cms/admin-articles";
 import { isDatabaseConfigured } from "@/lib/cms/db/client";
 
 type PageProps = {
@@ -13,7 +13,7 @@ export default async function PreviewArticlePage({ params }: PageProps) {
   }
 
   const { id } = await params;
-  const article = await getArticleById(id);
+  const article = await getAdminArticleById(id);
   if (!article) {
     notFound();
   }

@@ -1,9 +1,13 @@
 import { auth } from "@/lib/auth";
+import {
+  databaseArticleToAdminArticle,
+  ensureRecoveredArticleOverride,
+  getAdminArticleById,
+} from "@/lib/cms/admin-articles";
 import { getArticleById, listRevisions, updateArticle } from "@/lib/cms/articles";
 import { isDatabaseConfigured } from "@/lib/cms/db/client";
 import { jsonError, jsonOk, readJsonBody } from "@/lib/cms/http";
 import { sanitizeCmsHtml } from "@/lib/cms/sanitize";
-import { serializeArticle } from "@/lib/cms/serialize";
 import { pathnameFromSlug } from "@/lib/cms/schemas";
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -25,12 +29,12 @@ export async function GET(request: Request, context: RouteContext) {
     return jsonOk({ revisions });
   }
 
-  const row = await getArticleById(id);
-  if (!row) {
+  const article = await getAdminArticleById(id);
+  if (!article) {
     return jsonError("Article not found.", 404);
   }
 
-  return jsonOk({ article: serializeArticle(row) });
+  return jsonOk({ article });
 }
 
 export async function PATCH(request: Request, context: RouteContext) {
@@ -61,7 +65,8 @@ export async function PATCH(request: Request, context: RouteContext) {
     return jsonError("Invalid JSON body.");
   }
 
-  const existing = await getArticleById(id);
+  const actor = session.user?.email ?? "admin";
+  const existing = (await getArticleById(id)) ?? (await ensureRecoveredArticleOverride(id, actor));
   if (!existing) {
     return jsonError("Article not found.", 404);
   }
@@ -86,8 +91,8 @@ export async function PATCH(request: Request, context: RouteContext) {
       featuredImage: body.featuredImage === undefined ? undefined : body.featuredImage,
       seo: body.seo as never,
     },
-    session.user?.email ?? "admin",
+    actor,
   );
 
-  return jsonOk({ article: row ? serializeArticle(row) : null });
+  return jsonOk({ article: row ? databaseArticleToAdminArticle(row) : null });
 }

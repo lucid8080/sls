@@ -9,6 +9,7 @@ type ArticleSummary = {
   slug: string;
   status: string;
   updatedAt: string;
+  source: "database" | "recovered";
 };
 
 export default function AdminArticlesPage() {
@@ -63,6 +64,7 @@ export default function AdminArticlesPage() {
           <thead>
             <tr>
               <th>Title</th>
+              <th>Source</th>
               <th>Status</th>
               <th>Updated</th>
             </tr>
@@ -73,6 +75,7 @@ export default function AdminArticlesPage() {
                 <td>
                   <Link href={`/admin/articles/${article.id}`}>{article.title}</Link>
                 </td>
+                <td>{article.source === "database" ? "CMS" : "Recovered"}</td>
                 <td>
                   <span className={`admin-status ${article.status}`}>{article.status}</span>
                 </td>
