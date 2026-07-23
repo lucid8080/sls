@@ -18,7 +18,24 @@ export const TaxonomyTermSchema = z.object({
   slug: z.string().min(1),
 });
 
+export const AuthorSocialsSchema = z.object({
+  twitter: z.string().optional(),
+  linkedin: z.string().optional(),
+  facebook: z.string().optional(),
+  website: z.string().optional(),
+});
+
 export const AuthorSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  slug: z.string().min(1),
+  bio: z.string().optional(),
+  avatarPath: z.string().startsWith("/").optional().nullable(),
+  socials: AuthorSocialsSchema.optional(),
+});
+
+/** Lightweight snapshot stored on articles (id/name/slug only). */
+export const ArticleAuthorSnapshotSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   slug: z.string().min(1),
@@ -67,7 +84,7 @@ export const ArticleSchema = z.object({
   excerpt: z.string().optional(),
   publishedAt: z.string().min(1),
   modifiedAt: z.string().optional(),
-  author: AuthorSchema.optional(),
+  author: ArticleAuthorSnapshotSchema.optional(),
   categories: z.array(TaxonomyTermSchema),
   tags: z.array(TaxonomyTermSchema),
   featuredImage: FeaturedImageSchema.optional(),
@@ -78,10 +95,12 @@ export const ArticleSchema = z.object({
 export const CmsExportBundleSchema = z.object({
   generatedAt: z.string(),
   articles: z.array(ArticleSchema),
+  authors: z.array(AuthorSchema).default([]),
 });
 
 export type TaxonomyTerm = z.infer<typeof TaxonomyTermSchema>;
 export type Author = z.infer<typeof AuthorSchema>;
+export type AuthorSocials = z.infer<typeof AuthorSocialsSchema>;
 export type FeaturedImage = z.infer<typeof FeaturedImageSchema>;
 export type ArticleExport = z.infer<typeof ArticleSchema>;
 

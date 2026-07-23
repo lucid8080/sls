@@ -128,9 +128,9 @@ Commands:
 Publish fails (stays in review) when:
 
 - HTML contains executable patterns
-- Article is too short
 - Casino/gambling spam patterns are detected
 - Schema validation fails
+- Article is missing an H2 heading
 
 Warnings (non-blocking by default):
 

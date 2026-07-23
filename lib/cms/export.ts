@@ -1,5 +1,6 @@
 import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
+import { listAuthorsForExport } from "@/lib/cms/authors";
 import { isDatabaseConfigured } from "@/lib/cms/db/client";
 import { listPublishedArticles } from "@/lib/cms/articles";
 import { articleRowToExport } from "@/lib/cms/validate";
@@ -16,9 +17,11 @@ export async function exportCmsBundle(outputPath?: string): Promise<{ path: stri
   try {
     const rows = await listPublishedArticles();
     const articles = rows.map(articleRowToExport);
+    const authors = await listAuthorsForExport();
     const bundle = CmsExportBundleSchema.parse({
       generatedAt: new Date().toISOString(),
       articles,
+      authors,
     });
 
     mkdirSync(join(target, ".."), { recursive: true });
@@ -38,6 +41,7 @@ function writeEmptyExport(target: string): void {
   const bundle = {
     generatedAt: new Date().toISOString(),
     articles: [],
+    authors: [],
   };
   writeFileSync(target, `${JSON.stringify(bundle, null, 2)}\n`, "utf8");
 }

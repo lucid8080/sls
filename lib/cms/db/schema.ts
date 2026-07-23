@@ -26,6 +26,24 @@ export const agentJobStatusEnum = pgEnum("agent_job_status", [
   "failed",
 ]);
 
+export type AuthorSocials = {
+  twitter?: string;
+  linkedin?: string;
+  facebook?: string;
+  website?: string;
+};
+
+export const authors = pgTable("authors", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  bio: text("bio"),
+  avatarPath: text("avatar_path"),
+  socials: jsonb("socials").$type<AuthorSocials>().notNull().default({}),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export const articles = pgTable("articles", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
@@ -140,6 +158,12 @@ export const mediaAssets = pgTable("media_assets", {
   mimeType: text("mime_type").notNull(),
   createdBy: text("created_by"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const mediaDeletions = pgTable("media_deletions", {
+  publicPath: text("public_path").primaryKey(),
+  deletedAt: timestamp("deleted_at", { withTimezone: true }).notNull().defaultNow(),
+  deletedBy: text("deleted_by"),
 });
 
 export const topicSourceTypeEnum = pgEnum("topic_source_type", [
@@ -304,7 +328,87 @@ export const topicActivity = pgTable(
   ],
 );
 
+export const affiliateNetworkEnum = pgEnum("affiliate_network", ["amazon", "other"]);
+export const affiliateLinkSourceEnum = pgEnum("affiliate_link_source", ["scanned", "manual", "both"]);
+export const affiliateTagStatusEnum = pgEnum("affiliate_tag_status", [
+  "ok",
+  "missing_tag",
+  "not_applicable",
+]);
+export const affiliateLiveStatusEnum = pgEnum("affiliate_live_status", [
+  "unchecked",
+  "active",
+  "dead",
+  "redirected",
+  "blocked",
+  "error",
+]);
+export const affiliateArticleSourceEnum = pgEnum("affiliate_article_source", [
+  "database",
+  "recovered",
+  "catalog",
+]);
+
+export const affiliateLinks = pgTable(
+  "affiliate_links",
+  {
+    id: text("id").primaryKey(),
+    url: text("url").notNull(),
+    normalizedUrl: text("normalized_url").notNull().unique(),
+    network: affiliateNetworkEnum("network").notNull().default("other"),
+    asin: text("asin"),
+    affiliateTag: text("affiliate_tag"),
+    label: text("label"),
+    notes: text("notes"),
+    source: affiliateLinkSourceEnum("source").notNull().default("scanned"),
+    tagStatus: affiliateTagStatusEnum("tag_status").notNull().default("not_applicable"),
+    liveStatus: affiliateLiveStatusEnum("live_status").notNull().default("unchecked"),
+    liveStatusCode: integer("live_status_code"),
+    liveFinalUrl: text("live_final_url"),
+    liveCheckedAt: timestamp("live_checked_at", { withTimezone: true }),
+    liveError: text("live_error"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("affiliate_links_network_idx").on(table.network),
+    index("affiliate_links_tag_status_idx").on(table.tagStatus),
+    index("affiliate_links_live_status_idx").on(table.liveStatus),
+  ],
+);
+
+export const affiliateLinkArticles = pgTable(
+  "affiliate_link_articles",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    linkId: text("link_id")
+      .notNull()
+      .references(() => affiliateLinks.id, { onDelete: "cascade" }),
+    articleId: text("article_id").notNull(),
+    articleTitle: text("article_title").notNull(),
+    pathname: text("pathname").notNull(),
+    articleSource: affiliateArticleSourceEnum("article_source").notNull(),
+    anchorText: text("anchor_text"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    unique("affiliate_link_articles_link_article_uidx").on(
+      table.linkId,
+      table.articleId,
+      table.articleSource,
+    ),
+    index("affiliate_link_articles_link_id_idx").on(table.linkId),
+    index("affiliate_link_articles_article_id_idx").on(table.articleId),
+  ],
+);
+
 export type ArticleRow = typeof articles.$inferSelect;
+export type AffiliateLinkRow = typeof affiliateLinks.$inferSelect;
+export type AffiliateLinkInsert = typeof affiliateLinks.$inferInsert;
+export type AffiliateLinkArticleRow = typeof affiliateLinkArticles.$inferSelect;
+export type AuthorRow = typeof authors.$inferSelect;
+export type AuthorInsert = typeof authors.$inferInsert;
+export type MediaRow = typeof mediaAssets.$inferSelect;
 export type ArticleInsert = typeof articles.$inferInsert;
 export type TopicSourceRow = typeof topicSources.$inferSelect;
 export type TopicSourceInsert = typeof topicSources.$inferInsert;

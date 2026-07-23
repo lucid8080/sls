@@ -1,6 +1,6 @@
 import { verifyAgentRequest } from "@/lib/cms/agent-auth";
 import { createArticle, listArticles } from "@/lib/cms/articles";
-import { jsonError, jsonOk, readJsonBody } from "@/lib/cms/http";
+import { agentJsonError, agentJsonOk, headWithJsonBody, readJsonBody } from "@/lib/cms/http";
 import { sanitizeCmsHtml } from "@/lib/cms/sanitize";
 import { serializeArticle } from "@/lib/cms/serialize";
 import { pathnameFromSlug, slugifyTitle } from "@/lib/cms/schemas";
@@ -27,25 +27,37 @@ type CreateArticleBody = {
 export async function GET(request: Request) {
   const authResult = await verifyAgentRequest(request.headers.get("authorization"), "agent:read");
   if (!authResult.ok) {
-    return jsonError(authResult.error, authResult.status);
+    return agentJsonError(authResult.error, authResult.status);
   }
 
   const { searchParams } = new URL(request.url);
   const status = searchParams.get("status") as CreateArticleBody["status"] | null;
   const search = searchParams.get("search") ?? undefined;
   const rows = await listArticles({ status: status ?? undefined, search });
-  return jsonOk({ articles: rows.map(serializeArticle) });
+  return agentJsonOk({ articles: rows.map(serializeArticle) });
+}
+
+export async function HEAD(request: Request) {
+  return headWithJsonBody(await GET(request));
+}
+
+export async function OPTIONS() {
+  return agentJsonOk({
+    ok: true,
+    endpoint: "/api/agent/v1/articles",
+    methods: ["GET", "POST", "HEAD", "OPTIONS"],
+  });
 }
 
 export async function POST(request: Request) {
   const authResult = await verifyAgentRequest(request.headers.get("authorization"), "agent:write");
   if (!authResult.ok) {
-    return jsonError(authResult.error, authResult.status);
+    return agentJsonError(authResult.error, authResult.status);
   }
 
   const body = await readJsonBody<CreateArticleBody>(request);
   if (!body?.title || !body.html) {
-    return jsonError("title and html are required.");
+    return agentJsonError("title and html are required.");
   }
 
   const slug = body.slug ?? slugifyTitle(body.title);
@@ -72,5 +84,5 @@ export async function POST(request: Request) {
     createdBy: `agent:${authResult.label}`,
   });
 
-  return jsonOk({ article: serializeArticle(row), sanitizeReports: sanitized.reports }, { status: 201 });
+  return agentJsonOk({ article: serializeArticle(row), sanitizeReports: sanitized.reports }, { status: 201 });
 }

@@ -16,10 +16,22 @@ export default function AdminAgentsPage() {
   const [createdKey, setCreatedKey] = useState("");
   const [error, setError] = useState("");
 
+  async function parseJsonResponse<T>(response: Response, context: string): Promise<T> {
+    const raw = await response.text();
+    if (!raw.trim()) {
+      throw new Error(`${context}: empty response body (HTTP ${response.status}).`);
+    }
+    try {
+      return JSON.parse(raw) as T;
+    } catch {
+      throw new Error(`${context}: response was not valid JSON (HTTP ${response.status}).`);
+    }
+  }
+
   function load() {
     fetch("/api/cms/keys")
       .then(async (response) => {
-        const data = (await response.json()) as { keys?: ApiKey[]; error?: string };
+        const data = await parseJsonResponse<{ keys?: ApiKey[]; error?: string }>(response, "load keys");
         if (!response.ok) throw new Error(data.error ?? "Failed to load keys.");
         setKeys(data.keys ?? []);
       })
@@ -44,7 +56,7 @@ export default function AdminAgentsPage() {
       }),
     });
 
-    const data = (await response.json()) as { key?: string; error?: string };
+    const data = await parseJsonResponse<{ key?: string; error?: string }>(response, "create key");
     if (!response.ok) {
       setError(data.error ?? "Failed to create key.");
       return;
@@ -58,7 +70,12 @@ export default function AdminAgentsPage() {
     <div className="admin-grid">
       <section className="admin-card">
         <h1>Agent API keys</h1>
-        <p>Create keys for OpenClaw or other automation agents. Keys are shown once.</p>
+        <p>Create keys for OpenClaw, Hermes, or other automation agents. Keys are shown once.</p>
+        <p>
+          Hermes connection URL: <code>/api/agent/v1</code> with{" "}
+          <code>Authorization: Bearer &lt;key&gt;</code>. Use GET (authenticated) or OPTIONS (health
+          check). Do not use HEAD — HTTP clients drop HEAD response bodies.
+        </p>
         <form className="admin-grid" onSubmit={createKey} style={{ marginTop: "1rem" }}>
           <input className="admin-input" value={label} onChange={(e) => setLabel(e.target.value)} />
           <button className="admin-button" type="submit">

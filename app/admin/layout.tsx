@@ -6,9 +6,11 @@ import "./admin.css";
 const navItems = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/articles", label: "Articles" },
+  { href: "/admin/authors", label: "Authors" },
   { href: "/admin/topics", label: "Topic Inbox" },
   { href: "/admin/calendar", label: "Calendar" },
   { href: "/admin/media", label: "Media" },
+  { href: "/admin/affiliates", label: "Affiliates" },
   { href: "/admin/youtube-cleanup", label: "YouTube Cleanup" },
   { href: "/admin/ads", label: "Ads" },
   { href: "/admin/agents", label: "Agents" },

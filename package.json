@@ -12,6 +12,7 @@
     "start": "next start",
     "lint": "eslint .",
     "media:sync": "node scripts/sync-approved-media.mjs",
+    "media:prune": "node scripts/prune-deleted-media.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",

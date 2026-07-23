@@ -1,7 +1,7 @@
 import { verifyAgentRequest } from "@/lib/cms/agent-auth";
 import { searchInternalArticles } from "@/lib/cms/articles";
 import { getContentBundle } from "@/lib/content";
-import { jsonError, jsonOk } from "@/lib/cms/http";
+import { jsonError, jsonOk, headWithJsonBody } from "@/lib/cms/http";
 
 export async function GET(request: Request) {
   const authResult = await verifyAgentRequest(request.headers.get("authorization"), "agent:read");
@@ -37,4 +37,8 @@ export async function GET(request: Request) {
       ...staticResults,
     ],
   });
+}
+
+export async function HEAD(request: Request) {
+  return headWithJsonBody(await GET(request));
 }

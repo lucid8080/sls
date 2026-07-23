@@ -1,6 +1,7 @@
 import { ArticleSchema, BLOCKED_PUBLIC_RE, type ArticleExport } from "@/lib/cms/schemas";
 import type { ArticleRow } from "@/lib/cms/db/schema";
 import { getContentBundle } from "@/lib/content";
+import { normalizeFeaturedImage } from "@/lib/cms/featured-image";
 
 export type QualityGateIssue = {
   code: string;
@@ -20,7 +21,6 @@ export type ValidationResult = {
 };
 
 const DEFAULT_GATES = {
-  minWordCount: 300,
   minInternalLinks: 3,
   maxInternalLinks: 12,
   requireFaq: true,
@@ -41,7 +41,7 @@ export function articleRowToExport(row: ArticleRow): ArticleExport {
     author: row.author ?? undefined,
     categories: row.categories ?? [],
     tags: row.tags ?? [],
-    featuredImage: (row.featuredImage as ArticleExport["featuredImage"]) ?? undefined,
+    featuredImage: normalizeFeaturedImage(row.featuredImage),
     content: {
       kind: "html",
       html: row.html,
@@ -57,16 +57,6 @@ export function runQualityGates(
   const gates = { ...DEFAULT_GATES, ...options };
   const issues: QualityGateIssue[] = [];
   const html = article.content.html;
-  const text = html.replace(/<[^>]+>/g, " ");
-  const words = text.trim().split(/\s+/).filter(Boolean).length;
-
-  if (words < gates.minWordCount) {
-    issues.push({
-      code: "min_word_count",
-      message: `Article has ${words} words; minimum is ${gates.minWordCount}.`,
-      severity: "error",
-    });
-  }
 
   if (gates.requireH2 && !/<h2[\s>]/i.test(html)) {
     issues.push({
@@ -129,7 +119,7 @@ export function validatePublishedArticle(article: ArticleExport): ValidationResu
       ok: false,
       issues: parsed.error.issues.map((issue) => ({
         code: "schema_validation",
-        message: issue.message,
+        message: `${issue.path.join(".") || "article"}: ${issue.message}`,
         severity: "error" as const,
       })),
     };

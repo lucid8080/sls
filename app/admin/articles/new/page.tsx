@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FeaturedImageField } from "@/components/cms/FeaturedImageField";
 import { RichTextEditor } from "@/components/cms/RichTextEditor";
+import type { FeaturedImage } from "@/lib/cms/schemas";
 
 export default function NewArticlePage() {
   const router = useRouter();
@@ -10,6 +12,7 @@ export default function NewArticlePage() {
   const [slug, setSlug] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [html, setHtml] = useState("<p></p>");
+  const [featuredImage, setFeaturedImage] = useState<FeaturedImage | null>(null);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -20,7 +23,19 @@ export default function NewArticlePage() {
     const response = await fetch("/api/cms/articles", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, slug: slug || undefined, excerpt, html, status }),
+      body: JSON.stringify({
+        title,
+        slug: slug || undefined,
+        excerpt,
+        html,
+        status,
+        featuredImage,
+        seo: featuredImage
+          ? {
+              ogImage: featuredImage.src,
+            }
+          : undefined,
+      }),
     });
 
     const data = (await response.json()) as { article?: { id: string }; error?: string };
@@ -48,6 +63,7 @@ export default function NewArticlePage() {
             onChange={(e) => setExcerpt(e.target.value)}
             rows={3}
           />
+          <FeaturedImageField value={featuredImage} onChange={setFeaturedImage} disabled={saving} />
           <RichTextEditor value={html} onChange={setHtml} />
           {error ? <p style={{ color: "#b91c1c" }}>{error}</p> : null}
           <div style={{ display: "flex", gap: "0.75rem" }}>

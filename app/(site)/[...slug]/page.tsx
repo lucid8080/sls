@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArticleByline } from "@/components/ArticleByline";
 import { ArticleCard } from "@/components/ArticleCard";
 import { ArticleRail, AfterArticleAds, ShareLinks } from "@/components/ArticleExtras";
+import { AuthorBio } from "@/components/AuthorBio";
 import { HeroTitle } from "@/components/HeroTitle";
 import { SafeHtml } from "@/components/SafeHtml";
 import { getAdSettingsSafe } from "@/lib/ads/server-settings";
 import {
   extractHeadings,
-  formatDate,
+  getAuthor,
   getContentBundle,
   getItemByPathname,
   getRelatedArticles,
@@ -17,6 +19,7 @@ import {
   readingTime,
   siteName,
   siteUrl,
+  type Author,
 } from "@/lib/content";
 
 type PageProps = {
@@ -67,6 +70,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+function resolveAuthorProfile(
+  snapshot: { id: string; name: string; slug: string } | undefined,
+): Author | undefined {
+  if (!snapshot) return undefined;
+  return getAuthor(snapshot.slug) ?? snapshot;
+}
+
 export default async function ContentPage({ params }: PageProps) {
   const { slug } = await params;
   const item = getItemByPathname(`/${slug.join("/")}/`);
@@ -82,18 +92,15 @@ export default async function ContentPage({ params }: PageProps) {
   const hasArticleRail = item.type === "article" || headings.length >= 3 || trending.length > 0;
   const hasHeroImage = Boolean(item.featuredImage);
   const adSettings = item.type === "article" ? await getAdSettingsSafe() : undefined;
+  const authorProfile = resolveAuthorProfile(item.author);
 
   const meta = (
-    <div className={`meta${hasHeroImage ? " article-meta--below-hero" : ""}`}>
-      {item.author ? (
-        <Link href={`/author/${item.author.slug}/`} rel="author">
-          {item.author.name}
-        </Link>
-      ) : null}
-      <time dateTime={item.publishedAt}>{formatDate(item.publishedAt)}</time>
-      {item.modifiedAt ? <span>Updated {formatDate(item.modifiedAt)}</span> : null}
-      <span>{readingTime(item.content.html)} min read</span>
-    </div>
+    <ArticleByline
+      author={authorProfile}
+      publishedAt={item.publishedAt}
+      readingMinutes={readingTime(item.content.html)}
+      className={hasHeroImage ? "article-meta--below-hero" : ""}
+    />
   );
 
   return (
@@ -143,6 +150,10 @@ export default async function ContentPage({ params }: PageProps) {
         </div>
 
         {item.type === "article" ? <AfterArticleAds /> : null}
+
+        {item.type === "article" && authorProfile ? (
+          <AuthorBio author={authorProfile} variant="socials" />
+        ) : null}
 
         {item.type === "article" ? <ShareLinks title={item.title} pathname={item.pathname} /> : null}
       </article>

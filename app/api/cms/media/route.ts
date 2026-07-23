@@ -1,15 +1,14 @@
-import { desc } from "drizzle-orm";
 import { put } from "@vercel/blob";
 import sharp from "sharp";
 import { auth } from "@/lib/auth";
-import { getDb } from "@/lib/cms/db/client";
+import { listAdminMedia } from "@/lib/cms/admin-media";
+import { getDb, isDatabaseConfigured } from "@/lib/cms/db/client";
 import { mediaAssets } from "@/lib/cms/db/schema";
-import { isDatabaseConfigured } from "@/lib/cms/db/client";
 import { jsonError, jsonOk } from "@/lib/cms/http";
 
 const ALLOWED_MIME = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 
-export async function GET() {
+export async function GET(request: Request) {
   if (!isDatabaseConfigured()) {
     return jsonError("DATABASE_URL is not configured.", 503);
   }
@@ -19,9 +18,32 @@ export async function GET() {
     return jsonError("Unauthorized.", 401);
   }
 
-  const db = getDb();
-  const media = await db.select().from(mediaAssets).orderBy(desc(mediaAssets.createdAt));
-  return jsonOk({ media });
+  const { searchParams } = new URL(request.url);
+  const search = searchParams.get("search") ?? undefined;
+  const source = searchParams.get("source");
+  const limit = Number(searchParams.get("limit") ?? "50");
+  const offset = Number(searchParams.get("offset") ?? "0");
+
+  const inUseParam = searchParams.get("inUse");
+  const inUse =
+    inUseParam === "true" ? true : inUseParam === "false" ? false : undefined;
+
+  const result = await listAdminMedia({
+    search,
+    source: source === "database" || source === "recovered" ? source : undefined,
+    inUse,
+    limit: Number.isFinite(limit) ? limit : 50,
+    offset: Number.isFinite(offset) ? offset : 0,
+  }).catch((error: unknown) => {
+    const message = error instanceof Error ? error.message : "Failed to load media.";
+    return { error: message } as const;
+  });
+
+  if ("error" in result) {
+    return jsonError(result.error, 500);
+  }
+
+  return jsonOk(result);
 }
 
 export async function POST(request: Request) {

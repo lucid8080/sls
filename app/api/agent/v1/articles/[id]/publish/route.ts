@@ -13,7 +13,9 @@ export async function POST(request: Request, context: RouteContext) {
   const { id } = await context.params;
   const result = await publishArticle(id, `agent:${authResult.label}`);
   if (!result.ok) {
-    return jsonError(result.error ?? "Publish failed.", 422);
+    return jsonError(result.error ?? "Publish failed.", 422, {
+      issues: result.issues ?? [],
+    });
   }
 
   return jsonOk(result);

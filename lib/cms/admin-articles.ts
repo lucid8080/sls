@@ -98,7 +98,10 @@ export async function ensureRecoveredArticleOverride(
     return existing;
   }
 
-  const recovered = getRecoveredContentBundle().articles.find((article) => article.id === id);
+  const bundle = getRecoveredContentBundle();
+  const recovered =
+    bundle.articles.find((article) => article.id === id) ??
+    bundle.pages.find((page) => page.id === id);
   if (!recovered) {
     return undefined;
   }

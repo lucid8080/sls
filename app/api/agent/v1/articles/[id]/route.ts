@@ -1,6 +1,6 @@
 import { verifyAgentRequest } from "@/lib/cms/agent-auth";
 import { getArticleById, updateArticle } from "@/lib/cms/articles";
-import { jsonError, jsonOk, readJsonBody } from "@/lib/cms/http";
+import { jsonError, jsonOk, headWithJsonBody, readJsonBody } from "@/lib/cms/http";
 import { sanitizeCmsHtml } from "@/lib/cms/sanitize";
 import { serializeArticle } from "@/lib/cms/serialize";
 import { pathnameFromSlug } from "@/lib/cms/schemas";
@@ -20,6 +20,10 @@ export async function GET(request: Request, context: RouteContext) {
   }
 
   return jsonOk({ article: serializeArticle(row) });
+}
+
+export async function HEAD(request: Request, context: RouteContext) {
+  return headWithJsonBody(await GET(request, context));
 }
 
 export async function PATCH(request: Request, context: RouteContext) {

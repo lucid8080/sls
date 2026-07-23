@@ -1,6 +1,6 @@
 import { verifyAgentRequest } from "@/lib/cms/agent-auth";
 import { getAgentJob } from "@/lib/cms/articles";
-import { jsonError, jsonOk } from "@/lib/cms/http";
+import { jsonError, jsonOk, headWithJsonBody } from "@/lib/cms/http";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -17,4 +17,8 @@ export async function GET(request: Request, context: RouteContext) {
   }
 
   return jsonOk({ job });
+}
+
+export async function HEAD(request: Request, context: RouteContext) {
+  return headWithJsonBody(await GET(request, context));
 }

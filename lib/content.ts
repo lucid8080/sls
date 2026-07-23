@@ -10,10 +10,20 @@ const taxonomyTermSchema = z.object({
   slug: z.string(),
 });
 
+const authorSocialsSchema = z.object({
+  twitter: z.string().optional(),
+  linkedin: z.string().optional(),
+  facebook: z.string().optional(),
+  website: z.string().optional(),
+});
+
 const authorSchema = z.object({
   id: z.string(),
   name: z.string(),
   slug: z.string(),
+  bio: z.string().optional(),
+  avatarPath: z.string().startsWith("/").optional().nullable(),
+  socials: authorSocialsSchema.optional(),
 });
 
 const imageVariantSchema = z.object({
@@ -108,17 +118,15 @@ export const getRecoveredContentBundle = cache(() => {
 export const getContentBundle = cache(() => {
   const cmsPath = join(process.cwd(), "content", "cms-export.json");
   const bundle = getRecoveredContentBundle();
-  const cmsArticles = readCmsArticles(cmsPath);
-  const mergedArticles = dedupeArticles([...bundle.articles, ...cmsArticles]);
+  const cmsExport = readCmsExport(cmsPath);
+  const mergedArticles = dedupeArticles([...bundle.articles, ...cmsExport.articles]);
   const articles = mergedArticles.filter(isPublicContent).sort(sortNewestFirst);
   const pages = bundle.pages.filter(isPublicContent).sort(sortAlphabetically);
   const categories = bundle.categories
     .filter((category) => CORE_CATEGORY_SLUGS.has(category.slug))
     .filter((category) => articles.some((article) => article.categories.some((term) => term.slug === category.slug)))
     .sort(sortAlphabetically);
-  const authors = bundle.authors
-    .filter((author) => articles.some((article) => article.author?.id === author.id))
-    .sort(sortAlphabetically);
+  const authors = mergeAuthors(bundle.authors, cmsExport.authors, articles).sort(sortAlphabetically);
 
   return {
     generatedAt: bundle.generatedAt,
@@ -214,6 +222,24 @@ export function formatDate(value?: string): string {
   }).format(new Date(value));
 }
 
+/** e.g. "Published Jul 14, 2026, 3:11 AM EDT" */
+export function formatPublishedLabel(value?: string): string {
+  if (!value) {
+    return "";
+  }
+
+  const formatted = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  }).format(new Date(value));
+
+  return `Published ${formatted}`;
+}
+
 export function readingTime(html: string): number {
   const text = html.replace(/<[^>]+>/g, " ");
   const words = text.trim().split(/\s+/).filter(Boolean).length;
@@ -277,9 +303,12 @@ function slugify(value: string): string {
   );
 }
 
-function readCmsArticles(cmsPath: string): z.infer<typeof contentItemSchema>[] {
+function readCmsExport(cmsPath: string): {
+  articles: z.infer<typeof contentItemSchema>[];
+  authors: Author[];
+} {
   if (!existsSync(cmsPath)) {
-    return [];
+    return { articles: [], authors: [] };
   }
 
   try {
@@ -287,12 +316,51 @@ function readCmsArticles(cmsPath: string): z.infer<typeof contentItemSchema>[] {
     const exportBundle = z
       .object({
         articles: z.array(ArticleSchema),
+        authors: z.array(authorSchema).optional().default([]),
       })
       .parse(parsed);
-    return exportBundle.articles;
+    return {
+      articles: exportBundle.articles,
+      authors: exportBundle.authors,
+    };
   } catch {
-    return [];
+    return { articles: [], authors: [] };
   }
+}
+
+function mergeAuthors(
+  recovered: Author[],
+  cmsAuthors: Author[],
+  articles: ContentItem[],
+): Author[] {
+  const bySlug = new Map<string, Author>();
+
+  for (const author of recovered) {
+    bySlug.set(author.slug, author);
+  }
+
+  for (const author of cmsAuthors) {
+    bySlug.set(author.slug, { ...bySlug.get(author.slug), ...author });
+  }
+
+  for (const article of articles) {
+    const snapshot = article.author;
+    if (!snapshot) continue;
+    if (![...bySlug.values()].some((author) => author.id === snapshot.id || author.slug === snapshot.slug)) {
+      bySlug.set(snapshot.slug, snapshot);
+    }
+  }
+
+  const usedIds = new Set(
+    articles.map((article) => article.author?.id).filter((id): id is string => Boolean(id)),
+  );
+  const usedSlugs = new Set(
+    articles.map((article) => article.author?.slug).filter((slug): slug is string => Boolean(slug)),
+  );
+
+  return [...bySlug.values()].filter(
+    (author) => usedIds.has(author.id) || usedSlugs.has(author.slug),
+  );
 }
 
 function dedupeArticles<T extends { id: string }>(items: T[]): T[] {

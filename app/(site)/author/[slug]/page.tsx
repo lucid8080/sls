@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/ArticleCard";
+import { AuthorBio } from "@/components/AuthorBio";
 import { getArticlesByAuthor, getAuthor, getContentBundle } from "@/lib/content";
 
 type PageProps = {
@@ -37,9 +38,26 @@ export default async function AuthorPage({ params }: PageProps) {
     <main id="main">
       <section className="archive-header">
         <p className="eyebrow">Author archive</p>
-        <h1>{author.name}</h1>
-        <p>{articles.length} reviewed articles recovered for this author.</p>
+        <div className="author-archive-heading">
+          {author.avatarPath ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              className="author-archive-heading__avatar"
+              src={author.avatarPath}
+              alt=""
+              width={72}
+              height={72}
+            />
+          ) : null}
+          <div>
+            <h1>{author.name}</h1>
+            <p>{articles.length} reviewed articles recovered for this author.</p>
+          </div>
+        </div>
       </section>
+
+      <AuthorBio author={author} />
+
       <section className="section">
         <div className="card-grid">
           {articles.map((article) => (

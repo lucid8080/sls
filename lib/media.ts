@@ -23,6 +23,14 @@ export type MediaReference = {
   height?: number;
 };
 
+export type RecoveredMediaCatalogItem = {
+  originalPath: string;
+  publicPath: string;
+  mediaType: string;
+  width?: number;
+  height?: number;
+};
+
 function resolveMediaAcceptedPath(): string | null {
   const candidates = [
     join(process.cwd(), "data", "media-accepted.json"),
@@ -31,25 +39,37 @@ function resolveMediaAcceptedPath(): string | null {
   return candidates.find((path) => existsSync(path)) ?? null;
 }
 
-export const getMediaMap = cache(() => {
-  const map = new Map<string, MediaReference>();
+export const getRecoveredMediaCatalog = cache((): RecoveredMediaCatalogItem[] => {
   const reportPath = resolveMediaAcceptedPath();
   if (!reportPath) {
-    return map;
+    return [];
   }
 
   const parsed = mediaAcceptedSchema.parse(JSON.parse(readFileSync(reportPath, "utf8")) as unknown);
-
-  for (const item of parsed) {
+  return parsed.flatMap((item) => {
     if (!item.outputPath) {
-      continue;
+      return [];
     }
 
-    const publicPath = `/${normalizeSlashes(item.outputPath)}`;
-    const originalPath = `/media/${normalizeSlashes(item.originalPath)}`;
-    map.set(normalizeMediaKey(originalPath), {
-      originalPath,
-      publicPath,
+    return [
+      {
+        originalPath: `/media/${normalizeSlashes(item.originalPath)}`,
+        publicPath: `/${normalizeSlashes(item.outputPath)}`,
+        mediaType: item.mediaType,
+        width: item.width,
+        height: item.height,
+      },
+    ];
+  });
+});
+
+export const getMediaMap = cache(() => {
+  const map = new Map<string, MediaReference>();
+
+  for (const item of getRecoveredMediaCatalog()) {
+    map.set(normalizeMediaKey(item.originalPath), {
+      originalPath: item.originalPath,
+      publicPath: item.publicPath,
       width: item.width,
       height: item.height,
     });

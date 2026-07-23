@@ -1,7 +1,7 @@
 import { verifyAgentRequest } from "@/lib/cms/agent-auth";
 import { getCalendarEntryByDate } from "@/lib/cms/articles";
 import { todayInTimezone, getAutopilotSettings } from "@/lib/cms/autopilot";
-import { jsonError, jsonOk } from "@/lib/cms/http";
+import { jsonError, jsonOk, headWithJsonBody } from "@/lib/cms/http";
 
 export async function GET(request: Request) {
   const authResult = await verifyAgentRequest(request.headers.get("authorization"), "agent:calendar");
@@ -18,4 +18,8 @@ export async function GET(request: Request) {
     timezone: settings.timezone,
     entry: entry ?? null,
   });
+}
+
+export async function HEAD(request: Request) {
+  return headWithJsonBody(await GET(request));
 }

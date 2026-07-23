@@ -30,7 +30,9 @@ export async function POST(request: Request, context: RouteContext) {
 
   const result = await publishArticle(id, actor);
   if (!result.ok) {
-    return jsonError(result.error ?? "Publish failed.", 422);
+    return jsonError(result.error ?? "Publish failed.", 422, {
+      issues: result.issues ?? [],
+    });
   }
 
   return jsonOk(result);

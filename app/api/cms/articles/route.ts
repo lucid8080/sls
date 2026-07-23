@@ -53,6 +53,8 @@ export async function POST(request: Request) {
     excerpt?: string;
     html?: string;
     status?: "draft" | "in_review" | "scheduled" | "published" | "archived";
+    featuredImage?: Record<string, unknown> | null;
+    seo?: { title?: string; description?: string; ogImage?: string; noindex?: boolean };
   }>(request);
 
   if (!body?.title) {
@@ -69,9 +71,13 @@ export async function POST(request: Request) {
     excerpt: body.excerpt,
     html,
     status: body.status ?? "draft",
+    featuredImage: body.featuredImage ?? null,
     seo: {
       canonicalPath: pathname,
       noindex: true,
+      ...(body.seo?.title ? { title: body.seo.title } : {}),
+      ...(body.seo?.description ? { description: body.seo.description } : {}),
+      ...(body.seo?.ogImage ? { ogImage: body.seo.ogImage } : {}),
     },
     createdBy: session.user?.email ?? "admin",
   });

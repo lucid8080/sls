@@ -2,10 +2,16 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { FeaturedImageField } from "@/components/cms/FeaturedImageField";
 import { RichTextEditor } from "@/components/cms/RichTextEditor";
 import type { ArticleAiSuggestion, ArticleAiSuggestionField } from "@/lib/cms/article-suggestions";
+import { normalizeFeaturedImage } from "@/lib/cms/featured-image";
+import { formatPublishGateError } from "@/lib/cms/publish-messages";
+import type { FeaturedImage } from "@/lib/cms/schemas";
 
 type TaxonomyTerm = { id: string; name: string; slug: string };
+
+type ArticleAuthor = { id: string; name: string; slug: string };
 
 type Article = {
   id: string;
@@ -14,8 +20,10 @@ type Article = {
   status: string;
   excerpt: string | null;
   html: string;
+  author: ArticleAuthor | null;
   categories: TaxonomyTerm[];
   tags: TaxonomyTerm[];
+  featuredImage: FeaturedImage | null;
   seo: {
     title?: string;
     description?: string;
@@ -66,6 +74,7 @@ function formatSuggestionValue(field: ArticleAiSuggestionField, value: unknown):
 
 export function ArticleEditor({ articleId }: { articleId: string }) {
   const [article, setArticle] = useState<Article | null>(null);
+  const [authors, setAuthors] = useState<ArticleAuthor[]>([]);
   const [savedSnapshot, setSavedSnapshot] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -87,11 +96,28 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
         if (!response.ok) {
           throw new Error(data.error ?? "Failed to load article.");
         }
-        const loaded = data.article ?? null;
+        const loaded = data.article
+          ? {
+              ...data.article,
+              author: data.article.author ?? null,
+              featuredImage: normalizeFeaturedImage(data.article.featuredImage) ?? null,
+            }
+          : null;
         setArticle(loaded);
         setSavedSnapshot(loaded ? JSON.stringify(loaded) : "");
       })
       .catch((loadError: Error) => setError(loadError.message));
+
+    fetch("/api/cms/authors")
+      .then(async (response) => {
+        const data = (await response.json()) as { authors?: ArticleAuthor[]; error?: string };
+        if (response.ok) {
+          setAuthors(data.authors ?? []);
+        }
+      })
+      .catch(() => {
+        // Author picker remains empty if the authors API is unavailable.
+      });
   }, [articleId]);
 
   const suggestedFields = useMemo(() => {
@@ -122,8 +148,13 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
     }
 
     if (data.article) {
-      setArticle(data.article);
-      setSavedSnapshot(JSON.stringify(data.article));
+      const saved = {
+        ...data.article,
+        author: data.article.author ?? null,
+        featuredImage: normalizeFeaturedImage(data.article.featuredImage) ?? null,
+      };
+      setArticle(saved);
+      setSavedSnapshot(JSON.stringify(saved));
     }
     setMessage("Saved.");
   }
@@ -145,11 +176,15 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
     const response = await fetch(`/api/cms/articles/${articleId}/publish?action=${action}`, {
       method: "POST",
     });
-    const data = (await response.json()) as { error?: string; deployTriggered?: boolean };
+    const data = (await response.json()) as {
+      error?: string;
+      issues?: Array<{ code: string; message: string; severity: string }>;
+      deployTriggered?: boolean;
+    };
     setSaving(false);
 
     if (!response.ok) {
-      setError(data.error ?? "Action failed.");
+      setError(formatPublishGateError(data.error ?? "Action failed.", data.issues));
       return;
     }
 
@@ -236,8 +271,13 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
         throw new Error(data.error ?? `Apply failed (${data.code ?? response.status}).`);
       }
       if (data.article) {
-        setArticle(data.article);
-        setSavedSnapshot(JSON.stringify(data.article));
+        const saved = {
+          ...data.article,
+          author: data.article.author ?? null,
+          featuredImage: normalizeFeaturedImage(data.article.featuredImage) ?? null,
+        };
+        setArticle(saved);
+        setSavedSnapshot(JSON.stringify(saved));
       }
       setSuggestionPayload(null);
       setSelected(new Set());
@@ -298,6 +338,46 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
             value={article.excerpt ?? ""}
             onChange={(e) => setArticle({ ...article, excerpt: e.target.value })}
           />
+          <FeaturedImageField
+            value={article.featuredImage}
+            disabled={saving}
+            onChange={(featuredImage) =>
+              setArticle({
+                ...article,
+                featuredImage,
+                seo: {
+                  ...article.seo,
+                  ogImage: featuredImage?.src,
+                },
+              })
+            }
+          />
+          <label>
+            <span style={{ display: "block", marginBottom: "0.35rem", fontWeight: 600 }}>Author</span>
+            <select
+              className="admin-select"
+              value={article.author?.id ?? ""}
+              onChange={(e) => {
+                const selectedAuthor = authors.find((author) => author.id === e.target.value);
+                setArticle({
+                  ...article,
+                  author: selectedAuthor
+                    ? { id: selectedAuthor.id, name: selectedAuthor.name, slug: selectedAuthor.slug }
+                    : null,
+                });
+              }}
+            >
+              <option value="">No author</option>
+              {authors.map((author) => (
+                <option key={author.id} value={author.id}>
+                  {author.name}
+                </option>
+              ))}
+              {article.author && !authors.some((author) => author.id === article.author?.id) ? (
+                <option value={article.author.id}>{article.author.name} (current)</option>
+              ) : null}
+            </select>
+          </label>
           <RichTextEditor value={article.html} onChange={(html) => setArticle({ ...article, html })} />
           <div className="admin-grid two">
             <input

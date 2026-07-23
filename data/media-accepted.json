@@ -64827,69 +64827,6 @@
     "height": 612
   },
   {
-    "originalPath": "2026/02/openclaw-telegram-setup-guide-150x150.png",
-    "outputPath": "media/2026/02/openclaw-telegram-setup-guide-150x150.webp",
-    "mediaType": "png",
-    "originalBytes": 16066,
-    "hash": "50e564c66cad4ddace82e3433b6d264e15432f066c837b3995cc0b19188c4a37",
-    "width": 150,
-    "height": 150
-  },
-  {
-    "originalPath": "2026/02/openclaw-telegram-setup-guide-300x300.png",
-    "outputPath": "media/2026/02/openclaw-telegram-setup-guide-300x300.webp",
-    "mediaType": "png",
-    "originalBytes": 62174,
-    "hash": "4a922d15314b5ba07a46657b53610752e6d70d36bd1c598aaedee0ea20051dcb",
-    "width": 300,
-    "height": 300
-  },
-  {
-    "originalPath": "2026/02/openclaw-telegram-setup-guide-330x220.png",
-    "outputPath": "media/2026/02/openclaw-telegram-setup-guide-330x220.webp",
-    "mediaType": "png",
-    "originalBytes": 56238,
-    "hash": "c1995acc2c1b296a4242dbdf4e3474fbf2da047c7eed1319a1228380729442a8",
-    "width": 330,
-    "height": 220
-  },
-  {
-    "originalPath": "2026/02/openclaw-telegram-setup-guide-420x280.png",
-    "outputPath": "media/2026/02/openclaw-telegram-setup-guide-420x280.webp",
-    "mediaType": "png",
-    "originalBytes": 90028,
-    "hash": "e64745549e167b448cbffe48ff05c17b91eb1bb7254eebeafe7b93e828bf8490",
-    "width": 420,
-    "height": 280
-  },
-  {
-    "originalPath": "2026/02/openclaw-telegram-setup-guide-615x410.png",
-    "outputPath": "media/2026/02/openclaw-telegram-setup-guide-615x410.webp",
-    "mediaType": "png",
-    "originalBytes": 185585,
-    "hash": "3b870e96f522e1a0f609b2fbe9081fb65fa09a54c08dbe9eea919aaefa6d1d9b",
-    "width": 615,
-    "height": 410
-  },
-  {
-    "originalPath": "2026/02/openclaw-telegram-setup-guide-768x768.png",
-    "outputPath": "media/2026/02/openclaw-telegram-setup-guide-768x768.webp",
-    "mediaType": "png",
-    "originalBytes": 383036,
-    "hash": "61f9864ea37e206995d6f3784138577c8915ed5650de61fa69bf69a4985d5cb3",
-    "width": 768,
-    "height": 768
-  },
-  {
-    "originalPath": "2026/02/openclaw-telegram-setup-guide-860x860.png",
-    "outputPath": "media/2026/02/openclaw-telegram-setup-guide-860x860.webp",
-    "mediaType": "png",
-    "originalBytes": 468920,
-    "hash": "1a053b9164ba6411c20e96a3decf436e80b55199a7c082e20973c205f7b1c277",
-    "width": 860,
-    "height": 860
-  },
-  {
     "originalPath": "2026/02/openclaw-telegram-setup-guide.png",
     "outputPath": "media/2026/02/openclaw-telegram-setup-guide.webp",
     "mediaType": "png",
@@ -64915,132 +64852,6 @@
     "hash": "7384320be2279d4b48495539fb6b81e373151da30b9dd03ea31e2a52beba49e7",
     "width": 300,
     "height": 168
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-ai-comparison-330x220.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-ai-comparison-330x220.webp",
-    "mediaType": "png",
-    "originalBytes": 62113,
-    "hash": "3a1a080841e8157a732c3886ad29f59dee9d72183cd6127eef6a7413ea22e9d0",
-    "width": 330,
-    "height": 220
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-ai-comparison-420x280.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-ai-comparison-420x280.webp",
-    "mediaType": "png",
-    "originalBytes": 98428,
-    "hash": "36c0fdb1312075faa0eebba682efd6c97c0c6e460aff056ca586ee371c5103c6",
-    "width": 420,
-    "height": 280
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-ai-comparison-615x410.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-ai-comparison-615x410.webp",
-    "mediaType": "png",
-    "originalBytes": 203942,
-    "hash": "4d435e64d52949d7b9beb52ffb97bc4a179dbe7027abd4a6b25e9dded189f1f6",
-    "width": 615,
-    "height": 410
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-ai-comparison-768x431.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-ai-comparison-768x431.webp",
-    "mediaType": "png",
-    "originalBytes": 251302,
-    "hash": "83ffcd2c1bd38a10b60400bb39c46becd2dc460453f6f6dffa19130ad4c922db",
-    "width": 768,
-    "height": 431
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-ai-comparison-860x482.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-ai-comparison-860x482.webp",
-    "mediaType": "png",
-    "originalBytes": 308280,
-    "hash": "ace803e5e408f1caa2f5b572faa757dce86a68864543ea78b0aaba58dc093b20",
-    "width": 860,
-    "height": 482
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-ai-comparison.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-ai-comparison.webp",
-    "mediaType": "png",
-    "originalBytes": 559778,
-    "hash": "d964a9e3c0cd7ce03e8fe1d7df4c34feda1536aa968c2b581b6825481be531fb",
-    "width": 1024,
-    "height": 574
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-lobster-150x150.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-lobster-150x150.webp",
-    "mediaType": "png",
-    "originalBytes": 22866,
-    "hash": "836690a8aca3eda6a0188865cf00accbadcffbe7980b29737e7b6546a6dd286e",
-    "width": 150,
-    "height": 150
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-lobster-300x149.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-lobster-300x149.webp",
-    "mediaType": "png",
-    "originalBytes": 43975,
-    "hash": "d1470724b1982d88a063a9efec0b779dc942555a79eb9be3b9cd064860b57f73",
-    "width": 300,
-    "height": 149
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-lobster-330x220.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-lobster-330x220.webp",
-    "mediaType": "png",
-    "originalBytes": 70394,
-    "hash": "abbf90ea2a3bcdfd6ccf9d112ce91923317d8f2a81a806e57378a575e39808c6",
-    "width": 330,
-    "height": 220
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-lobster-420x280.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-lobster-420x280.webp",
-    "mediaType": "png",
-    "originalBytes": 107985,
-    "hash": "7684c05038afe356f176bc23252b287ccc5960e0e01b1f89d068de947387722c",
-    "width": 420,
-    "height": 280
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-lobster-615x410.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-lobster-615x410.webp",
-    "mediaType": "png",
-    "originalBytes": 210338,
-    "hash": "cf437268a2d89aad5bf36ca85e583fc00772c20c062c9a442b4d947c26599437",
-    "width": 615,
-    "height": 410
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-lobster-768x383.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-lobster-768x383.webp",
-    "mediaType": "png",
-    "originalBytes": 238516,
-    "hash": "137dc64c90ac4006267d02faea0a54c23be9759e046c0b00bd5f732fc9a64ca4",
-    "width": 768,
-    "height": 383
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-lobster-860x428.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-lobster-860x428.webp",
-    "mediaType": "png",
-    "originalBytes": 288752,
-    "hash": "ae8929de601ebbe38efafc2b058e03c02760639a3ab3f64f7c4c95c15b7bc982",
-    "width": 860,
-    "height": 428
-  },
-  {
-    "originalPath": "2026/02/openclaw-vs-cloud-lobster.png",
-    "outputPath": "media/2026/02/openclaw-vs-cloud-lobster.webp",
-    "mediaType": "png",
-    "originalBytes": 506564,
-    "hash": "59a6221904c63639b6025ae17ccc2909e939b3ff18beb2b1c62e7946da4888ec",
-    "width": 1024,
-    "height": 510
   },
   {
     "originalPath": "2026/02/OpenClaw-vs-Home-Assistant-showdown-150x150.webp",
@@ -65259,24 +65070,6 @@
     "height": 512
   },
   {
-    "originalPath": "2026/05/ad-sls2-142x300.jpg",
-    "outputPath": "media/2026/05/ad-sls2-142x300.webp",
-    "mediaType": "jpeg",
-    "originalBytes": 19025,
-    "hash": "068d4c3ebc26635b80bd069578bbffc7969a40fbbcb18cb9ad000ee4459ffab0",
-    "width": 142,
-    "height": 300
-  },
-  {
-    "originalPath": "2026/05/ad-sls2-150x150.jpg",
-    "outputPath": "media/2026/05/ad-sls2-150x150.webp",
-    "mediaType": "jpeg",
-    "originalBytes": 11801,
-    "hash": "e252d64f4bad9f80fedd6ac2e4f2f9b2777ba26208c59906dbabcb93e7f5383e",
-    "width": 150,
-    "height": 150
-  },
-  {
     "originalPath": "2026/05/ad-sls2-330x220.jpg",
     "outputPath": "media/2026/05/ad-sls2-330x220.webp",
     "mediaType": "jpeg",
@@ -65338,15 +65131,6 @@
     "hash": "5176956fe4e6f96b251d1e369440690f23673eb08cdbcbd8124ebc0e01ed343e",
     "width": 860,
     "height": 1813
-  },
-  {
-    "originalPath": "2026/05/ad-sls2-e1779461968406-150x150.jpg",
-    "outputPath": "media/2026/05/ad-sls2-e1779461968406-150x150.webp",
-    "mediaType": "jpeg",
-    "originalBytes": 12138,
-    "hash": "03874d335d1f093fac42f24983eeaf4888a0b67efd4bd3f0747842679b5772a5",
-    "width": 150,
-    "height": 150
   },
   {
     "originalPath": "2026/05/ad-sls2-e1779461968406-180x300.jpg",

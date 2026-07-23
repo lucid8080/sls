@@ -10,6 +10,7 @@ import {
   type ArticleRow,
 } from "@/lib/cms/db/schema";
 import { pathnameFromSlug, slugifyTitle, type ArticleStatus } from "@/lib/cms/schemas";
+import { normalizeFeaturedImage } from "@/lib/cms/featured-image";
 
 export function createArticleId(): string {
   return `cms_${randomUUID().replace(/-/g, "").slice(0, 12)}`;
@@ -84,6 +85,8 @@ export async function createArticle(input: ArticleInput): Promise<ArticleRow> {
     noindex: input.status !== "published",
   };
 
+  const featuredImage = normalizeFeaturedImage(input.featuredImage) ?? null;
+
   const [row] = await db
     .insert(articles)
     .values({
@@ -97,7 +100,7 @@ export async function createArticle(input: ArticleInput): Promise<ArticleRow> {
       author: input.author ?? null,
       categories: input.categories ?? [],
       tags: input.tags ?? [],
-      featuredImage: input.featuredImage ?? null,
+      featuredImage,
       seo,
       scheduledAt: input.scheduledAt ?? null,
       createdBy: input.createdBy,
@@ -126,6 +129,11 @@ export async function updateArticle(
   const pathname = pathnameFromSlug(slug);
   const now = new Date();
 
+  const featuredImage =
+    input.featuredImage === undefined
+      ? normalizeFeaturedImage(existing.featuredImage) ?? null
+      : normalizeFeaturedImage(input.featuredImage) ?? null;
+
   const [row] = await db
     .update(articles)
     .set({
@@ -138,7 +146,7 @@ export async function updateArticle(
       author: input.author === undefined ? existing.author : input.author,
       categories: input.categories ?? existing.categories,
       tags: input.tags ?? existing.tags,
-      featuredImage: input.featuredImage === undefined ? existing.featuredImage : input.featuredImage,
+      featuredImage,
       seo: input.seo ?? existing.seo,
       scheduledAt: input.scheduledAt === undefined ? existing.scheduledAt : input.scheduledAt,
       updatedAt: now,
