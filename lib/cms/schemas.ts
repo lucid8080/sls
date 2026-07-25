@@ -9,8 +9,58 @@ export const BLOCKED_PUBLIC_RE =
 export const ARTICLE_STATUSES = ["draft", "in_review", "scheduled", "published", "archived"] as const;
 export type ArticleStatus = (typeof ARTICLE_STATUSES)[number];
 
-export const AGENT_SCOPES = ["agent:read", "agent:write", "agent:publish", "agent:calendar"] as const;
+export const AGENT_SCOPES = [
+  "agent:read",
+  "agent:write",
+  "agent:publish",
+  "agent:calendar",
+  "agent:ads",
+  "agent:affiliates",
+  "agent:media",
+  "agent:topics",
+] as const;
 export type AgentScope = (typeof AGENT_SCOPES)[number];
+
+export const DEFAULT_AGENT_SCOPES: AgentScope[] = ["agent:read", "agent:write", "agent:calendar"];
+
+export const AGENT_SCOPE_DESCRIPTIONS: Record<AgentScope, string> = {
+  "agent:read": "Read articles, jobs, internal search",
+  "agent:write": "Create and update article drafts",
+  "agent:publish": "Publish approved articles",
+  "agent:calendar": "Read content calendar slots",
+  "agent:ads": "Read and update ad placement settings",
+  "agent:affiliates": "Manage affiliate links",
+  "agent:media": "List, upload, edit, and delete media",
+  "agent:topics": "Manage the topic inbox",
+};
+
+export function isAgentScope(value: unknown): value is AgentScope {
+  return typeof value === "string" && (AGENT_SCOPES as readonly string[]).includes(value);
+}
+
+export type AgentScopeParseResult =
+  | { ok: true; scopes: AgentScope[] }
+  | { ok: false; error: string };
+
+/** Validates a caller-supplied scope list against the catalog, preserving catalog order. */
+export function parseAgentScopes(value: unknown): AgentScopeParseResult {
+  if (!Array.isArray(value)) {
+    return { ok: false, error: "scopes must be an array." };
+  }
+
+  const invalid = value.filter((scope) => !isAgentScope(scope));
+  if (invalid.length > 0) {
+    return { ok: false, error: `Unknown scopes: ${invalid.map(String).join(", ")}` };
+  }
+
+  const selected = new Set(value as AgentScope[]);
+  const scopes = AGENT_SCOPES.filter((scope) => selected.has(scope));
+  if (scopes.length === 0) {
+    return { ok: false, error: "At least one scope is required." };
+  }
+
+  return { ok: true, scopes };
+}
 
 export const TaxonomyTermSchema = z.object({
   id: z.string().min(1),

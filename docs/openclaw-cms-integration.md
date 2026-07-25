@@ -25,9 +25,16 @@ Authorization: Bearer sls_<your-key>
 Scopes:
 
 - `agent:read` — read articles, jobs, internal search
-- `agent:write` — create/update drafts, upload media
+- `agent:write` — create/update article drafts
 - `agent:publish` — publish approved articles
 - `agent:calendar` — read content calendar slots
+- `agent:ads` — read/update ad placement settings
+- `agent:affiliates` — manage affiliate links
+- `agent:media` — list, upload, edit, and delete media
+- `agent:topics` — manage the topic inbox
+
+Scopes are selected per key in `/admin/agents` and can be edited (or the key deleted) at any time.
+Media upload requires `agent:media`; keys created before this scope existed must have it added.
 
 ## Daily autopilot workflow
 
@@ -92,7 +99,16 @@ GET /calendar/today
 GET /search/internal?q=instant+pot
 ```
 
-### Upload featured image
+### Media library (`agent:media`)
+
+```http
+GET /media?search=vacuum&source=database&limit=50&offset=0
+GET /media/{id}
+PATCH /media/{id}          # { "alt": "Descriptive alt text" }
+DELETE /media/{id}         # 409 when the asset is still referenced
+```
+
+Upload a new asset:
 
 ```http
 POST /media
@@ -101,6 +117,37 @@ Content-Type: multipart/form-data
 file=<image>
 alt=Descriptive alt text
 ```
+
+### Ads (`agent:ads`)
+
+```http
+GET /ads
+POST /ads                  # { "globalEnabled": true, "placements": { "<key>": { "enabled": false } } }
+```
+
+### Affiliate links (`agent:affiliates`)
+
+```http
+GET /affiliates?network=amazon&tagStatus=missing_tag&search=blender
+POST /affiliates           # { "url": "https://...", "label": "...", "notes": "..." }
+GET /affiliates/{id}
+PATCH /affiliates/{id}
+DELETE /affiliates/{id}
+```
+
+### Topic inbox (`agent:topics`)
+
+```http
+GET /topics?status=new&page=1&pageSize=25
+POST /topics
+GET /topics/{id}
+PATCH /topics/{id}
+DELETE /topics/{id}
+POST /topics/{id}/transition   # { "toStatus": "approved" }
+```
+
+Rejecting a topic requires `rejectionReason`. Topics linked to an article or calendar entry
+cannot be deleted — archive them instead.
 
 ### Poll jobs
 

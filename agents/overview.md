@@ -93,6 +93,14 @@ External agent endpoints live under `app/api/agent/v1/`. They use bearer keys wh
 - `agent:write`
 - `agent:publish`
 - `agent:calendar`
+- `agent:ads`
+- `agent:affiliates`
+- `agent:media`
+- `agent:topics`
+
+The scope catalog is defined by `AGENT_SCOPES` in `lib/cms/schemas.ts`. `/admin/agents` picks scopes
+on key creation and can edit or delete keys afterwards via `/api/cms/keys` (POST/PATCH/DELETE), which
+rejects scope values outside the catalog.
 
 Never log raw API keys, credentials, bearer tokens, webhook secrets, or database URLs. Keep authorization checks at each API boundary.
 

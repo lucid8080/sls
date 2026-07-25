@@ -1341,6 +1341,44 @@
   white-space: nowrap;
 }
 
+.agent-scope-fieldset {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem 1rem;
+}
+
+.agent-scope-fieldset legend {
+  padding: 0 0.35rem;
+  font-weight: 600;
+}
+
+.agent-scope-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.5rem;
+}
+
+.agent-scope-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.agent-scope-option span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.agent-scope-option small {
+  color: #6b7280;
+}
+
+.agent-key-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 @media (max-width: 900px) {
   .admin-shell {
     grid-template-columns: 1fr;

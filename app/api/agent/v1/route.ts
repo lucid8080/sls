@@ -12,6 +12,7 @@ export async function GET(request: Request) {
     api: "sls-agent",
     version: "v1",
     keyLabel: authResult.label,
+    scopes: authResult.scopes,
     endpoints: {
       articles: "/api/agent/v1/articles",
       media: "/api/agent/v1/media",
@@ -19,6 +20,9 @@ export async function GET(request: Request) {
       calendarUpcoming: "/api/agent/v1/calendar/upcoming",
       searchInternal: "/api/agent/v1/search/internal",
       jobsPending: "/api/agent/v1/jobs/pending",
+      ads: "/api/agent/v1/ads",
+      affiliates: "/api/agent/v1/affiliates",
+      topics: "/api/agent/v1/topics",
     },
   });
 }

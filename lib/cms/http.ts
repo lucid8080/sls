@@ -35,7 +35,7 @@ export async function headWithJsonBody(response: Response): Promise<Response> {
 
 const AGENT_CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, HEAD, POST, PATCH, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, HEAD, POST, PATCH, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Authorization, Content-Type",
 };
 

@@ -34,8 +34,12 @@ describe("Agent v1 index route", () => {
       api: "sls-agent",
       version: "v1",
       keyLabel: "Hermes",
+      scopes: ["agent:read"],
       endpoints: {
         articles: "/api/agent/v1/articles",
+        ads: "/api/agent/v1/ads",
+        affiliates: "/api/agent/v1/affiliates",
+        topics: "/api/agent/v1/topics",
       },
     });
   });
