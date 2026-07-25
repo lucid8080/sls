@@ -33,7 +33,7 @@ export type ArticleSuggestionResult = {
   articleStatus: string;
 };
 
-export function buildArticleSuggestionPrompt(article: {
+export async function buildArticleSuggestionPrompt(article: {
   id: string;
   title: string;
   slug: string;
@@ -49,8 +49,8 @@ export function buildArticleSuggestionPrompt(article: {
     noindex: boolean;
   };
   status: string;
-}): { system: string; user: string } {
-  const known = loadKnownTaxonomy();
+}): Promise<{ system: string; user: string }> {
+  const known = await loadKnownTaxonomy();
   const htmlBudget = boundedHtmlCharLimit();
   const clippedHtml = article.html.slice(0, htmlBudget);
 
@@ -135,7 +135,7 @@ export async function generateArticleSuggestions(
     throw new TopicDomainError("NOT_FOUND", "Article not found.");
   }
 
-  const { system, user } = buildArticleSuggestionPrompt(article);
+  const { system, user } = await buildArticleSuggestionPrompt(article);
   const messages: ChatMessage[] = [
     { role: "system", content: system },
     { role: "user", content: user },
@@ -150,7 +150,7 @@ export async function generateArticleSuggestions(
     fetchImpl,
   });
 
-  const known = loadKnownTaxonomy();
+  const known = await loadKnownTaxonomy();
   const suggestions: ArticleAiSuggestion = {
     ...completion.data,
     categories: completion.data.categories
@@ -201,7 +201,7 @@ export async function applyArticleSuggestions(
   }
 
   const previousStatus = article.status;
-  const known = loadKnownTaxonomy();
+  const known = await loadKnownTaxonomy();
   const picked = pickSelectedArticleSuggestions(input.suggestions, input.selectedFields);
 
   const seo =

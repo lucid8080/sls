@@ -32,7 +32,7 @@ type RemovalResult = {
   updatedArticleCount: number;
   skippedVideoIds: string[];
   skippedReasons?: Record<string, string>;
-  deployTriggered: boolean;
+  revalidated: boolean;
 };
 
 const REMOVABLE_STATUSES = new Set<VideoStatus>(["unavailable", "restricted", "error"]);
@@ -167,9 +167,9 @@ export default function AdminYouTubeCleanupPage() {
         throw new Error(data.error ?? "The bulk removal failed.");
       }
 
-      const deployment = data.result.deployTriggered
-        ? " A site deployment was triggered."
-        : " No deploy hook is configured; publish the next deployment to make the changes live.";
+      const deployment = data.result.revalidated
+        ? " Live pages were refreshed."
+        : " No public pages needed refreshing.";
       const skipped =
         data.result.skippedVideoIds.length > 0
           ? ` ${data.result.skippedVideoIds.length} video(s) were skipped (usually because recheck found them available).`

@@ -2,17 +2,16 @@ import { eq } from "drizzle-orm";
 import { getDb } from "@/lib/cms/db/client";
 import { articles, publishLog } from "@/lib/cms/db/schema";
 import { getArticleById, updateArticle } from "@/lib/cms/articles";
-import { exportCmsBundle } from "@/lib/cms/export";
-import { sanitizeCmsHtml } from "@/lib/cms/sanitize";
 import { articleRowToExport, validatePublishedArticle } from "@/lib/cms/validate";
+import { revalidateCmsContent } from "@/lib/cms/revalidate-content";
+import { sanitizeCmsHtml } from "@/lib/cms/sanitize";
 import { notifyTelegram } from "@/lib/cms/telegram";
 
 export type PublishResult = {
   ok: boolean;
   articleId?: string;
   issues?: Array<{ code: string; message: string; severity: string }>;
-  exportCount?: number;
-  deployTriggered?: boolean;
+  revalidated?: boolean;
   error?: string;
 };
 
@@ -60,7 +59,7 @@ export async function publishArticle(articleId: string, actor: string): Promise<
     .returning();
 
   const exportArticle = articleRowToExport(published);
-  const validation = validatePublishedArticle(exportArticle);
+  const validation = await validatePublishedArticle(exportArticle);
 
   if (!validation.ok) {
     await updateArticle(articleId, { status: "in_review" }, actor);
@@ -73,21 +72,23 @@ export async function publishArticle(articleId: string, actor: string): Promise<
     };
   }
 
-  const exported = await exportCmsBundle();
-  const deployTriggered = await triggerDeployHook();
+  revalidateCmsContent({
+    pathname: published.pathname,
+    categorySlugs: (published.categories ?? []).map((category) => category.slug),
+    authorSlug: published.author?.slug ?? null,
+  });
 
-  await logPublish(articleId, actor, "published", validation.issues, deployTriggered ? "deploy-hook" : undefined);
+  await logPublish(articleId, actor, "published", validation.issues, "revalidate");
 
   await notifyTelegram(
-    `Published: *${published.title}*\n${published.pathname}\nCMS export: ${exported.count} article(s).`,
+    `Published: *${published.title}*\n${published.pathname}\nPublic pages revalidated.`,
   );
 
   return {
     ok: true,
     articleId,
     issues: validation.issues,
-    exportCount: exported.count,
-    deployTriggered,
+    revalidated: true,
   };
 }
 
@@ -127,18 +128,4 @@ async function logPublish(
     validationReport: validationReport as Record<string, unknown>,
     deployId,
   });
-}
-
-export async function triggerDeployHook(): Promise<boolean> {
-  const hook = process.env.VERCEL_DEPLOY_HOOK_URL?.trim();
-  if (!hook) {
-    return false;
-  }
-
-  try {
-    const response = await fetch(hook, { method: "POST" });
-    return response.ok;
-  } catch {
-    return false;
-  }
 }

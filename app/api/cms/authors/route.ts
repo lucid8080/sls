@@ -1,9 +1,8 @@
 import { auth } from "@/lib/auth";
 import { createAuthor, listAuthors, serializeAuthor } from "@/lib/cms/authors";
 import { isDatabaseConfigured } from "@/lib/cms/db/client";
-import { exportCmsBundle } from "@/lib/cms/export";
 import { jsonError, jsonOk, readJsonBody } from "@/lib/cms/http";
-import { triggerDeployHook } from "@/lib/cms/publish";
+import { revalidateCmsContent } from "@/lib/cms/revalidate-content";
 import type { AuthorSocials } from "@/lib/cms/db/schema";
 
 export async function GET() {
@@ -48,13 +47,11 @@ export async function POST(request: Request) {
 
   try {
     const row = await createAuthor(body);
-    const exported = await exportCmsBundle();
-    const deployTriggered = await triggerDeployHook();
+    revalidateCmsContent({ authorSlug: row.slug });
     return jsonOk(
       {
         author: serializeAuthor(row),
-        exportCount: exported.count,
-        deployTriggered,
+        revalidated: true,
       },
       { status: 201 },
     );

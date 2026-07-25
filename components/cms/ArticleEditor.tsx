@@ -194,8 +194,7 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
     const data = (await response.json()) as {
       error?: string;
       issues?: Array<{ code: string; message: string; severity: string }>;
-      deployTriggered?: boolean;
-      exportCount?: number;
+      revalidated?: boolean;
     };
     setSaving(false);
 
@@ -207,7 +206,7 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
     setMessage(
       action === "review"
         ? "Submitted for review."
-        : `Published.${data.deployTriggered ? " Deploy triggered." : ""}`,
+        : `Published.${data.revalidated ? " Live pages refreshed." : ""}`,
     );
   }
 

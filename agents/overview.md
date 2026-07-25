@@ -166,7 +166,6 @@ Database and content commands:
 npm run db:push
 npm run db:generate
 npm run db:studio
-npm run cms:export
 npm run media:sync
 ```
 
@@ -176,7 +175,11 @@ Install the Playwright browser when needed:
 npx playwright install chromium
 ```
 
-Important build behavior: `npm run build` runs `npm run cms:export` first and rewrites `content/cms-export.json`. If `DATABASE_URL` is absent, the export is empty. Inspect the resulting diff and do not accidentally commit a destructive empty export.
+Important publish behavior: public pages read published CMS articles live from the database
+(cached with tag `cms-content`). Publish calls `revalidateTag` / `revalidatePath` for the
+article, its category/author archives, home, search, and SEO routes. Do not add a full-site
+deploy hook or `cms:export` step back unless explicitly requested. Legacy recovered content
+still comes from `content/content-bundle.json`.
 
 The recovery utility has its own `package.json`, lockfile, README, commands, and test suite. Run its commands from `tools/wordpress-recovery/`.
 
@@ -189,12 +192,11 @@ See `.env.example` for the maintained list. Major groups are:
 - NextAuth: `NEXTAUTH_SECRET`, `NEXTAUTH_URL`.
 - Media: `BLOB_READ_WRITE_TOKEN`.
 - Ads/analytics: Ezoic IDs and optional `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
-- Deployment: `VERCEL_DEPLOY_HOOK_URL`.
 - YouTube checks: optional `YOUTUBE_API_KEY`.
 - Automation: `CRON_SECRET` and `AUTOPILOT_*`.
 - Telegram: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, and `TELEGRAM_WEBHOOK_SECRET`.
 
-Never commit `.env` files or real production values. Most CMS operations return an unavailable/error response when the database is not configured; public content should continue to work from files.
+Never commit `.env` files or real production values. Most CMS operations return an unavailable/error response when the database is not configured; public recovered content should continue to work from `content/content-bundle.json`.
 
 ## Coding and Content Conventions
 

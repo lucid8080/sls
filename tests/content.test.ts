@@ -8,23 +8,23 @@ import {
 } from "@/lib/content";
 
 describe("public content loader", () => {
-  it("loads a reviewed home/lifestyle corpus", () => {
-    const bundle = getContentBundle();
+  it("loads a reviewed home/lifestyle corpus", async () => {
+    const bundle = await getContentBundle();
 
     expect(bundle.articles.length).toBeGreaterThan(100);
     expect(bundle.categories.map((category) => category.slug)).toContain("home-care");
     expect(bundle.categories.map((category) => category.slug)).toContain("smart-cleaning");
   });
 
-  it("does not publish casino-style recovered spam routes", () => {
-    const bundle = getContentBundle();
+  it("does not publish casino-style recovered spam routes", async () => {
+    const bundle = await getContentBundle();
 
     expect(bundle.allPublicItems.some((item) => /casino|roulette|bingo|free-spins/i.test(item.pathname))).toBe(false);
-    expect(getItemByPathname("/american-roulette-and-european/")).toBeUndefined();
+    expect(await getItemByPathname("/american-roulette-and-european/")).toBeUndefined();
   });
 
-  it("supports static local search over public articles", () => {
-    const results = searchContent("robot vacuum");
+  it("supports static local search over public articles", async () => {
+    const results = await searchContent("robot vacuum");
 
     expect(results.length).toBeGreaterThan(0);
     expect(results[0].title.toLowerCase()).toContain("robot");
@@ -37,9 +37,8 @@ describe("public content loader", () => {
     expect(source).toContain("SearchClient");
   });
 
-
-  it("loads featured image data for public article cards and hero images", () => {
-    const article = getItemByPathname("/7-ai-automations-that-save-me-10-hours-every-week/");
+  it("loads featured image data for public article cards and hero images", async () => {
+    const article = await getItemByPathname("/7-ai-automations-that-save-me-10-hours-every-week/");
 
     expect(article?.featuredImage?.src).toMatch(/^\/media\/.+\.(webp|gif)$/);
     expect(article?.featuredImage?.width).toBeGreaterThan(0);
@@ -47,20 +46,20 @@ describe("public content loader", () => {
     expect(article?.featuredImage?.variants?.card?.src).toMatch(/^\/media\/.+\.(webp|gif)$/);
   });
 
-  it("builds a trending rail that excludes the current article", () => {
-    const article = getContentBundle().articles[0];
-    const trending = getTrendingArticles(article, 5);
+  it("builds a trending rail that excludes the current article", async () => {
+    const article = (await getContentBundle()).articles[0];
+    const trending = await getTrendingArticles(article, 5);
 
     expect(trending.length).toBeGreaterThan(0);
     expect(trending.length).toBeLessThanOrEqual(5);
     expect(trending.every((item) => item.id !== article.id)).toBe(true);
   });
 
-  it("includes recovered product display markers on pilot articles", () => {
-    const luggage = getItemByPathname(
+  it("includes recovered product display markers on pilot articles", async () => {
+    const luggage = await getItemByPathname(
       "/carry-on-luggage-rules-and-info-you-should-know-before-you-travel-baggage-chart-included/",
     );
-    const makita = getItemByPathname("/makita-robot-vacuum-review/");
+    const makita = await getItemByPathname("/makita-robot-vacuum-review/");
 
     expect(luggage?.content.html).toContain('data-product-display="tablepress" data-id="5"');
     expect(makita?.content.html).toContain('data-product-display="aawp" data-id="4232"');

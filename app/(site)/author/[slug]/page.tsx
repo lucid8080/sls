@@ -10,29 +10,30 @@ type PageProps = {
   }>;
 };
 
-/** Only known author slugs render; unknown archives 404 without on-demand generation. */
-export const dynamicParams = false;
+/** Author archives can appear after CMS publish without a full redeploy. */
+export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return getContentBundle().authors.map((author) => ({ slug: author.slug }));
+export async function generateStaticParams() {
+  const bundle = await getContentBundle();
+  return bundle.authors.map((author) => ({ slug: author.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const author = getAuthor(slug);
+  const author = await getAuthor(slug);
 
   return author ? { title: `${author.name} Articles` } : {};
 }
 
 export default async function AuthorPage({ params }: PageProps) {
   const { slug } = await params;
-  const author = getAuthor(slug);
+  const author = await getAuthor(slug);
 
   if (!author) {
     notFound();
   }
 
-  const articles = getArticlesByAuthor(author.slug);
+  const articles = await getArticlesByAuthor(author.slug);
 
   return (
     <main id="main">

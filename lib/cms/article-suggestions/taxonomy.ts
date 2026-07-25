@@ -7,8 +7,8 @@ export type KnownTaxonomy = {
   tagsBySlug: Map<string, TaxonomyTerm>;
 };
 
-export function loadKnownTaxonomy(): KnownTaxonomy {
-  const bundle = getContentBundle();
+export async function loadKnownTaxonomy(): Promise<KnownTaxonomy> {
+  const bundle = await getContentBundle();
   const tagsBySlug = new Map<string, TaxonomyTerm>();
 
   for (const article of bundle.articles) {

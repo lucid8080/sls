@@ -27,8 +27,8 @@ describe("cms schemas", () => {
 });
 
 describe("cms quality gates", () => {
-  it("does not enforce a minimum word count", () => {
-    const result = runQualityGates({
+  it("does not enforce a minimum word count", async () => {
+    const result = await runQualityGates({
       id: "cms_test",
       type: "article",
       title: "Test",
@@ -46,8 +46,8 @@ describe("cms quality gates", () => {
     expect(result.passed).toBe(true);
   });
 
-  it("fails publish on missing H2 but treats FAQ as warning only", () => {
-    const result = runQualityGates({
+  it("fails publish on missing H2 but treats FAQ as warning only", async () => {
+    const result = await runQualityGates({
       id: "cms_test_h2",
       type: "article",
       title: "Test Guide",
@@ -73,8 +73,8 @@ describe("cms quality gates", () => {
     );
   });
 
-  it("passes when H2 is present even without FAQ", () => {
-    const result = runQualityGates({
+  it("passes when H2 is present even without FAQ", async () => {
+    const result = await runQualityGates({
       id: "cms_test_ok",
       type: "article",
       title: "Test Guide",
@@ -153,7 +153,7 @@ describe("featured image normalization", () => {
     });
   });
 
-  it("lets publish validation pass when featuredImage was stored as a string URL", () => {
+  it("lets publish validation pass when featuredImage was stored as a string URL", async () => {
     const words = Array.from({ length: 320 }, () => "word").join(" ");
     const row = {
       id: "cms_featured_string",
@@ -179,7 +179,7 @@ describe("featured image normalization", () => {
     const exported = articleRowToExport(row);
     expect(exported.featuredImage?.src).toBe("/media/2020/01/Webp.net-compress-image-scaled.webp");
 
-    const validation = validatePublishedArticle(exported);
+    const validation = await validatePublishedArticle(exported);
     expect(validation.ok).toBe(true);
     expect(validation.issues.some((issue) => issue.code === "schema_validation")).toBe(false);
   });

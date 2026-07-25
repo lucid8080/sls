@@ -8,15 +8,15 @@ function readRouteSource(relativePath: string): string {
   return readFileSync(join(root, relativePath), "utf8");
 }
 
-describe("static route boundaries", () => {
+describe("public route boundaries", () => {
   it.each([
     "app/(site)/[...slug]/page.tsx",
     "app/(site)/category/[slug]/page.tsx",
     "app/(site)/author/[slug]/page.tsx",
-  ])("disables on-demand params for %s", (relativePath) => {
+  ])("allows on-demand params after CMS publish for %s", (relativePath) => {
     const source = readRouteSource(relativePath);
 
-    expect(source).toContain("export const dynamicParams = false");
-    expect(source).toContain("export function generateStaticParams");
+    expect(source).toContain("export const dynamicParams = true");
+    expect(source).toContain("export async function generateStaticParams");
   });
 });

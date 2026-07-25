@@ -1,7 +1,7 @@
 import { ArticleSchema, BLOCKED_PUBLIC_RE, CORE_CATEGORY_SLUGS, hasPublicCategory, type ArticleExport } from "@/lib/cms/schemas";
-import type { ArticleRow } from "@/lib/cms/db/schema";
 import { getContentBundle } from "@/lib/content";
-import { normalizeFeaturedImage } from "@/lib/cms/featured-image";
+
+export { articleRowToExport } from "@/lib/cms/article-to-export";
 
 export type QualityGateIssue = {
   code: string;
@@ -27,33 +27,10 @@ const DEFAULT_GATES = {
   requireH2: true,
 };
 
-export function articleRowToExport(row: ArticleRow): ArticleExport {
-  return {
-    id: row.id,
-    type: "article",
-    title: row.title,
-    slug: row.slug,
-    pathname: row.pathname,
-    status: "published",
-    excerpt: row.excerpt ?? undefined,
-    publishedAt: (row.publishedAt ?? row.updatedAt).toISOString(),
-    modifiedAt: row.modifiedAt?.toISOString(),
-    author: row.author ?? undefined,
-    categories: row.categories ?? [],
-    tags: row.tags ?? [],
-    featuredImage: normalizeFeaturedImage(row.featuredImage),
-    content: {
-      kind: "html",
-      html: row.html,
-    },
-    seo: row.seo,
-  };
-}
-
-export function runQualityGates(
+export async function runQualityGates(
   article: ArticleExport,
   options: Partial<typeof DEFAULT_GATES> = {},
-): QualityGateResult {
+): Promise<QualityGateResult> {
   const gates = { ...DEFAULT_GATES, ...options };
   const issues: QualityGateIssue[] = [];
   const html = article.content.html;
@@ -101,8 +78,9 @@ export function runQualityGates(
     });
   }
 
+  const bundle = await getContentBundle();
   const knownPaths = new Set(
-    getContentBundle().allPublicItems.map((item) => item.pathname.replace(/\/$/, "").toLowerCase()),
+    bundle.allPublicItems.map((item) => item.pathname.replace(/\/$/, "").toLowerCase()),
   );
   knownPaths.add(article.pathname.replace(/\/$/, "").toLowerCase());
 
@@ -121,7 +99,7 @@ export function runQualityGates(
   return { passed: errors.length === 0, issues };
 }
 
-export function validatePublishedArticle(article: ArticleExport): ValidationResult {
+export async function validatePublishedArticle(article: ArticleExport): Promise<ValidationResult> {
   const parsed = ArticleSchema.safeParse(article);
   if (!parsed.success) {
     return {
@@ -134,7 +112,7 @@ export function validatePublishedArticle(article: ArticleExport): ValidationResu
     };
   }
 
-  const gates = runQualityGates(parsed.data);
+  const gates = await runQualityGates(parsed.data);
   return {
     ok: gates.passed,
     article: parsed.data,

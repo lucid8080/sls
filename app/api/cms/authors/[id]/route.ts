@@ -7,9 +7,8 @@ import {
 } from "@/lib/cms/authors";
 import { isDatabaseConfigured } from "@/lib/cms/db/client";
 import type { AuthorSocials } from "@/lib/cms/db/schema";
-import { exportCmsBundle } from "@/lib/cms/export";
 import { jsonError, jsonOk, readJsonBody } from "@/lib/cms/http";
-import { triggerDeployHook } from "@/lib/cms/publish";
+import { revalidateCmsContent } from "@/lib/cms/revalidate-content";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -57,12 +56,10 @@ export async function PATCH(request: Request, context: RouteContext) {
 
   try {
     const row = await updateAuthor(id, body);
-    const exported = await exportCmsBundle();
-    const deployTriggered = await triggerDeployHook();
+    revalidateCmsContent({ authorSlug: row.slug });
     return jsonOk({
       author: serializeAuthor(row),
-      exportCount: exported.count,
-      deployTriggered,
+      revalidated: true,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to update author.";
@@ -85,12 +82,12 @@ export async function DELETE(_request: Request, context: RouteContext) {
   }
 
   const { id } = await context.params;
+  const existing = await getAuthorById(id);
 
   try {
     await deleteAuthor(id);
-    const exported = await exportCmsBundle();
-    const deployTriggered = await triggerDeployHook();
-    return jsonOk({ ok: true, exportCount: exported.count, deployTriggered });
+    revalidateCmsContent({ authorSlug: existing?.slug ?? null });
+    return jsonOk({ ok: true, revalidated: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to delete author.";
     if (message === "Author not found.") {

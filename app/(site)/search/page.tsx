@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   description: "Search recovered Simple Life Saver guides.",
 };
 
-export default function SearchPage() {
-  const index = getSearchIndex();
+export default async function SearchPage() {
+  const index = await getSearchIndex();
 
   return (
     <main id="main">

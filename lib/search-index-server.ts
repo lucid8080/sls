@@ -3,12 +3,13 @@ import { getContentBundle, readingTime, type ContentItem } from "@/lib/content";
 import type { SearchIndexEntry } from "@/lib/search-index";
 import { searchIndex } from "@/lib/search-index";
 
-export const getSearchIndex = cache((): SearchIndexEntry[] =>
-  getContentBundle().articles.map(toSearchIndexEntry),
-);
+export const getSearchIndex = cache(async (): Promise<SearchIndexEntry[]> => {
+  const bundle = await getContentBundle();
+  return bundle.articles.map(toSearchIndexEntry);
+});
 
-export function searchPublicContent(query: string): SearchIndexEntry[] {
-  return searchIndex(query, getSearchIndex());
+export async function searchPublicContent(query: string): Promise<SearchIndexEntry[]> {
+  return searchIndex(query, await getSearchIndex());
 }
 
 function toSearchIndexEntry(article: ContentItem): SearchIndexEntry {

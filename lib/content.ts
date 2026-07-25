@@ -1,8 +1,9 @@
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
 import { z } from "zod";
-import { ArticleSchema, BLOCKED_PUBLIC_RE, CORE_CATEGORY_SLUGS } from "@/lib/cms/schemas";
+import { getLiveCmsBundle } from "@/lib/cms/live-bundle";
+import { BLOCKED_PUBLIC_RE, CORE_CATEGORY_SLUGS } from "@/lib/cms/schemas";
 
 const taxonomyTermSchema = z.object({
   id: z.string(),
@@ -84,6 +85,15 @@ export type TaxonomyTerm = z.infer<typeof taxonomyTermSchema>;
 export type Author = z.infer<typeof authorSchema>;
 export type ContentItem = z.infer<typeof contentItemSchema>;
 
+export type ContentBundle = {
+  generatedAt: string;
+  articles: ContentItem[];
+  pages: ContentItem[];
+  categories: TaxonomyTerm[];
+  authors: Author[];
+  allPublicItems: ContentItem[];
+};
+
 export const siteUrl = "https://simplelifesaver.com";
 export const siteName = "Simple Life Saver";
 
@@ -93,18 +103,18 @@ export const getRecoveredContentBundle = cache(() => {
   return contentBundleSchema.parse(parsed);
 });
 
-export const getContentBundle = cache(() => {
-  const cmsPath = join(process.cwd(), "content", "cms-export.json");
+export const getContentBundle = cache(async (): Promise<ContentBundle> => {
   const bundle = getRecoveredContentBundle();
-  const cmsExport = readCmsExport(cmsPath);
-  const mergedArticles = dedupeArticles([...bundle.articles, ...cmsExport.articles]);
+  const live = await getLiveCmsBundle();
+  const cmsArticles = live.articles as ContentItem[];
+  const mergedArticles = dedupeArticles([...bundle.articles, ...cmsArticles]);
   const articles = mergedArticles.filter(isPublicContent).sort(sortNewestFirst);
   const pages = bundle.pages.filter(isPublicContent).sort(sortAlphabetically);
   const categories = bundle.categories
     .filter((category) => CORE_CATEGORY_SLUGS.has(category.slug))
     .filter((category) => articles.some((article) => article.categories.some((term) => term.slug === category.slug)))
     .sort(sortAlphabetically);
-  const authors = mergeAuthors(bundle.authors, cmsExport.authors, articles).sort(sortAlphabetically);
+  const authors = mergeAuthors(bundle.authors, live.authors, articles).sort(sortAlphabetically);
 
   return {
     generatedAt: bundle.generatedAt,
@@ -116,58 +126,64 @@ export const getContentBundle = cache(() => {
   };
 });
 
-export function getItemByPathname(pathname: string): ContentItem | undefined {
+export async function getItemByPathname(pathname: string): Promise<ContentItem | undefined> {
   const normalized = normalizePathname(pathname);
-  return getContentBundle().allPublicItems.find((item) => normalizePathname(item.pathname) === normalized);
+  const bundle = await getContentBundle();
+  return bundle.allPublicItems.find((item) => normalizePathname(item.pathname) === normalized);
 }
 
-export function getCategory(slug: string): TaxonomyTerm | undefined {
-  return getContentBundle().categories.find((category) => category.slug === slug);
+export async function getCategory(slug: string): Promise<TaxonomyTerm | undefined> {
+  const bundle = await getContentBundle();
+  return bundle.categories.find((category) => category.slug === slug);
 }
 
-export function getArticlesByCategory(slug: string): ContentItem[] {
-  return getContentBundle().articles.filter((article) => article.categories.some((category) => category.slug === slug));
+export async function getArticlesByCategory(slug: string): Promise<ContentItem[]> {
+  const bundle = await getContentBundle();
+  return bundle.articles.filter((article) => article.categories.some((category) => category.slug === slug));
 }
 
-export function getAuthor(slug: string): Author | undefined {
-  return getContentBundle().authors.find((author) => author.slug === slug);
+export async function getAuthor(slug: string): Promise<Author | undefined> {
+  const bundle = await getContentBundle();
+  return bundle.authors.find((author) => author.slug === slug);
 }
 
-export function getArticlesByAuthor(slug: string): ContentItem[] {
-  return getContentBundle().articles.filter((article) => article.author?.slug === slug);
+export async function getArticlesByAuthor(slug: string): Promise<ContentItem[]> {
+  const bundle = await getContentBundle();
+  return bundle.articles.filter((article) => article.author?.slug === slug);
 }
 
-export function getRelatedArticles(item: ContentItem, limit = 3): ContentItem[] {
+export async function getRelatedArticles(item: ContentItem, limit = 3): Promise<ContentItem[]> {
   const categorySlugs = new Set(item.categories.map((category) => category.slug));
-  return getContentBundle()
-    .articles.filter((article) => article.id !== item.id)
+  const bundle = await getContentBundle();
+  return bundle.articles
+    .filter((article) => article.id !== item.id)
     .filter((article) => article.categories.some((category) => categorySlugs.has(category.slug)))
     .slice(0, limit);
 }
 
 /** Recent same-category guides first, then newest overall — used for the article right rail. */
-export function getTrendingArticles(item: ContentItem, limit = 5): ContentItem[] {
-  const related = getRelatedArticles(item, limit);
+export async function getTrendingArticles(item: ContentItem, limit = 5): Promise<ContentItem[]> {
+  const related = await getRelatedArticles(item, limit);
   if (related.length >= limit) {
     return related;
   }
 
   const seen = new Set([item.id, ...related.map((article) => article.id)]);
-  const fillers = getContentBundle()
-    .articles.filter((article) => !seen.has(article.id))
-    .slice(0, limit - related.length);
+  const bundle = await getContentBundle();
+  const fillers = bundle.articles.filter((article) => !seen.has(article.id)).slice(0, limit - related.length);
 
   return [...related, ...fillers];
 }
 
-export function searchContent(query: string): ContentItem[] {
+export async function searchContent(query: string): Promise<ContentItem[]> {
   const normalized = query.trim().toLowerCase();
   if (!normalized) {
     return [];
   }
 
-  return getContentBundle()
-    .articles.filter((item) => {
+  const bundle = await getContentBundle();
+  return bundle.articles
+    .filter((item) => {
       const haystack = [item.title, item.excerpt, item.categories.map((category) => category.name).join(" ")]
         .join(" ")
         .toLowerCase();
@@ -279,31 +295,6 @@ function slugify(value: string): string {
       .replace(/^-+|-+$/g, "")
       .slice(0, 80) || "section"
   );
-}
-
-function readCmsExport(cmsPath: string): {
-  articles: z.infer<typeof contentItemSchema>[];
-  authors: Author[];
-} {
-  if (!existsSync(cmsPath)) {
-    return { articles: [], authors: [] };
-  }
-
-  try {
-    const parsed = JSON.parse(readFileSync(cmsPath, "utf8")) as unknown;
-    const exportBundle = z
-      .object({
-        articles: z.array(ArticleSchema),
-        authors: z.array(authorSchema).optional().default([]),
-      })
-      .parse(parsed);
-    return {
-      articles: exportBundle.articles,
-      authors: exportBundle.authors,
-    };
-  } catch {
-    return { articles: [], authors: [] };
-  }
 }
 
 function mergeAuthors(

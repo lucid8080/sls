@@ -3,8 +3,8 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { NewsletterCta, TopicLink } from "@/components/ArticleExtras";
 import { getContentBundle } from "@/lib/content";
 
-export default function HomePage() {
-  const { articles } = getContentBundle();
+export default async function HomePage() {
+  const { articles } = await getContentBundle();
   const [featured, ...latest] = articles;
 
   return (

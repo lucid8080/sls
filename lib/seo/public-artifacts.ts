@@ -2,6 +2,7 @@ import {
   getContentBundle,
   siteName,
   siteUrl,
+  type ContentBundle,
   type ContentItem,
 } from "@/lib/content";
 
@@ -45,16 +46,17 @@ function sitemapEntry(pathname: string, lastmod?: string): string {
   </url>`;
 }
 
-export function buildPublicSeoArtifacts(
-  bundle = getContentBundle(),
-): PublicSeoArtifacts {
+export async function buildPublicSeoArtifacts(
+  bundle?: ContentBundle,
+): Promise<PublicSeoArtifacts> {
+  const resolved = bundle ?? (await getContentBundle());
   const urls = [
     sitemapEntry("/"),
-    ...bundle.allPublicItems.map((item) =>
+    ...resolved.allPublicItems.map((item) =>
       sitemapEntry(item.pathname, item.modifiedAt ?? item.publishedAt),
     ),
-    ...bundle.categories.map((category) => sitemapEntry(`/category/${category.slug}/`)),
-    ...bundle.authors.map((author) => sitemapEntry(`/author/${author.slug}/`)),
+    ...resolved.categories.map((category) => sitemapEntry(`/category/${category.slug}/`)),
+    ...resolved.authors.map((author) => sitemapEntry(`/author/${author.slug}/`)),
     sitemapEntry("/search/"),
   ];
 
@@ -70,7 +72,7 @@ Allow: /
 Sitemap: ${absoluteUrl("/sitemap.xml")}
 `;
 
-  const latestArticles = [...bundle.articles]
+  const latestArticles = [...resolved.articles]
     .sort(
       (left, right) =>
         new Date(right.publishedAt).getTime() - new Date(left.publishedAt).getTime(),

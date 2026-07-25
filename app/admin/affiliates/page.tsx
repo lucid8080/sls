@@ -228,6 +228,7 @@ export default function AdminAffiliatesPage() {
           catalogUpdated: number;
           skippedShortLinks: number;
           exportCount?: number;
+          revalidated?: boolean;
           scan?: { linksUpserted: number };
         };
         error?: string;

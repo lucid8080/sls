@@ -16,8 +16,9 @@ export async function GET(request: Request) {
   }
 
   const cmsResults = await searchInternalArticles(query, 20);
-  const staticResults = getContentBundle()
-    .articles.filter((article) => {
+  const bundle = await getContentBundle();
+  const staticResults = bundle.articles
+    .filter((article) => {
       const haystack = `${article.title} ${article.slug} ${article.pathname}`.toLowerCase();
       return haystack.includes(query.toLowerCase());
     })

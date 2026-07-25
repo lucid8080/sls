@@ -201,5 +201,5 @@ Warnings (non-blocking by default):
 3. Set admin credentials and `NEXTAUTH_SECRET`.
 4. Create an agent API key in `/admin/agents`.
 5. Add calendar entries in `/admin/calendar`.
-6. Configure `VERCEL_DEPLOY_HOOK_URL` for automatic redeploys after publish.
+6. Publish revalidates the article path (plus category/author/home) via Next.js cache tags — no deploy hook required.
 7. Enable autopilot in `/admin/settings` when ready.

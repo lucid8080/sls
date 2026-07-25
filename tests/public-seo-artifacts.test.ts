@@ -6,9 +6,9 @@ const BLOCKED_RE =
   /\b(casino|pokies?|slots?|blackjack|gambling|roulette|bingo|free spins?|no deposit|real cash|wagering|jackpot|betting)\b/i;
 
 describe("public SEO artifacts", () => {
-  it("builds sitemap and RSS only from the public content filter", () => {
-    const bundle = getContentBundle();
-    const artifacts = buildPublicSeoArtifacts(bundle);
+  it("builds sitemap and RSS only from the public content filter", async () => {
+    const bundle = await getContentBundle();
+    const artifacts = await buildPublicSeoArtifacts(bundle);
 
     expect(artifacts.sitemapXml).toContain("<urlset");
     expect(artifacts.sitemapXml).toContain("https://simplelifesaver.com/");
@@ -26,8 +26,8 @@ describe("public SEO artifacts", () => {
     expect(artifacts.rssXml).toContain(firstArticle.title);
   });
 
-  it("never advertises known blocked recovered spam paths", () => {
-    const artifacts = buildPublicSeoArtifacts();
+  it("never advertises known blocked recovered spam paths", async () => {
+    const artifacts = await buildPublicSeoArtifacts();
 
     expect(artifacts.sitemapXml).not.toContain("/american-roulette-and-european/");
     expect(artifacts.rssXml).not.toContain("/best-online-bookies/");

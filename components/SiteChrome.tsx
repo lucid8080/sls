@@ -4,8 +4,9 @@ import { getContentBundle, siteName } from "@/lib/content";
 
 const navSlugs = ["smart-cooking", "home-care", "smart-cleaning", "robot-vacuums", "appliances", "travel"];
 
-export function SiteHeader() {
-  const categories = getContentBundle().categories.filter((category) => navSlugs.includes(category.slug));
+export async function SiteHeader() {
+  const bundle = await getContentBundle();
+  const categories = bundle.categories.filter((category) => navSlugs.includes(category.slug));
 
   return (
     <header className="site-header">
@@ -59,3 +60,4 @@ export function SiteFooter() {
     </footer>
   );
 }
+

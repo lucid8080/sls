@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { getContentBundle } from "@/lib/content";
 
-export default function NotFound() {
-  const categories = getContentBundle().categories.slice(0, 6);
+export default async function NotFound() {
+  const bundle = await getContentBundle();
+  const categories = bundle.categories.slice(0, 6);
 
   return (
     <main id="main" className="not-found">

@@ -4,7 +4,7 @@ import { buildPublicSeoArtifacts } from "../lib/seo/public-artifacts";
 
 const root = process.cwd();
 const publicDir = join(root, "public");
-const artifacts = buildPublicSeoArtifacts();
+const artifacts = await buildPublicSeoArtifacts();
 
 mkdirSync(publicDir, { recursive: true });
 
@@ -20,5 +20,5 @@ for (const [filename, contents] of targets) {
 }
 
 console.log(
-  `[generate-public-seo] Wrote sitemap.xml, robots.txt, and rss.xml from the public content filter.`,
+  `[generate-public-seo] Wrote sitemap.xml, robots.txt, and rss.xml from the live public content filter.`,
 );

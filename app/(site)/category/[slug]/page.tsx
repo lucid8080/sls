@@ -9,16 +9,17 @@ type PageProps = {
   }>;
 };
 
-/** Only known category slugs render; unknown archives 404 without on-demand generation. */
-export const dynamicParams = false;
+/** Category archives can appear after CMS publish without a full redeploy. */
+export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return getContentBundle().categories.map((category) => ({ slug: category.slug }));
+export async function generateStaticParams() {
+  const bundle = await getContentBundle();
+  return bundle.categories.map((category) => ({ slug: category.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const category = getCategory(slug);
+  const category = await getCategory(slug);
 
   if (!category) {
     return {};
@@ -32,13 +33,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = await params;
-  const category = getCategory(slug);
+  const category = await getCategory(slug);
 
   if (!category) {
     notFound();
   }
 
-  const articles = getArticlesByCategory(category.slug);
+  const articles = await getArticlesByCategory(category.slug);
 
   return (
     <main id="main">

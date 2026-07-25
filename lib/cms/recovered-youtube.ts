@@ -4,8 +4,7 @@ import { getRecoveredContentBundle } from "@/lib/content";
 import { saveRevision } from "@/lib/cms/articles";
 import { getDb } from "@/lib/cms/db/client";
 import { articles, publishLog } from "@/lib/cms/db/schema";
-import { exportCmsBundle } from "@/lib/cms/export";
-import { triggerDeployHook } from "@/lib/cms/publish";
+import { revalidateCmsContent } from "@/lib/cms/revalidate-content";
 import {
   checkYouTubeAvailability,
   extractYouTubeEmbeds,
@@ -82,8 +81,7 @@ export async function removeRecoveredYouTubeEmbeds(
   removedVideoIds: string[];
   skippedVideoIds: string[];
   skippedReasons: Record<string, string>;
-  exportCount: number;
-  deployTriggered: boolean;
+  revalidated: boolean;
 }> {
   const requested = [...new Set(requestedVideoIds)];
   const availability = await checkYouTubeAvailability(requested, {
@@ -122,8 +120,7 @@ export async function removeRecoveredYouTubeEmbeds(
       removedVideoIds: [],
       skippedVideoIds,
       skippedReasons,
-      exportCount: 0,
-      deployTriggered: false,
+      revalidated: false,
     };
   }
 
@@ -160,8 +157,9 @@ export async function removeRecoveredYouTubeEmbeds(
     updatedArticleCount += 1;
   }
 
-  const exported = await exportCmsBundle();
-  const deployTriggered = updatedArticleCount > 0 ? await triggerDeployHook() : false;
+  if (updatedArticleCount > 0) {
+    revalidateCmsContent();
+  }
 
   return {
     removedEmbedCount,
@@ -169,8 +167,7 @@ export async function removeRecoveredYouTubeEmbeds(
     removedVideoIds: [...removable],
     skippedVideoIds,
     skippedReasons,
-    exportCount: exported.count,
-    deployTriggered,
+    revalidated: updatedArticleCount > 0,
   };
 }
 

@@ -28,18 +28,19 @@ type PageProps = {
   }>;
 };
 
-/** Only build-time public paths render; unknown slugs 404 without on-demand generation. */
-export const dynamicParams = false;
+/** Unknown published paths can render on demand after CMS publish; unpublished still 404. */
+export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return getContentBundle().allPublicItems.map((item) => ({
+export async function generateStaticParams() {
+  const bundle = await getContentBundle();
+  return bundle.allPublicItems.map((item) => ({
     slug: pathnameToSegments(item.pathname),
   }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const item = getItemByPathname(`/${slug.join("/")}/`);
+  const item = await getItemByPathname(`/${slug.join("/")}/`);
 
   if (!item) {
     return {};
@@ -70,29 +71,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-function resolveAuthorProfile(
+async function resolveAuthorProfile(
   snapshot: { id: string; name: string; slug: string } | undefined,
-): Author | undefined {
+): Promise<Author | undefined> {
   if (!snapshot) return undefined;
-  return getAuthor(snapshot.slug) ?? snapshot;
+  return (await getAuthor(snapshot.slug)) ?? snapshot;
 }
 
 export default async function ContentPage({ params }: PageProps) {
   const { slug } = await params;
-  const item = getItemByPathname(`/${slug.join("/")}/`);
+  const item = await getItemByPathname(`/${slug.join("/")}/`);
 
   if (!item) {
     notFound();
   }
 
   const primaryCategory = item.categories[0];
-  const related = item.type === "article" ? getRelatedArticles(item) : [];
-  const trending = item.type === "article" ? getTrendingArticles(item) : [];
+  const related = item.type === "article" ? await getRelatedArticles(item) : [];
+  const trending = item.type === "article" ? await getTrendingArticles(item) : [];
   const headings = extractHeadings(item.content.html);
   const hasArticleRail = item.type === "article" || headings.length >= 3 || trending.length > 0;
   const hasHeroImage = Boolean(item.featuredImage);
   const adSettings = item.type === "article" ? await getAdSettingsSafe() : undefined;
-  const authorProfile = resolveAuthorProfile(item.author);
+  const authorProfile = await resolveAuthorProfile(item.author);
 
   const meta = (
     <ArticleByline

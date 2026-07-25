@@ -14,7 +14,7 @@ import {
 import { scanAndUpsertAffiliateLinks, type AffiliateScanResult } from "@/lib/cms/affiliate-scan";
 import { getAffiliateLinkById } from "@/lib/cms/affiliate-links";
 import { updateArticle } from "@/lib/cms/articles";
-import { exportCmsBundle } from "@/lib/cms/export";
+import { revalidateCmsContent } from "@/lib/cms/revalidate-content";
 import { sanitizeCmsHtml } from "@/lib/cms/sanitize";
 import { getRecoveredContentBundle } from "@/lib/content";
 
@@ -37,7 +37,7 @@ export type AffiliateTagFixResult = {
   skippedShortLinks: number;
   samples: AffiliateTagFixSample[];
   scan?: AffiliateScanResult;
-  exportCount?: number;
+  revalidated?: boolean;
 };
 
 type PrettyLinkEntry = { slug?: string; url?: string; name?: string };
@@ -248,8 +248,8 @@ export async function fixAmazonAffiliateTags(options: {
   };
 
   if (!dryRun && (articlesUpdated > 0 || catalogUpdated > 0)) {
-    const exported = await exportCmsBundle();
-    result.exportCount = exported.count;
+    revalidateCmsContent();
+    result.revalidated = true;
     result.scan = await scanAndUpsertAffiliateLinks();
   }
 

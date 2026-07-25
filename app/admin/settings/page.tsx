@@ -8,7 +8,6 @@ type SettingsResponse = {
     autoPublish: boolean;
     timezone: string;
   };
-  deployHookConfigured: boolean;
   telegramConfigured: boolean;
 };
 
@@ -96,7 +95,6 @@ export default function AdminSettingsPage() {
               })
             }
           />
-          <p>Deploy hook configured: {settings.deployHookConfigured ? "Yes" : "No"}</p>
           <p>Telegram configured: {settings.telegramConfigured ? "Yes" : "No"}</p>
           {error ? <p style={{ color: "#b91c1c" }}>{error}</p> : null}
           {message ? <p style={{ color: "#047857" }}>{message}</p> : null}

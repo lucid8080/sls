@@ -15,12 +15,10 @@ export async function GET() {
   }
 
   const autopilot = await getAutopilotSettings();
-  const deployHookConfigured = Boolean(process.env.VERCEL_DEPLOY_HOOK_URL);
   const telegramConfigured = Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID);
 
   return jsonOk({
     autopilot,
-    deployHookConfigured,
     telegramConfigured,
     defaultAuthor: await getSetting("default_author", null),
   });
