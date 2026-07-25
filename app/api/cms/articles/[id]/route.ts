@@ -65,6 +65,10 @@ export async function PATCH(request: Request, context: RouteContext) {
     return jsonError("Invalid JSON body.");
   }
 
+  if (body.status === "published") {
+    return jsonError("Use the Publish action (POST .../publish) to publish articles.", 422);
+  }
+
   const actor = session.user?.email ?? "admin";
   const existing = (await getArticleById(id)) ?? (await ensureRecoveredArticleOverride(id, actor));
   if (!existing) {

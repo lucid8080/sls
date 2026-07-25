@@ -60,6 +60,13 @@ export async function POST(request: Request) {
     return agentJsonError("title and html are required.");
   }
 
+  if (body.status === "published") {
+    return agentJsonError(
+      "Cannot create articles as published. Create as draft/in_review, then POST /articles/{id}/publish.",
+      422,
+    );
+  }
+
   const slug = body.slug ?? slugifyTitle(body.title);
   const pathname = pathnameFromSlug(slug);
   const sanitized = sanitizeCmsHtml(body.html, { title: body.title, pathname });
@@ -79,7 +86,7 @@ export async function POST(request: Request) {
       title: body.seo?.title,
       description: body.seo?.description,
       ogImage: body.seo?.ogImage,
-      noindex: body.seo?.noindex ?? body.status !== "published",
+      noindex: body.seo?.noindex ?? true,
     },
     createdBy: `agent:${authResult.label}`,
   });

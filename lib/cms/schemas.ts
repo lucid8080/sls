@@ -6,6 +6,34 @@ export const EXECUTABLE_CONTENT_RE =
 export const BLOCKED_PUBLIC_RE =
   /\b(casino|pokies?|slots?|blackjack|gambling|roulette|bingo|free spins?|no deposit|real cash|wagering|jackpot|betting)\b/i;
 
+/** Categories allowed on the public static site (`lib/content.ts` isPublicContent). */
+export const CORE_CATEGORY_SLUGS = new Set([
+  "lifestyle",
+  "smart-cooking",
+  "home-care",
+  "smart-cleaning",
+  "blog",
+  "multi-function",
+  "robot-vacuums",
+  "flooring",
+  "comparisons",
+  "appliances",
+  "travel",
+  "air-quality",
+  "checklist",
+  "miscellaneous",
+  "buyers-guide",
+  "robot-mower",
+  "duster",
+  "ai-tools",
+  "hardware",
+  "developer-tools",
+]);
+
+export function hasPublicCategory(categories: Array<{ slug: string }>): boolean {
+  return categories.some((category) => CORE_CATEGORY_SLUGS.has(category.slug));
+}
+
 export const ARTICLE_STATUSES = ["draft", "in_review", "scheduled", "published", "archived"] as const;
 export type ArticleStatus = (typeof ARTICLE_STATUSES)[number];
 

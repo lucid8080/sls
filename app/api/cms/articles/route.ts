@@ -61,6 +61,10 @@ export async function POST(request: Request) {
     return jsonError("title is required.");
   }
 
+  if (body.status === "published") {
+    return jsonError("Use the Publish action (POST .../publish) to publish articles.", 422);
+  }
+
   const slug = body.slug ?? slugifyTitle(body.title);
   const pathname = pathnameFromSlug(slug);
   const html = sanitizeCmsHtml(body.html ?? "<p></p>", { title: body.title, pathname }).html;

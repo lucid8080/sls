@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
 import { z } from "zod";
-import { ArticleSchema } from "@/lib/cms/schemas";
+import { ArticleSchema, BLOCKED_PUBLIC_RE, CORE_CATEGORY_SLUGS } from "@/lib/cms/schemas";
 
 const taxonomyTermSchema = z.object({
   id: z.string(),
@@ -83,28 +83,6 @@ const contentBundleSchema = z.object({
 export type TaxonomyTerm = z.infer<typeof taxonomyTermSchema>;
 export type Author = z.infer<typeof authorSchema>;
 export type ContentItem = z.infer<typeof contentItemSchema>;
-
-const BLOCKED_PUBLIC_RE =
-  /\b(casino|pokies?|slots?|blackjack|gambling|roulette|bingo|free spins?|no deposit|real cash|wagering|jackpot|betting)\b/i;
-const CORE_CATEGORY_SLUGS = new Set([
-  "lifestyle",
-  "smart-cooking",
-  "home-care",
-  "smart-cleaning",
-  "blog",
-  "multi-function",
-  "robot-vacuums",
-  "flooring",
-  "comparisons",
-  "appliances",
-  "travel",
-  "air-quality",
-  "checklist",
-  "miscellaneous",
-  "buyers-guide",
-  "robot-mower",
-  "duster",
-]);
 
 export const siteUrl = "https://simplelifesaver.com";
 export const siteName = "Simple Life Saver";

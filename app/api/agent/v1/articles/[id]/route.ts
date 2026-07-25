@@ -55,6 +55,13 @@ export async function PATCH(request: Request, context: RouteContext) {
     return jsonError("Article not found.", 404);
   }
 
+  if (body.status === "published") {
+    return jsonError(
+      "Cannot set status to published via PATCH. Use POST /articles/{id}/publish.",
+      422,
+    );
+  }
+
   const slug = body.slug ?? existing.slug;
   const pathname = pathnameFromSlug(slug);
   const html = body.html

@@ -133,10 +133,25 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
     setError("");
     setMessage("");
 
+    // Status transitions go through the Publish action; PATCH rejects
+    // `status: "published"`, so omit status here to allow saving edits to a
+    // published article without flipping it out of published.
+    const saveable = {
+      title: article.title,
+      slug: article.slug,
+      excerpt: article.excerpt,
+      html: article.html,
+      author: article.author,
+      categories: article.categories,
+      tags: article.tags,
+      featuredImage: article.featuredImage,
+      seo: article.seo,
+    };
+
     const response = await fetch(`/api/cms/articles/${articleId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(article),
+      body: JSON.stringify(saveable),
     });
 
     const data = (await response.json()) as { article?: Article; error?: string };
@@ -180,6 +195,7 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
       error?: string;
       issues?: Array<{ code: string; message: string; severity: string }>;
       deployTriggered?: boolean;
+      exportCount?: number;
     };
     setSaving(false);
 

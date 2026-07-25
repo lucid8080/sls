@@ -1,4 +1,4 @@
-import { ArticleSchema, BLOCKED_PUBLIC_RE, type ArticleExport } from "@/lib/cms/schemas";
+import { ArticleSchema, BLOCKED_PUBLIC_RE, CORE_CATEGORY_SLUGS, hasPublicCategory, type ArticleExport } from "@/lib/cms/schemas";
 import type { ArticleRow } from "@/lib/cms/db/schema";
 import { getContentBundle } from "@/lib/content";
 import { normalizeFeaturedImage } from "@/lib/cms/featured-image";
@@ -88,6 +88,15 @@ export function runQualityGates(
     issues.push({
       code: "blocked_spam_pattern",
       message: "Content matches blocked casino/gambling spam patterns.",
+      severity: "error",
+    });
+  }
+
+  if (!hasPublicCategory(article.categories)) {
+    const allowed = [...CORE_CATEGORY_SLUGS].sort().join(", ");
+    issues.push({
+      code: "public_category_required",
+      message: `Article needs at least one public category so it can appear on the site. Allowed: ${allowed}.`,
       severity: "error",
     });
   }
