@@ -31,21 +31,21 @@ export type RecoveredMediaCatalogItem = {
   height?: number;
 };
 
-function resolveMediaAcceptedPath(): string | null {
-  const candidates = [
-    join(process.cwd(), "data", "media-accepted.json"),
-    join(process.cwd(), "recovered-media-output", "reports", "media-accepted.json"),
-  ];
-  return candidates.find((path) => existsSync(path)) ?? null;
-}
-
 export const getRecoveredMediaCatalog = cache((): RecoveredMediaCatalogItem[] => {
-  const reportPath = resolveMediaAcceptedPath();
-  if (!reportPath) {
+  const primary = join(process.cwd(), "data", "media-accepted.json");
+  const fallback = join(process.cwd(), "recovered-media-output", "reports", "media-accepted.json");
+
+  let raw: string | null = null;
+  if (existsSync(primary)) {
+    raw = readFileSync(primary, "utf8");
+  } else if (existsSync(fallback)) {
+    raw = readFileSync(fallback, "utf8");
+  }
+  if (!raw) {
     return [];
   }
 
-  const parsed = mediaAcceptedSchema.parse(JSON.parse(readFileSync(reportPath, "utf8")) as unknown);
+  const parsed = mediaAcceptedSchema.parse(JSON.parse(raw) as unknown);
   return parsed.flatMap((item) => {
     if (!item.outputPath) {
       return [];

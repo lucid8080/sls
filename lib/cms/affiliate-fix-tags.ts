@@ -75,11 +75,11 @@ function firstRewrittenPair(beforeHtml: string, afterHtml: string): { before: st
 }
 
 function rewriteCatalogFile(
-  relativePath: string,
+  filename: string,
   dryRun: boolean,
   target?: AmazonTarget | null,
 ): { updated: number; skippedShortLinks: number } {
-  const absolute = join(process.cwd(), relativePath);
+  const absolute = join(process.cwd(), "data", filename);
   if (!existsSync(absolute)) {
     return { updated: 0, skippedShortLinks: 0 };
   }
@@ -231,8 +231,8 @@ export async function fixAmazonAffiliateTags(options: {
   }
 
   // Single-link: still check catalog for matching URLs. Bulk: rewrite all catalog Amazon URLs.
-  const pretty = rewriteCatalogFile("data/pretty-links.json", dryRun, target);
-  const aawp = rewriteCatalogFile("data/aawp-products.json", dryRun, target);
+  const pretty = rewriteCatalogFile("pretty-links.json", dryRun, target);
+  const aawp = rewriteCatalogFile("aawp-products.json", dryRun, target);
   const catalogUpdated = pretty.updated + aawp.updated;
   skippedShortLinks += pretty.skippedShortLinks + aawp.skippedShortLinks;
 

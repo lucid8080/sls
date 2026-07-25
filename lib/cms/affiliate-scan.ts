@@ -36,8 +36,9 @@ export type AffiliateScanResult = {
 type PrettyLinkEntry = { slug?: string; url?: string; name?: string };
 type AawpProduct = { asin?: string; title?: string; url?: string };
 
-function readJsonFile<T>(relativePath: string): T | null {
-  const absolute = join(process.cwd(), relativePath);
+function readDataJsonFile<T>(filename: string): T | null {
+  // Keep the data/ segment static so Turbopack does not treat cwd+dynamic as the whole repo.
+  const absolute = join(process.cwd(), "data", filename);
   if (!existsSync(absolute)) return null;
   try {
     return JSON.parse(readFileSync(absolute, "utf8")) as T;
@@ -62,7 +63,7 @@ async function loadContentForAffiliateScan(): Promise<AdminArticle[]> {
 function collectCatalogOccurrences(): ScanOccurrence[] {
   const occurrences: ScanOccurrence[] = [];
 
-  const prettyLinks = readJsonFile<PrettyLinkEntry[]>("data/pretty-links.json") ?? [];
+  const prettyLinks = readDataJsonFile<PrettyLinkEntry[]>("pretty-links.json") ?? [];
   for (const entry of prettyLinks) {
     if (!entry.url) continue;
     const parsed = normalizeAffiliateUrl(entry.url);
@@ -77,7 +78,7 @@ function collectCatalogOccurrences(): ScanOccurrence[] {
     });
   }
 
-  const aawpProducts = readJsonFile<AawpProduct[]>("data/aawp-products.json") ?? [];
+  const aawpProducts = readDataJsonFile<AawpProduct[]>("aawp-products.json") ?? [];
   for (const product of aawpProducts) {
     if (!product.url) continue;
     const parsed = normalizeAffiliateUrl(product.url);

@@ -14,42 +14,69 @@ export type DeleteMediaResult =
   | { ok: false; status: 409; usages: MediaUsageEntry[] }
   | { ok: false; status: 404; message: string };
 
-function resolveMediaAcceptedPath(): string | null {
-  const candidates = [
-    join(process.cwd(), "data", "media-accepted.json"),
-    join(process.cwd(), "recovered-media-output", "reports", "media-accepted.json"),
-  ];
-  return candidates.find((path) => existsSync(path)) ?? null;
-}
-
 function removeFromMediaAcceptedManifest(publicPath: string): void {
-  const manifestPath = resolveMediaAcceptedPath();
-  if (!manifestPath) {
+  // Manifest edits are local/dev only — Vercel FS is ephemeral.
+  if (process.env.VERCEL) {
     return;
   }
 
   const normalizedTarget = normalizeMediaPublicPath(publicPath);
-  const parsed = JSON.parse(readFileSync(manifestPath, "utf8")) as Array<{
-    originalPath: string;
-    outputPath?: string;
-  }>;
+  const primary = join(process.cwd(), "data", "media-accepted.json");
+  if (existsSync(primary)) {
+    const parsed = JSON.parse(readFileSync(primary, "utf8")) as Array<{
+      originalPath: string;
+      outputPath?: string;
+    }>;
+    const filtered = filterMediaAcceptedEntries(parsed, normalizedTarget);
+    if (filtered.length !== parsed.length) {
+      writeFileSync(primary, `${JSON.stringify(filtered, null, 2)}\n`, "utf8");
+    }
+    return;
+  }
 
-  const filtered = parsed.filter((item) => {
+  const fallback = join(process.cwd(), "recovered-media-output", "reports", "media-accepted.json");
+  if (existsSync(fallback)) {
+    const parsed = JSON.parse(readFileSync(fallback, "utf8")) as Array<{
+      originalPath: string;
+      outputPath?: string;
+    }>;
+    const filtered = filterMediaAcceptedEntries(parsed, normalizedTarget);
+    if (filtered.length !== parsed.length) {
+      writeFileSync(fallback, `${JSON.stringify(filtered, null, 2)}\n`, "utf8");
+    }
+  }
+}
+
+function filterMediaAcceptedEntries(
+  parsed: Array<{ originalPath: string; outputPath?: string }>,
+  normalizedTarget: string,
+) {
+  return parsed.filter((item) => {
     if (!item.outputPath) {
       return true;
     }
     const itemPath = normalizeMediaPublicPath(`/${item.outputPath.replace(/\\/g, "/")}`);
     return itemPath !== normalizedTarget;
   });
-
-  if (filtered.length !== parsed.length) {
-    writeFileSync(manifestPath, `${JSON.stringify(filtered, null, 2)}\n`, "utf8");
-  }
 }
 
 function deleteLocalPublicFile(publicPath: string): void {
-  const relative = publicPath.replace(/^\/+/, "");
-  const absolute = join(process.cwd(), "public", relative);
+  // On Vercel the deployment FS is ephemeral/read-only; tombstones + Blob delete
+  // are the source of truth. Local unlinks are for local/dev only.
+  if (process.env.VERCEL) {
+    return;
+  }
+
+  const relative = publicPath.replace(/^\/+/, "").replace(/\\/g, "/");
+  const parts = relative.split("/").filter((part) => part.length > 0 && part !== "." && part !== "..");
+  if (parts.length === 0) {
+    return;
+  }
+
+  // Avoid path.join(cwd, "public", <dynamic>) — Turbopack expands that as a glob
+  // over all of public/ (~14k recovered media files) and warns about over-bundling.
+  const publicDir = ["pub", "lic"].join("");
+  const absolute = [process.cwd(), publicDir, ...parts].join("/");
   if (existsSync(absolute)) {
     unlinkSync(absolute);
   }
