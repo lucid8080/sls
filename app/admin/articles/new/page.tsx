@@ -20,33 +20,42 @@ export default function NewArticlePage() {
     setSaving(true);
     setError("");
 
-    const response = await fetch("/api/cms/articles", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title,
-        slug: slug || undefined,
-        excerpt,
-        html,
-        status,
-        featuredImage,
-        seo: featuredImage
-          ? {
-              ogImage: featuredImage.src,
-            }
-          : undefined,
-      }),
-    });
+    try {
+      const response = await fetch("/api/cms/articles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          slug: slug || undefined,
+          excerpt,
+          html,
+          status,
+          featuredImage,
+          seo: featuredImage
+            ? {
+                ogImage: featuredImage.src,
+              }
+            : undefined,
+        }),
+      });
 
-    const data = (await response.json()) as { article?: { id: string }; error?: string };
-    setSaving(false);
+      const data = (await response.json()) as { article?: { id: string }; error?: string };
 
-    if (!response.ok) {
-      setError(data.error ?? "Failed to save article.");
-      return;
+      if (!response.ok) {
+        setError(data.error ?? `Failed to save article (HTTP ${response.status}).`);
+        return;
+      }
+
+      router.push(`/admin/articles/${data.article?.id}`);
+    } catch (saveError) {
+      setError(
+        saveError instanceof Error
+          ? `Save failed: ${saveError.message}`
+          : "Save failed (network or parse error).",
+      );
+    } finally {
+      setSaving(false);
     }
-
-    router.push(`/admin/articles/${data.article?.id}`);
   }
 
   return (

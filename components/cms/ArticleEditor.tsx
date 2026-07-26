@@ -148,30 +148,39 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
       seo: article.seo,
     };
 
-    const response = await fetch(`/api/cms/articles/${articleId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(saveable),
-    });
+    try {
+      const response = await fetch(`/api/cms/articles/${articleId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(saveable),
+      });
 
-    const data = (await response.json()) as { article?: Article; error?: string };
-    setSaving(false);
+      const data = (await response.json()) as { article?: Article; error?: string };
 
-    if (!response.ok) {
-      setError(data.error ?? "Failed to save.");
-      return;
+      if (!response.ok) {
+        setError(data.error ?? `Failed to save (HTTP ${response.status}).`);
+        return;
+      }
+
+      if (data.article) {
+        const saved = {
+          ...data.article,
+          author: data.article.author ?? null,
+          featuredImage: normalizeFeaturedImage(data.article.featuredImage) ?? null,
+        };
+        setArticle(saved);
+        setSavedSnapshot(JSON.stringify(saved));
+      }
+      setMessage("Saved.");
+    } catch (saveError) {
+      setError(
+        saveError instanceof Error
+          ? `Save failed: ${saveError.message}`
+          : "Save failed (network or parse error).",
+      );
+    } finally {
+      setSaving(false);
     }
-
-    if (data.article) {
-      const saved = {
-        ...data.article,
-        author: data.article.author ?? null,
-        featuredImage: normalizeFeaturedImage(data.article.featuredImage) ?? null,
-      };
-      setArticle(saved);
-      setSavedSnapshot(JSON.stringify(saved));
-    }
-    setMessage("Saved.");
   }
 
   async function publish(action: "review" | "publish") {
@@ -188,26 +197,35 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
     setError("");
     setMessage("");
 
-    const response = await fetch(`/api/cms/articles/${articleId}/publish?action=${action}`, {
-      method: "POST",
-    });
-    const data = (await response.json()) as {
-      error?: string;
-      issues?: Array<{ code: string; message: string; severity: string }>;
-      revalidated?: boolean;
-    };
-    setSaving(false);
+    try {
+      const response = await fetch(`/api/cms/articles/${articleId}/publish?action=${action}`, {
+        method: "POST",
+      });
+      const data = (await response.json()) as {
+        error?: string;
+        issues?: Array<{ code: string; message: string; severity: string }>;
+        revalidated?: boolean;
+      };
 
-    if (!response.ok) {
-      setError(formatPublishGateError(data.error ?? "Action failed.", data.issues));
-      return;
+      if (!response.ok) {
+        setError(formatPublishGateError(data.error ?? `Action failed (HTTP ${response.status}).`, data.issues));
+        return;
+      }
+
+      setMessage(
+        action === "review"
+          ? "Submitted for review."
+          : `Published.${data.revalidated ? " Live pages refreshed." : ""}`,
+      );
+    } catch (publishError) {
+      setError(
+        publishError instanceof Error
+          ? `Publish failed: ${publishError.message}`
+          : "Publish failed (network or parse error).",
+      );
+    } finally {
+      setSaving(false);
     }
-
-    setMessage(
-      action === "review"
-        ? "Submitted for review."
-        : `Published.${data.revalidated ? " Live pages refreshed." : ""}`,
-    );
   }
 
   async function generateSuggestions() {
@@ -340,31 +358,37 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
           <input
             className="admin-input"
             value={article.title}
-            onChange={(e) => setArticle({ ...article, title: e.target.value })}
+            onChange={(e) => setArticle((current) => (current ? { ...current, title: e.target.value } : current))}
           />
           <input
             className="admin-input"
             value={article.slug}
-            onChange={(e) => setArticle({ ...article, slug: e.target.value })}
+            onChange={(e) => setArticle((current) => (current ? { ...current, slug: e.target.value } : current))}
           />
           <textarea
             className="admin-textarea"
             rows={3}
             value={article.excerpt ?? ""}
-            onChange={(e) => setArticle({ ...article, excerpt: e.target.value })}
+            onChange={(e) =>
+              setArticle((current) => (current ? { ...current, excerpt: e.target.value } : current))
+            }
           />
           <FeaturedImageField
             value={article.featuredImage}
             disabled={saving}
             onChange={(featuredImage) =>
-              setArticle({
-                ...article,
-                featuredImage,
-                seo: {
-                  ...article.seo,
-                  ogImage: featuredImage?.src,
-                },
-              })
+              setArticle((current) =>
+                current
+                  ? {
+                      ...current,
+                      featuredImage,
+                      seo: {
+                        ...current.seo,
+                        ogImage: featuredImage?.src,
+                      },
+                    }
+                  : current,
+              )
             }
           />
           <label>
@@ -374,12 +398,16 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
               value={article.author?.id ?? ""}
               onChange={(e) => {
                 const selectedAuthor = authors.find((author) => author.id === e.target.value);
-                setArticle({
-                  ...article,
-                  author: selectedAuthor
-                    ? { id: selectedAuthor.id, name: selectedAuthor.name, slug: selectedAuthor.slug }
-                    : null,
-                });
+                setArticle((current) =>
+                  current
+                    ? {
+                        ...current,
+                        author: selectedAuthor
+                          ? { id: selectedAuthor.id, name: selectedAuthor.name, slug: selectedAuthor.slug }
+                          : null,
+                      }
+                    : current,
+                );
               }}
             >
               <option value="">No author</option>
@@ -393,20 +421,31 @@ export function ArticleEditor({ articleId }: { articleId: string }) {
               ) : null}
             </select>
           </label>
-          <RichTextEditor value={article.html} onChange={(html) => setArticle({ ...article, html })} />
+          <RichTextEditor
+            value={article.html}
+            onChange={(html) => setArticle((current) => (current ? { ...current, html } : current))}
+          />
           <div className="admin-grid two">
             <input
               className="admin-input"
               placeholder="SEO title"
               value={article.seo.title ?? ""}
-              onChange={(e) => setArticle({ ...article, seo: { ...article.seo, title: e.target.value } })}
+              onChange={(e) =>
+                setArticle((current) =>
+                  current ? { ...current, seo: { ...current.seo, title: e.target.value } } : current,
+                )
+              }
             />
             <input
               className="admin-input"
               placeholder="SEO description"
               value={article.seo.description ?? ""}
               onChange={(e) =>
-                setArticle({ ...article, seo: { ...article.seo, description: e.target.value } })
+                setArticle((current) =>
+                  current
+                    ? { ...current, seo: { ...current.seo, description: e.target.value } }
+                    : current,
+                )
               }
             />
           </div>
